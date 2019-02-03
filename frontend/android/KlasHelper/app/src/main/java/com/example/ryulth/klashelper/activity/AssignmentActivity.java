@@ -25,8 +25,12 @@ import com.example.ryulth.klashelper.adapter.AssignmentsViewAdapter;
 import com.example.ryulth.klashelper.api.AssignmentApi;
 import com.example.ryulth.klashelper.model.User;
 import com.example.ryulth.klashelper.pojo.model.Assignment;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -42,6 +46,8 @@ public class AssignmentActivity extends AppCompatActivity {
     private MyHandler myHandler;
     private BottomNavigationView navigation;
     private Toolbar toolbar;
+    private long lastTimeBackPressed; //뒤로가기 버튼이 클릭된 시간
+    private ObjectMapper mapper = new ObjectMapper();
 
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
@@ -60,15 +66,23 @@ public class AssignmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment);
-
         Intent intent = getIntent();
         user = (User) intent.getSerializableExtra("userInfoIntent");
+
         mTextMessage = (TextView) findViewById(R.id.message);
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
         myHandler = new MyHandler(this);
         listView = (ListView) findViewById(R.id.navigation_assignment);
         toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
         setSupportActionBar(toolbar);
+
+        try {
+            if (loadAssignment()) {
+                mappingAssignments();
+            }
+        } catch (IOException e) {
+            Log.e(e.getMessage(), e.getStackTrace().toString());
+        }
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setOnRefreshListener(
@@ -148,6 +162,7 @@ public class AssignmentActivity extends AppCompatActivity {
         try {
             assignments = null;
             assignments = assignmentApi.execute(user).get();
+            saveAssignment();
         } catch (Exception e) {
             Log.e(e.getMessage(), e.getStackTrace().toString());
         }
@@ -188,6 +203,7 @@ public class AssignmentActivity extends AppCompatActivity {
         assignmentsViewAdapter.setAssignments(lectures);
         listView.setAdapter(assignmentsViewAdapter);
     }
+
     private void setNotes() {
         AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
         assignmentsViewAdapter.setAssignments(notes);
@@ -205,4 +221,37 @@ public class AssignmentActivity extends AppCompatActivity {
         startActivity(intentHome);
     }
 
+    @Override
+    public void onBackPressed() {
+        //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
+        if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
+            this.finishAffinity();
+            return;
+        }
+        //'뒤로' 버튼 한번 클릭 시 메시지
+        Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        lastTimeBackPressed = System.currentTimeMillis();
+    }
+
+    private void saveAssignment() throws JsonProcessingException {
+        SharedPreferences userInfoFile = getSharedPreferences("assignmentFile", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userInfoFile.edit();
+        editor.putString("id", user.getId());
+        editor.putString("assignments", mapper.writeValueAsString(assignments));
+        editor.commit();
+    }
+
+    private Boolean loadAssignment() throws IOException {
+        SharedPreferences userInfoFile = getSharedPreferences("assignmentFile", MODE_PRIVATE);
+        String tempId = userInfoFile.getString("id", "");
+        if (tempId.equals(user.getId())) {
+            String tempAssignments = userInfoFile.getString("assignments", "");
+            if ("".equals(tempAssignments)) {
+                return false;
+            }
+            assignments = Arrays.asList(mapper.readValue(tempAssignments, Assignment[].class));
+            return true;
+        }
+        return false;
+    }
 }

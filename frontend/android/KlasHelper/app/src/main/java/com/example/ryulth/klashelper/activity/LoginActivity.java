@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             isLogin = loginApi.execute(user).get();
                         } catch (Exception e) {
+                            Log.e(e.getMessage(), e.getStackTrace().toString());
                             isLogin=false;
                         }
                         if (isLogin){
@@ -75,4 +76,5 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean("isRemember",checkBoxRemember.isChecked());
         editor.commit();
     }
+
 }
