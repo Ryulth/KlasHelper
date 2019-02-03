@@ -1,0 +1,7 @@
+*.md linguist-vendored
+*.pyc linguist-vendored
+*.toc linguist-vendored
+*.txt linguist-vendored
+*.html linguist-vendored
+*.css linguist-vendored
+*.js linguist-vendored
