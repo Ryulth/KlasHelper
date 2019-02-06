@@ -1,6 +1,7 @@
 package com.ryulth.klashelper.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +51,14 @@ public class AssignmentsViewAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.listview_assignments, parent, false);
         }
 
-        TextView oTextTitle = (TextView) convertView.findViewById(R.id.textTitle);
-        TextView oTextDate = (TextView) convertView.findViewById(R.id.textDate);
-
-        oTextTitle.setText(assignments.get(position).getWorkTitle());
-        oTextDate.setText(assignments.get(position).getWorkFinishTime());
+        TextView assignmentTitle = (TextView) convertView.findViewById(R.id.assignmentTitle);
+        TextView assignmentDate = (TextView) convertView.findViewById(R.id.assignmentDate);
+        TextView assignmentClass = (TextView) convertView.findViewById(R.id.assignmentClass);
+        String finishTime = ("0".equals(assignments.get(position).getWorkFinishTime()))
+                ? "기한 없음" : assignments.get(position).getWorkFinishTime();
+        assignmentTitle.setText(assignments.get(position).getWorkTitle());
+        assignmentDate.setText("마감 기한 : " + finishTime);
+        assignmentClass.setText(assignments.get(position).getWorkCourse());
         return convertView;
     }
 }

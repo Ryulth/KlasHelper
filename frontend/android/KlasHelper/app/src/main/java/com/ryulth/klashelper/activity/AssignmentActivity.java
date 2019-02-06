@@ -63,7 +63,7 @@ public class AssignmentActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             activity.mappingAssignments();
-
+            activity.swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -104,7 +104,7 @@ public class AssignmentActivity extends AppCompatActivity {
                                 getAssignments();
                                 Message msg = myHandler.obtainMessage();
                                 myHandler.sendMessage(msg);
-                                swipeRefreshLayout.setRefreshing(false);
+
                             }
                         }).start();
                     }

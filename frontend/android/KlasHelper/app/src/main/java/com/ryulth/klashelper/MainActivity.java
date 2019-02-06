@@ -60,6 +60,5 @@ public class MainActivity extends AppCompatActivity {
                     .build();
         }
         return isRemember;
-
     }
 }

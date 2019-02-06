@@ -11,25 +11,37 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textTitle"
+            android:id="@+id/assignmentClass"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="제목"
+            android:layout_height="1dp"
+            android:layout_weight="60"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:text="class"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/assignmentTitle"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
             android:layout_weight="60"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:textStyle="bold"
+            android:text="제목"
             android:textColor="#33aabb"
-            />
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
         <TextView
-            android:id="@+id/textDate"
+            android:id="@+id/assignmentDate"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="날짜"
+            android:layout_height="1dp"
             android:layout_weight="40"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            />
+            android:text="날짜"
+            android:textSize="13sp" />
     </LinearLayout>
 
     <Button
