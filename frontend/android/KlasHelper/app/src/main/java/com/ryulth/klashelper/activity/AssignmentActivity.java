@@ -16,7 +16,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +57,7 @@ public class AssignmentActivity extends AppCompatActivity {
     private AssignmentRepository assignmentRepository;
     private String tableName;
     private String semester;
+    private Spinner spinner;
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
 
@@ -81,6 +86,9 @@ public class AssignmentActivity extends AppCompatActivity {
         this.myHandler = new MyHandler(this);
         this.listView = (ListView) findViewById(R.id.navigation_assignment);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
+        this.toolbar.setTitle("");
+        this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
+
         this.setSupportActionBar(toolbar);
         try {
             if (this.loadAssignment()) {
@@ -89,6 +97,7 @@ public class AssignmentActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(e.getMessage(), e.getStackTrace().toString());
         }
+        this.addItemsToSpinner();
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setOnRefreshListener(
@@ -122,9 +131,10 @@ public class AssignmentActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+
+
     }
 
     @Override
@@ -259,5 +269,35 @@ public class AssignmentActivity extends AppCompatActivity {
             catch (SQLiteConstraintException e){
             }
         }
+    }
+    public void addItemsToSpinner() {
+
+
+        List<String > myList = new ArrayList<>();//your data here
+        myList.add("2018_10");
+        myList.add(semester);
+        ArrayAdapter<String> adapter= new ArrayAdapter<>(this ,
+                android.R.layout.simple_spinner_item , myList);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spinner.setAdapter(adapter);
+        this.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapter, View v,
+                                       int position, long id) {
+                // On selecting a spinner item
+                String item = adapter.getItemAtPosition(position).toString();
+
+                // Showing selected spinner item
+                Toast.makeText(getApplicationContext(), "Selected  : " + item,
+                        Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
     }
 }
