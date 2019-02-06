@@ -1,0 +1,15 @@
+version: '2'
+services:
+    klashelper:
+        build:
+            context: .
+            dockerfile: /home/uzussregi/project/KlasHelperRemaster/Dockerfile
+    
+        volumes: 
+            - /home/uzussregi/project/KlasHelperRemaster/backend/KlasHelper:/code:rw
+        environment:
+            - DJANGO_DEBUG=True 
+         
+        command : > 
+            sh -c " virtualenv --system-site-packages -p python3 venv/ 
+            && uwsgi --ini /code/uwsgi.ini"
