@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper.model;
+package com.ryulth.klashelper.model;
 
 import java.io.Serializable;
 

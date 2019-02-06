@@ -1,12 +1,12 @@
-package com.example.ryulth.klashelper.api;
+package com.ryulth.klashelper.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.ryulth.klashelper.model.User;
-import com.example.ryulth.klashelper.pojo.model.Assignment;
-import com.example.ryulth.klashelper.pojo.response.LoginResponse;
-import com.example.ryulth.klashelper.pojo.response.UpdateResponse;
+import com.ryulth.klashelper.model.User;
+import com.ryulth.klashelper.pojo.model.Assignment;
+import com.ryulth.klashelper.pojo.response.LoginResponse;
+import com.ryulth.klashelper.pojo.response.UpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AssignmentApi extends AsyncTask<User, Void, List<Assignment>> {
-    static  final private String getAssUrl = "http://Ryulth.com:9999/get_ass";
+    static  final private String getAssUrl = "http://Ryulth.com:11111/get_ass/";
     @Override
     protected List<Assignment> doInBackground(User... users) {
         List<Assignment> assignments=null;

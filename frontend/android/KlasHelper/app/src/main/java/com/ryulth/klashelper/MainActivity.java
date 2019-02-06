@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper;
+package com.ryulth.klashelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -7,10 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.ryulth.klashelper.activity.AssignmentActivity;
-import com.example.ryulth.klashelper.activity.LoginActivity;
-import com.example.ryulth.klashelper.api.LoginApi;
-import com.example.ryulth.klashelper.model.User;
+import com.ryulth.klashelper.activity.AssignmentActivity;
+import com.ryulth.klashelper.activity.LoginActivity;
+import com.ryulth.klashelper.api.LoginApi;
+import com.ryulth.klashelper.model.User;
 
 public class MainActivity extends AppCompatActivity {
     private Intent intent;

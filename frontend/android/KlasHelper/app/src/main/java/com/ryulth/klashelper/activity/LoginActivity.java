@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper.activity;
+package com.ryulth.klashelper.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +11,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-import com.example.ryulth.klashelper.R;
-import com.example.ryulth.klashelper.api.LoginApi;
-import com.example.ryulth.klashelper.model.User;
+import com.ryulth.klashelper.R;
+import com.ryulth.klashelper.api.LoginApi;
+import com.ryulth.klashelper.model.User;
 
 
 public class LoginActivity extends AppCompatActivity {

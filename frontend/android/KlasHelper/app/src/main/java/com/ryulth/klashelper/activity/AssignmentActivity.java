@@ -1,7 +1,9 @@
-package com.example.ryulth.klashelper.activity;
+package com.ryulth.klashelper.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,12 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.example.ryulth.klashelper.MainActivity;
-import com.example.ryulth.klashelper.R;
-import com.example.ryulth.klashelper.adapter.AssignmentsViewAdapter;
-import com.example.ryulth.klashelper.api.AssignmentApi;
-import com.example.ryulth.klashelper.model.User;
-import com.example.ryulth.klashelper.pojo.model.Assignment;
+import com.ryulth.klashelper.MainActivity;
+import com.ryulth.klashelper.R;
+import com.ryulth.klashelper.adapter.AssignmentsViewAdapter;
+import com.ryulth.klashelper.api.AssignmentApi;
+import com.ryulth.klashelper.database.AssignmentRepository;
+import com.ryulth.klashelper.model.User;
+import com.ryulth.klashelper.pojo.model.Assignment;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,14 +44,15 @@ public class AssignmentActivity extends AppCompatActivity {
     private List<Assignment> lectures = new ArrayList<>();
     private List<Assignment> notes = new ArrayList<>();
     private ListView listView;
-    private TextView mTextMessage;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MyHandler myHandler;
     private BottomNavigationView navigation;
     private Toolbar toolbar;
     private long lastTimeBackPressed; //뒤로가기 버튼이 클릭된 시간
     private ObjectMapper mapper = new ObjectMapper();
-
+    private AssignmentRepository assignmentRepository;
+    private String tableName;
+    private String semester;
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
 
@@ -59,6 +63,7 @@ public class AssignmentActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             activity.mappingAssignments();
+
         }
     }
 
@@ -67,18 +72,19 @@ public class AssignmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assignment);
         Intent intent = getIntent();
-        user = (User) intent.getSerializableExtra("userInfoIntent");
-
-        mTextMessage = (TextView) findViewById(R.id.message);
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        myHandler = new MyHandler(this);
-        listView = (ListView) findViewById(R.id.navigation_assignment);
-        toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
-        setSupportActionBar(toolbar);
-
+        this.user = (User) intent.getSerializableExtra("userInfoIntent");
+        this.assignmentRepository = new AssignmentRepository(getApplicationContext());
+        //TODO 나중에 학기 선택 가능 하도록 변경
+        this.semester = "2018_20";
+        this.tableName= "a"+user.getId() + "_" +semester ;
+        this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        this.myHandler = new MyHandler(this);
+        this.listView = (ListView) findViewById(R.id.navigation_assignment);
+        this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
+        this.setSupportActionBar(toolbar);
         try {
-            if (loadAssignment()) {
-                mappingAssignments();
+            if (this.loadAssignment()) {
+                this.mappingAssignments();
             }
         } catch (IOException e) {
             Log.e(e.getMessage(), e.getStackTrace().toString());
@@ -90,6 +96,7 @@ public class AssignmentActivity extends AppCompatActivity {
                     @Override
                     public void onRefresh() {
                         // Your code here
+
                         swipeRefreshLayout.setRefreshing(true);
                         new Thread(new Runnable() {
                             @Override
@@ -122,16 +129,13 @@ public class AssignmentActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //return super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
                 Toast.makeText(getApplicationContext(), "로그아웃띠", Toast.LENGTH_LONG).show();
                 logout();
                 return true;
 
             case R.id.action_sidebar:
-                // If we got here, the user's action was not recognized.
                 Toast.makeText(getApplicationContext(), "메뉴 버튼 클릭됨", Toast.LENGTH_LONG).show();
                 return true;
         }
@@ -160,9 +164,10 @@ public class AssignmentActivity extends AppCompatActivity {
     private void getAssignments() {
         AssignmentApi assignmentApi = new AssignmentApi();
         try {
-            assignments = null;
-            assignments = assignmentApi.execute(user).get();
-            saveAssignment();
+            this.assignments = null;
+            this.assignments = assignmentApi.execute(user).get();
+            this.assignmentRepository.createTable(tableName);
+            this.insertAssignment();
         } catch (Exception e) {
             Log.e(e.getMessage(), e.getStackTrace().toString());
         }
@@ -172,23 +177,23 @@ public class AssignmentActivity extends AppCompatActivity {
         for (Assignment assignment : assignments) {
             switch (assignment.getWorkType()) {
                 case "0":
-                    homeworks.add(assignment);
+                    this.homeworks.add(assignment);
                     break;
                 case "1":
-                    lectures.add(assignment);
+                    this.lectures.add(assignment);
                     break;
                 case "2":
-                    notes.add(assignment);
+                    this.notes.add(assignment);
                     break;
             }
         }
         switch (navigation.getSelectedItemId()) {
             case R.id.navigation_assignment:
-                setHomeworks();
+                this.setHomeworks();
             case R.id.navigation_lecture:
-                setLectures();
+                this.setLectures();
             case R.id.navigation_notes:
-                setHomeworks();
+                this.setHomeworks();
         }
     }
 
@@ -233,25 +238,26 @@ public class AssignmentActivity extends AppCompatActivity {
         lastTimeBackPressed = System.currentTimeMillis();
     }
 
-    private void saveAssignment() throws JsonProcessingException {
-        SharedPreferences userInfoFile = getSharedPreferences("assignmentFile", MODE_PRIVATE);
-        SharedPreferences.Editor editor = userInfoFile.edit();
-        editor.putString("id", user.getId());
-        editor.putString("assignments", mapper.writeValueAsString(assignments));
-        editor.commit();
-    }
 
     private Boolean loadAssignment() throws IOException {
-        SharedPreferences userInfoFile = getSharedPreferences("assignmentFile", MODE_PRIVATE);
-        String tempId = userInfoFile.getString("id", "");
-        if (tempId.equals(user.getId())) {
-            String tempAssignments = userInfoFile.getString("assignments", "");
-            if ("".equals(tempAssignments)) {
-                return false;
-            }
-            assignments = Arrays.asList(mapper.readValue(tempAssignments, Assignment[].class));
-            return true;
+        try {
+            assignments = assignmentRepository.getAllAssignments(tableName);
+        }catch (SQLiteException e ){
+            return false;
         }
-        return false;
+        if (assignments.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    private void insertAssignment() {
+        for (Assignment assignment : assignments) {
+            try {
+                assignmentRepository.insertAssignment(assignment,tableName);
+            }
+            catch (SQLiteConstraintException e){
+            }
+        }
     }
 }

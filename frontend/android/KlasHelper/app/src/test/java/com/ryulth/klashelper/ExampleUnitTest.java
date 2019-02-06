@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper;
+package com.ryulth.klashelper;
 
 import org.junit.Test;
 

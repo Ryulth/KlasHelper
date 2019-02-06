@@ -1,10 +1,10 @@
-package com.example.ryulth.klashelper.api;
+package com.ryulth.klashelper.api;
 
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.ryulth.klashelper.model.User;
-import com.example.ryulth.klashelper.pojo.response.LoginResponse;
+import com.ryulth.klashelper.model.User;
+import com.ryulth.klashelper.pojo.response.LoginResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class LoginApi  extends AsyncTask<User, Void, Boolean> {
-    static  final private String loginUrl = "http://Ryulth.com:9999/login";
+    static  final private String loginUrl = "http://Ryulth.com:11111/login/";
     @Override
     protected Boolean doInBackground(User... users) {
         Boolean isAuth = false;

@@ -1,11 +1,7 @@
-package com.example.ryulth.klashelper.pojo.response;
+package com.ryulth.klashelper.pojo.response;
 
-import com.example.ryulth.klashelper.pojo.model.Assignment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor // Jackson will deserialize using this and then invoking setter
 @AllArgsConstructor(onConstructor = @__(@JsonIgnore)) // Lombok builder use this
-public class UpdateResponse {
+public class LoginResponse {
     private String status;
-    @JsonProperty("assignment")
-    private List<Assignment> assignments;
+    private Boolean flag;
 }

@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper;
+package com.ryulth.klashelper;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.ryulth.klashelper", appContext.getPackageName());
+        assertEquals("com.ryulth.klashelper", appContext.getPackageName());
     }
 }

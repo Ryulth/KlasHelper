@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper.pojo.model;
+package com.ryulth.klashelper.pojo.model;
 
 import android.content.Intent;
 
@@ -16,12 +16,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor // Jackson will deserialize using this and then invoking setter
 @AllArgsConstructor(onConstructor = @__(@JsonIgnore)) // Lombok builder use this
 public class Assignment {
+    private String workCode; // 고유 키
+    private String semester; //year_학기  10 1학기,15 여름학기,20 2학기,25겨울학기
     private String workFile;
-    private String workCreateTime;
     private String workCourse;
-    private String workFinishTime;
-    private String workCode;
     private int isSubmit; //1 제출띠
     private String workType; //(0=과제 1=인강 2=강의자료) workType int
     private String workTitle;
+    private String workCreateTime;
+    private String workFinishTime;
+    @JsonIgnore
+    private int flag = 1;
 }

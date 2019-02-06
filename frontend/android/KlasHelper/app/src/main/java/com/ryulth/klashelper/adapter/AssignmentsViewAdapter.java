@@ -1,4 +1,4 @@
-package com.example.ryulth.klashelper.adapter;
+package com.ryulth.klashelper.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.ryulth.klashelper.R;
-import com.example.ryulth.klashelper.pojo.model.Assignment;
+import com.ryulth.klashelper.R;
+import com.ryulth.klashelper.pojo.model.Assignment;
 
 import java.util.ArrayList;
 import java.util.List;
