@@ -44,7 +44,8 @@ def login(req):
                             class_date = row.find_all('td')[2].text.strip()
                             class_dict[class_code] = class_date
                     class_dict = get_semester_dict(class_dict)
-                    user = models.UserTb( klas_id=LOGIN_INFO['USER_ID'],name=name,lectures=json.dumps(class_dict))
+                    user_semester = str.join(',', class_dict.keys())
+                    user = models.UserTb( klas_id=LOGIN_INFO['USER_ID'],name=name,lectures=json.dumps(class_dict),semesters=user_semester)
                     user.save()
                 finally:
                     flag=1
@@ -175,6 +176,18 @@ def get_assignment(req):
         else:
             pass
     return {'status': status, 'assignment': res}
+def get_semesters(req):
+    status = "Error"
+    semesters = ""
+    try:
+        user = models.UserTb.objects.get(klas_id=req['id'])
+        status = "OK"
+        semesters = user.semesters
+    except models.UserTb.DoesNotExist:
+        status = "NotUserError"
+    return {'status': status,"semesters" : semesters}
+
+
 def check_time(str_):
     if str_ == "기간없음":
         return [0, 0]

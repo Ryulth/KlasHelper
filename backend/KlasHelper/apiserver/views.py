@@ -29,7 +29,15 @@ def get_assignment(request):
     else:
         res_data = {'status': 'RequestError'}
         return JsonResponse(res_data, safe=False)
-
+@csrf_exempt
+def get_semesters(request):
+    if request.method=='POST':
+        req=json_loads(request.body.decode("utf-8"))
+        res_data=paser.get_semesters(req)
+        return JsonResponse(res_data, safe=False)
+    else:
+        res_data = {'status': 'RequestError'}
+        return JsonResponse(res_data, safe=False)
 @csrf_exempt#인증문제 해결
 def board(request):
     if request.method == 'POST':

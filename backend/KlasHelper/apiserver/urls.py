@@ -10,6 +10,7 @@ urlpatterns = [
     url('board/', views.board),
     url('login/', views.login),
     url('get_ass/', views.get_assignment),
+    url('get_semesters/', views.get_semesters),
     url('post_list/', views.get_postlist),
     url('post_add/', views.post_add),
     url('post_detail/(?P<pk>\d+)/$', views.get_postdetail),

@@ -58,6 +58,7 @@ class UserTb(models.Model):
     naver_id = models.CharField(max_length=20, blank=True, null=True)
     lectures = models.CharField(max_length=1024, blank=True, null=True)
     name = models.CharField(max_length=20, blank=True, null=True)
+    semesters = models.CharField(max_length=255, blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'user'
