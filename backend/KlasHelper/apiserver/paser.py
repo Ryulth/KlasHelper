@@ -120,6 +120,7 @@ def get_assignment(req):
             file_name2 = temp[3].split("출")[1]
         create_time, finish_time = check_time(temp[2].split("기간:")[1])
         temp_dict = {
+            "semester": semester,
             "workType": "0",
             "workCode": temp[4],
             "workCourse": temp[0],
@@ -135,6 +136,7 @@ def get_assignment(req):
         if len(temp) == 7:
             create_time, finish_time = check_time(temp[2].split("기간:")[1])
             temp_dict = {
+                "semester": semester,
                 "workType": "2",  # 2강의자료
                 "workCode": temp[5],
                 "workCourse": temp[0],
@@ -159,6 +161,7 @@ def get_assignment(req):
             else:
                 flag = 0
             temp_dict = {
+                "semester": semester,
                 "workType": "1",  # 1인강
                 "workCode": temp[11],
                 "workCourse": temp[0],
