@@ -20,8 +20,8 @@
       <file leaf-file-name="paser.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/apiserver/paser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="202">
-              <caret line="57" column="16" lean-forward="false" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="16" />
+            <state relative-caret-position="354">
+              <caret line="47" column="52" lean-forward="true" selection-start-line="47" selection-start-column="52" selection-end-line="47" selection-end-column="52" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -942,8 +942,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/apiserver/paser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="202">
-          <caret line="57" column="16" lean-forward="false" selection-start-line="57" selection-start-column="8" selection-end-line="57" selection-end-column="16" />
+        <state relative-caret-position="354">
+          <caret line="47" column="52" lean-forward="true" selection-start-line="47" selection-start-column="52" selection-end-line="47" selection-end-column="52" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
           </folding>

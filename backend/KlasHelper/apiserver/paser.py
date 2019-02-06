@@ -44,7 +44,9 @@ def login(req):
                             class_date = row.find_all('td')[2].text.strip()
                             class_dict[class_code] = class_date
                     class_dict = get_semester_dict(class_dict)
-                    user_semester = str.join(',', class_dict.keys())
+                    semester_list = list(class_dict.keys())
+                    semester_list.sort(reverse=True)
+                    user_semester = str.join(',', semester_list)
                     user = models.UserTb( klas_id=LOGIN_INFO['USER_ID'],name=name,lectures=json.dumps(class_dict),semesters=user_semester)
                     user.save()
                 finally:
