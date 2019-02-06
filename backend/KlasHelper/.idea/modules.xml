@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../KlasHelper/.idea/KlasHelper.iml" filepath="$PROJECT_DIR$/../KlasHelper/.idea/KlasHelper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/djangoKHUvel_2.iml" filepath="$PROJECT_DIR$/.idea/djangoKHUvel_2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/KlasHelper.iml" filepath="$PROJECT_DIR$/.idea/KlasHelper.iml" />
     </modules>
   </component>
 </project>

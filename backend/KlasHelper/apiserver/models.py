@@ -22,7 +22,7 @@ class CourseTb(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'course_2018_2'
+        db_table = 'course_2018_20'
 
 
 class PostTb(models.Model):
@@ -56,7 +56,7 @@ class CommentTb(models.Model):
 class UserTb(models.Model):
     klas_id = models.CharField(primary_key=True, max_length=20)
     naver_id = models.CharField(max_length=20, blank=True, null=True)
-    lectures = models.CharField(max_length=512, blank=True, null=True)
+    lectures = models.CharField(max_length=1024, blank=True, null=True)
     name = models.CharField(max_length=20, blank=True, null=True)
     class Meta:
         managed = False

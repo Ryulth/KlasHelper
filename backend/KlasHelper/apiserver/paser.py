@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import numpy as np
 from . import models
-
+import json
+from collections import defaultdict
 
 def login(req):
     LOGIN_INFO = {
@@ -27,19 +28,23 @@ def login(req):
                     html = req.text
                     soup = BeautifulSoup(html, 'html.parser')
                     name = soup.select("div.main_log_sec.login")[0].find('strong').get_text()
-                    req = s.get('https://klas.khu.ac.kr/classroom/viewClassroomCourseMoreList.do?courseType=ing')
-                    html = req.text
-                    soup = BeautifulSoup(html, 'html.parser')
-                    class_list = ''
-                    table_body = soup.find('tbody')
-                    rows = table_body.find_all('tr')
-                    if rows[0].text.strip() != "과목이 존재하지 않습니다.":
+                    class_dict = {}
+                    for i in range(1, 20):
+                        req = s.get(
+                            'https://klas.khu.ac.kr/classroom/viewClassroomCourseMoreList.do?courseType=end@pageIndex10&pageIndex=' + str(
+                                i))
+                        html = req.text
+                        soup = BeautifulSoup(html, 'html.parser')
+                        table_body = soup.find('tbody')
+                        rows = table_body.find_all('tr')
+                        if rows[0].text.strip() == "과목이 존재하지 않습니다.":
+                            break;
                         for row in rows:
-                            class_list += row.find_all('td')[1].text.strip().split('[')[1].split(']')[0] + ','
-                    user = models.UserTb( klas_id=LOGIN_INFO['USER_ID'],name=name,lectures=class_list)
-                    print("@@@@@@@@@@@@@@@@@@@@@@")
-                    print(name)
-                    print(user.lectures)
+                            class_code = row.find_all('td')[1].text.strip().split('[')[1].split(']')[0]
+                            class_date = row.find_all('td')[2].text.strip()
+                            class_dict[class_code] = class_date
+                    class_dict = get_semester_dict(class_dict)
+                    user = models.UserTb( klas_id=LOGIN_INFO['USER_ID'],name=name,lectures=json.dumps(class_dict))
                     user.save()
                 finally:
                     flag=1
@@ -48,9 +53,14 @@ def login(req):
 
 def get_assignment(req):
     user_set = models.UserTb.objects.get(klas_id=req['id'])
-    class_list=str(user_set.lectures).split(',')
+    try:
+        semester=req['semester']
+    except:
+        semester = "2018_20"
+    class_dict = json.loads(user_set.lectures)
+    class_list=str(class_dict[semester]).split(',')
     class_list.pop()
-    temp = np.char.array('https://klas.khu.ac.kr/course/viewCourseClassroom.do?COURSE_ID=2018_20_')
+    temp = np.char.array('https://klas.khu.ac.kr/course/viewCourseClassroom.do?COURSE_ID='+semester+'_')
     class_arr = np.array(class_list)
     class_link = temp + class_arr
     LOGIN_INFO = {
@@ -167,3 +177,25 @@ def check_time(str_):
         return [0, 0]
     else:
         return str_.split(' - ')
+
+
+def get_semester_dict(class_dict):
+    semester_list = list(zip([matching_semester(v) for v in class_dict.values()], class_dict.keys()))
+    semester_dict=defaultdict(str)
+    for semester, code in semester_list:
+        semester_dict[semester]+=code+','
+    return semester_dict
+
+def matching_semester(date_range):
+    year = date_range.split('.')[0]
+    start_date , end_date = date_range.split('~')
+    if start_date < year+".04.30"<end_date:
+        return year+"_10" # 1학기
+    elif start_date < year+".06.30"<end_date:
+        return year+"_15" # 여름학기
+    elif start_date < year+".09.30"<end_date:
+        return year+"_20" # 2학기
+    elif start_date < year+".12.31"<end_date:
+        return year+"_25" # 겨울학기
+    else :
+        return None;

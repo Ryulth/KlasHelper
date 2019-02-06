@@ -41,7 +41,7 @@ class Course20182(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'course_2018_2'
+        db_table = 'course_2018_20'
 
 
 class DjangoMigrations(models.Model):

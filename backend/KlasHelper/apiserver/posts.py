@@ -1,7 +1,7 @@
 from . import models
 def board_list(req):
     user_set = models.UserTb.objects.get(klas_id=req['id'])
-    class_list = str(user_set.class_2018_2).split(',')
+    class_list = str(user_set.class_2018_20).split(',')
     class_list.pop()
     res = []
     print(class_list)
