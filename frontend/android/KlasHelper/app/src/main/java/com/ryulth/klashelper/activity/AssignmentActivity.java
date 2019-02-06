@@ -12,16 +12,13 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -29,11 +26,12 @@ import com.ryulth.klashelper.MainActivity;
 import com.ryulth.klashelper.R;
 import com.ryulth.klashelper.adapter.AssignmentsViewAdapter;
 import com.ryulth.klashelper.api.AssignmentApi;
+import com.ryulth.klashelper.api.SemesterApi;
 import com.ryulth.klashelper.database.AssignmentRepository;
 import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ryulth.klashelper.pojo.request.AssignmentRequest;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,8 +54,10 @@ public class AssignmentActivity extends AppCompatActivity {
     private ObjectMapper mapper = new ObjectMapper();
     private AssignmentRepository assignmentRepository;
     private String tableName;
-    private String semester;
+    private String selectSemester;
+    private String semesters;
     private Spinner spinner;
+
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
 
@@ -78,25 +78,17 @@ public class AssignmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assignment);
         Intent intent = getIntent();
         this.user = (User) intent.getSerializableExtra("userInfoIntent");
+
         this.assignmentRepository = new AssignmentRepository(getApplicationContext());
         //TODO 나중에 학기 선택 가능 하도록 변경
-        this.semester = "2018_20";
-        this.tableName= "a"+user.getId() + "_" +semester ;
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.myHandler = new MyHandler(this);
         this.listView = (ListView) findViewById(R.id.navigation_assignment);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
         this.toolbar.setTitle("");
         this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
-
+        this.getSemesters();
         this.setSupportActionBar(toolbar);
-        try {
-            if (this.loadAssignment()) {
-                this.mappingAssignments();
-            }
-        } catch (IOException e) {
-            Log.e(e.getMessage(), e.getStackTrace().toString());
-        }
         this.addItemsToSpinner();
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
@@ -111,6 +103,7 @@ public class AssignmentActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 getAssignments();
+                                getSemesters();
                                 Message msg = myHandler.obtainMessage();
                                 myHandler.sendMessage(msg);
 
@@ -125,7 +118,6 @@ public class AssignmentActivity extends AppCompatActivity {
                 getResources().getColor(android.R.color.holo_orange_light),
                 getResources().getColor(android.R.color.holo_red_light)
         );
-
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
@@ -133,8 +125,6 @@ public class AssignmentActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
-
-
     }
 
     @Override
@@ -175,15 +165,30 @@ public class AssignmentActivity extends AppCompatActivity {
         AssignmentApi assignmentApi = new AssignmentApi();
         try {
             this.assignments = null;
-            this.assignments = assignmentApi.execute(user).get();
+            this.assignments = assignmentApi.execute(
+                    AssignmentRequest.builder()
+                            .id(user.getId())
+                            .pw(user.getPw())
+                            .semester(selectSemester)
+                            .build()).get();
             this.assignmentRepository.createTable(tableName);
             this.insertAssignment();
-        } catch (Exception e) {
-            Log.e(e.getMessage(), e.getStackTrace().toString());
+        } catch (Exception ignore) {
+        }
+    }
+    private void getSemesters(){
+        SemesterApi semesterApi =new SemesterApi();
+        try {
+            this.semesters = null;
+            this.semesters = semesterApi.execute(user).get();
+        } catch (Exception ignore) {
         }
     }
 
     private void mappingAssignments() {
+        this.homeworks.clear();
+        this.lectures.clear();
+        this.notes.clear();
         for (Assignment assignment : assignments) {
             switch (assignment.getWorkType()) {
                 case "0":
@@ -225,16 +230,6 @@ public class AssignmentActivity extends AppCompatActivity {
         listView.setAdapter(assignmentsViewAdapter);
     }
 
-    private void logout() {
-        SharedPreferences userInfoFile = getSharedPreferences("userInfoFile", MODE_PRIVATE);
-        SharedPreferences.Editor editor = userInfoFile.edit();
-        editor.putBoolean("isRemember", false);
-        editor.commit();
-        Intent intentHome = new Intent(this, MainActivity.class);
-        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intentHome.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intentHome);
-    }
 
     @Override
     public void onBackPressed() {
@@ -250,10 +245,10 @@ public class AssignmentActivity extends AppCompatActivity {
 
 
     private Boolean loadAssignment() throws IOException {
+        assignments.clear();
         try {
             assignments = assignmentRepository.getAllAssignments(tableName);
-        }catch (SQLiteException e ){
-            return false;
+        }catch (SQLiteException ignore ){
         }
         if (assignments.isEmpty()){
             return false;
@@ -273,9 +268,7 @@ public class AssignmentActivity extends AppCompatActivity {
     public void addItemsToSpinner() {
 
 
-        List<String > myList = new ArrayList<>();//your data here
-        myList.add("2018_10");
-        myList.add(semester);
+        List<String > myList = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
         ArrayAdapter<String> adapter= new ArrayAdapter<>(this ,
                 android.R.layout.simple_spinner_item , myList);
 
@@ -288,6 +281,15 @@ public class AssignmentActivity extends AppCompatActivity {
                 // On selecting a spinner item
                 String item = adapter.getItemAtPosition(position).toString();
 
+                selectSemester = item;
+                tableName= "a"+user.getId() + "_" +selectSemester ;
+                try {
+                    loadAssignment();
+                    mappingAssignments();
+
+                } catch (IOException ignore) {
+                }
+
                 // Showing selected spinner item
                 Toast.makeText(getApplicationContext(), "Selected  : " + item,
                         Toast.LENGTH_LONG).show();
@@ -299,5 +301,16 @@ public class AssignmentActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void logout() {
+        SharedPreferences userInfoFile = getSharedPreferences("userInfoFile", MODE_PRIVATE);
+        SharedPreferences.Editor editor = userInfoFile.edit();
+        editor.putBoolean("isRemember", false);
+        editor.commit();
+        Intent intentHome = new Intent(this, MainActivity.class);
+        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentHome.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intentHome);
     }
 }

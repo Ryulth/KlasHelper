@@ -1,5 +1,7 @@
 package com.ryulth.klashelper.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 import lombok.AllArgsConstructor;

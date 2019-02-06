@@ -3,9 +3,8 @@ package com.ryulth.klashelper.api;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
-import com.ryulth.klashelper.pojo.response.LoginResponse;
+import com.ryulth.klashelper.pojo.request.AssignmentRequest;
 import com.ryulth.klashelper.pojo.response.UpdateResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,13 +18,13 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.List;
 
-public class AssignmentApi extends AsyncTask<User, Void, List<Assignment>> {
+public class AssignmentApi extends AsyncTask<AssignmentRequest, Void, List<Assignment>> {
     static  final private String getAssUrl = "http://Ryulth.com:11111/get_ass/";
     @Override
-    protected List<Assignment> doInBackground(User... users) {
+    protected List<Assignment> doInBackground(AssignmentRequest... assignmentRequests) {
         List<Assignment> assignments=null;
         try {
-            assignments= getAssignments(users[0]);
+            assignments= getAssignments(assignmentRequests[0]);
         } catch (JsonProcessingException e) {
             Log.e(e.getMessage(),e.getStackTrace().toString());
         }
@@ -41,11 +40,11 @@ public class AssignmentApi extends AsyncTask<User, Void, List<Assignment>> {
         super.onPostExecute(assignments);
     }
 
-    private List<Assignment> getAssignments(User user) throws JsonProcessingException {
+    private List<Assignment> getAssignments(AssignmentRequest assignmentRequests) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         HttpHeaders headers = new HttpHeaders(); // response Header
         headers.setContentType(MediaType.APPLICATION_JSON); // header need UTF8
-        String responseBody = mapper.writeValueAsString(user);
+        String responseBody = mapper.writeValueAsString(assignmentRequests);
         HttpEntity requestEntity = new HttpEntity(responseBody, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<UpdateResponse > responseEntity = restTemplate.postForEntity(getAssUrl, requestEntity, UpdateResponse.class);
