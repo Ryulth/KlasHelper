@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor // Jackson will deserialize using this and then invoking setter
 @AllArgsConstructor(onConstructor = @__(@JsonIgnore)) // Lombok builder use this
+@EqualsAndHashCode(of = {"workCode","workFile","workTitle"})
 public class Assignment {
     private String workCode; // 고유 키
     private String semester; //year_학기  10 1학기,15 여름학기,20 2학기,25겨울학기

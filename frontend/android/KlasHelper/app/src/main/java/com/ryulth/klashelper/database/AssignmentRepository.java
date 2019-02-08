@@ -99,6 +99,30 @@ public class AssignmentRepository extends SQLiteOpenHelper {
                         1});
 
     }
-
+    public void insertAssignments(List<Assignment> assignments, String tableName){
+        SQLiteDatabase db = getWritableDatabase();
+        for (Assignment assignment : assignments) {
+            try {
+                StringBuffer sb = new StringBuffer();
+                sb.append(" INSERT INTO ");
+                sb.append(tableName);
+                sb.append("( workCode, semester, workFile, workCourse, isSubmit, workType, workTitle, workCreateTime, workFinishTime, flag) ");
+                sb.append(" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?,? ) ");
+                db.execSQL(sb.toString(),
+                        new Object[]{assignment.getWorkCode(),
+                                assignment.getSemester(),
+                                assignment.getWorkFile(),
+                                assignment.getWorkCourse(),
+                                assignment.getIsSubmit(),
+                                assignment.getWorkType(),
+                                assignment.getWorkTitle(),
+                                assignment.getWorkCreateTime(),
+                                assignment.getWorkFinishTime(),
+                                1});
+            } catch (SQLiteConstraintException e) {
+                // TODO UPDATE 코드
+            }
+        }
+    }
 
 }
