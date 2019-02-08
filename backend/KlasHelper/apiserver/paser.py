@@ -55,7 +55,11 @@ def login(req):
     return {'status': status,'flag':flag}
 
 def get_assignment(req):
-    user_set = models.UserTb.objects.get(klas_id=req['id'])
+    try:
+        user_set = models.UserTb.objects.get(klas_id=req['id'])
+    except models.UserTb.DoesNotExist:
+        status = "NotUserError"
+        return {'status': status,'assignment': ""}
     try:
         semester=req['semester']
     except:
@@ -171,7 +175,7 @@ def get_assignment(req):
                 "workTitle": temp[1],
                 "workCreateTime": str(create_time).replace('.','-'),
                 "workFinishTime": str(finish_time).replace('.','-'),
-                "isSubmit": flag,  # 강의자료는 다 제출
+                "isSubmit": flag,
                 "workFile": temp[10].split(')')[1] + "[*]" + temp[12]
             }
             res.append(temp_dict)
@@ -179,7 +183,6 @@ def get_assignment(req):
             pass
     return {'status': status, 'assignment': res}
 def get_semesters(req):
-    status = "Error"
     semesters = ""
     try:
         user = models.UserTb.objects.get(klas_id=req['id'])

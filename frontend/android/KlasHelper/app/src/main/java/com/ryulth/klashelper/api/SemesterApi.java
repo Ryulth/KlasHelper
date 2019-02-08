@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class SemesterApi extends AsyncTask<User, Void, String> {
-    static  final private String semestersUrl = "http://Ryulth.com:11111/get_semesters/";
+    static  final private String semestersUrl = ApiType.SEMESTER.getUrl();
     @Override
     protected String doInBackground(User... users) {
         String semesters = "";

@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AssignmentApi extends AsyncTask<AssignmentRequest, Void, List<Assignment>> {
-    static  final private String getAssUrl = "http://Ryulth.com:11111/get_ass/";
+    static  final private String getAssUrl = ApiType.ASSIGNMENT.getUrl();
     @Override
     protected List<Assignment> doInBackground(AssignmentRequest... assignmentRequests) {
         List<Assignment> assignments=null;
