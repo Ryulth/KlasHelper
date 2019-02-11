@@ -6,7 +6,7 @@ services:
             dockerfile: /home/uzussregi/project/KlasHelper/Dockerfile
     
         volumes: 
-            - /home/uzussregi/project/KlasHelper/backend/KlasHelper:/code:rw
+            - /home/uzussregi/project/KlasHelper/backend/django/KlasHelper:/code:rw
         environment:
             - DJANGO_DEBUG=True 
          
