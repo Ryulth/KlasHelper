@@ -1,12 +1,10 @@
 package com.ryulth.klashelper.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ryulth.klashelper.R;
@@ -41,6 +39,7 @@ public class AssignmentsViewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null)
         {
             final Context context = parent.getContext();
@@ -48,8 +47,10 @@ public class AssignmentsViewAdapter extends BaseAdapter {
             {
                 inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
+
             convertView = inflater.inflate(R.layout.listview_assignments, parent, false);
         }
+
 
         TextView assignmentTitle = (TextView) convertView.findViewById(R.id.assignmentTitle);
         TextView assignmentDate = (TextView) convertView.findViewById(R.id.assignmentDate);

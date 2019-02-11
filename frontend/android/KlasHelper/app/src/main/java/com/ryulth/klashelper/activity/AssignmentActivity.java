@@ -12,13 +12,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
@@ -39,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class AssignmentActivity extends AppCompatActivity {
+public class AssignmentActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
     private User user;
     private List<Assignment> assignments = new ArrayList<>();
     private List<Assignment> homeworks = new ArrayList<>();
@@ -58,6 +61,8 @@ public class AssignmentActivity extends AppCompatActivity {
     private String semesters;
     private Spinner spinner;
     private Boolean firstLogin = true;
+    private Switch aSwitch;
+
 
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
@@ -98,7 +103,8 @@ public class AssignmentActivity extends AppCompatActivity {
         this.getSemesters();
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
-
+        this.aSwitch = (Switch) findViewById(R.id.assignmentSwitch);
+        //this.aSwitch.setOnCheckedChangeListener(this);
         if (firstLogin) {
             firstLogin = false;
             new Thread(new Runnable() {
@@ -140,6 +146,22 @@ public class AssignmentActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.assignmentSwitch:
+                Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+
+        if (isChecked) {
+            // do something when check is selected
+            Log.d("Switch State=", ""+isChecked);
+        } else {
+            //do something when unchecked
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -191,6 +213,7 @@ public class AssignmentActivity extends AppCompatActivity {
                             .build()).get();
             this.assignmentRepository.createTable(tableName);
             this.assignmentRepository.insertAssignments(assignments,tableName);
+
         } catch (Exception ignore) {
         }
     }

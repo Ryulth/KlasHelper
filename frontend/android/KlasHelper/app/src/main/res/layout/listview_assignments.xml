@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="90dp"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -13,22 +13,25 @@
         <TextView
             android:id="@+id/assignmentClass"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="2dp"
             android:layout_weight="60"
+            android:fontFamily="sans-serif-condensed"
             android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:text="class"
-            android:textSize="12sp"
+            android:paddingTop="5dp"
+            android:text="class_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/assignmentTitle"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="0dp"
             android:layout_weight="60"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
-            android:text="제목"
+            android:text="제목제"
             android:textColor="#33aabb"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -36,23 +39,27 @@
         <TextView
             android:id="@+id/assignmentDate"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="10dp"
             android:layout_weight="40"
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
             android:text="날짜"
             android:textSize="13sp" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="0dp"
+    <Switch
+        android:id="@+id/assignmentSwitch"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
-        android:text="선택"
-        android:layout_weight="20"
-        />
+        android:layout_weight="1"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:checked="true"
+        android:switchTextAppearance="@style/TextAppearance.AppCompat.Body2" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="5"
-        />
+        android:layout_weight="5" />
 </LinearLayout>

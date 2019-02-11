@@ -1,7 +1,5 @@
 package com.ryulth.klashelper.pojo.model;
 
-import android.content.Intent;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -28,5 +26,7 @@ public class Assignment {
     private String workCreateTime;
     private String workFinishTime;
     @JsonIgnore
-    private int flag = 1;
+    private int isAlarm ;
+    @JsonIgnore
+    private int flag ;
 }
