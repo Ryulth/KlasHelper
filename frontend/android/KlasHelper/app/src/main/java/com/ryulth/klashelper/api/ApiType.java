@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 public enum ApiType {
 
-    ASSIGNMENT("get_ass/"),
-    LOGIN("login/"),
-    SEMESTER("get_semesters/");
+    ASSIGNMENT("assignments"),
+    LOGIN("login"),
+    SEMESTER("semesters");
 
     private static final String BASIC_URL = "http://klashelper.ryulth.com/";
     private final String subUrl;

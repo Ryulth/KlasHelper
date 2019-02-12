@@ -105,6 +105,7 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
         this.addItemsToSpinner();
         this.aSwitch = (Switch) findViewById(R.id.assignmentSwitch);
         //this.aSwitch.setOnCheckedChangeListener(this);
+        /*TODO 첫 자동업데이트 고민
         if (firstLogin) {
             firstLogin = false;
             new Thread(new Runnable() {
@@ -116,7 +117,7 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
                     myHandler.sendMessage(msg);
                 }
             }).start();
-        }
+        }*/
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {

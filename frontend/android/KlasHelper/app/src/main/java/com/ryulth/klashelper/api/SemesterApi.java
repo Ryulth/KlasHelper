@@ -10,12 +10,13 @@ import com.ryulth.klashelper.pojo.response.SemesterResponse;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class SemesterApi extends AsyncTask<User, Void, String> {
-    static  final private String semestersUrl = ApiType.SEMESTER.getUrl();
+    static  final private String SemestersUrl = ApiType.SEMESTER.getUrl();
     @Override
     protected String doInBackground(User... users) {
         String semesters = "";
@@ -38,13 +39,14 @@ public class SemesterApi extends AsyncTask<User, Void, String> {
     }
 
     private String  getSemester(User user) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         HttpHeaders headers = new HttpHeaders(); // response Header
         headers.setContentType(MediaType.APPLICATION_JSON); // header need UTF8
-        String responseBody = mapper.writeValueAsString(user);
-        HttpEntity requestEntity = new HttpEntity(responseBody, headers);
+        headers.set("appToken","test");
+        headers.set("id",user.getId());
+        HttpEntity entity = new HttpEntity(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<SemesterResponse> responseEntity = restTemplate.postForEntity(semestersUrl, requestEntity, SemesterResponse.class);
+        ResponseEntity<SemesterResponse> responseEntity = restTemplate.exchange(
+                SemestersUrl, HttpMethod.GET, entity, SemesterResponse.class);
         return responseEntity.getBody().getSemesters();
     }
 }
