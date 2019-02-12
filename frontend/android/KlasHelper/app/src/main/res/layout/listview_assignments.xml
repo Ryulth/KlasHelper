@@ -16,8 +16,8 @@
             android:layout_height="2dp"
             android:layout_weight="60"
             android:fontFamily="sans-serif-condensed"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
             android:text="class_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="14sp"
@@ -26,14 +26,14 @@
         <TextView
             android:id="@+id/assignmentTitle"
             android:layout_width="match_parent"
-            android:layout_height="24dp"
+            android:layout_height="4dp"
             android:layout_marginTop="0dp"
             android:layout_weight="60"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
+            android:paddingLeft="15dp"
             android:text="제목제"
             android:textColor="#33aabb"
-            android:textSize="15sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -42,8 +42,8 @@
             android:layout_height="10dp"
             android:layout_weight="40"
             android:gravity="center_vertical"
-            android:paddingLeft="10dp"
-            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingBottom="10dp"
             android:text="날짜"
             android:textSize="13sp" />
     </LinearLayout>
@@ -53,6 +53,8 @@
         android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:scaleX="1"
         android:scaleY="1"
         android:checked="true"

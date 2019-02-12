@@ -9,12 +9,16 @@ from . import crawler
 @csrf_exempt  # 인증문제 해결
 def login(request):
     # TODO request.id , request.password 같은 식으로 로그인 처리
-    if request.method == 'POST':
-        req = json_loads(request.body.decode("utf-8"))
-        res_data = crawler.login(req)
-        return JsonResponse(res_data, safe=False)
+    if "test" == request.META.get("HTTP_APPTOKEN"):
+        if request.method == 'POST':
+            req = json_loads(request.body.decode("utf-8"))
+            res_data = crawler.login(req)
+            return JsonResponse(res_data, safe=False)
+        else:
+            res_data = {'status': 'RequestError'}
+            return JsonResponse(res_data, safe=False)
     else:
-        res_data = {'status': 'RequestError'}
+        res_data = {'status': 'AppTokenError'}
         return JsonResponse(res_data, safe=False)
 
 
