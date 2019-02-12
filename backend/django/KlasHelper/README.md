@@ -10,7 +10,7 @@ django_backend_server
 
 #### login {POST} / 로그인 요청을 하는 기능
 
-http://klashelper.ryulth.com/login/
+http://klashelper.ryulth.com/login
 
 * Request
 
@@ -35,23 +35,21 @@ http://klashelper.ryulth.com/login/
 | flag   | 1<br />0                             | 1 -> 성공<br />0 -> 실패                                     |
 | status | OK<br />IdPwError<br />KlasPageError | OK  -> 성공<br />IdPwError -> IdPw 오류<br />KlasPageError -> KlasPage 응답시간 초과 |
 
-#### get_ass {post} / 학기의 과제를 가져오는 api
+#### assignments/<semester_code> {GET} / 학기의 과제를 가져오는 api
 
-http://klashelper.ryulth.com/get_ass/
+http://klashelper.ryulth.com/assignments/<semester_code>
 
-* Request
+* RequestHeader 
 
-```json
-{
-    "id" : "klasID",
-    "pw" : "klasPW",
-    "semester" : "학기 코드 EX)2018_20"
-}
-```
+| Key      | Value  | 설명                 |
+| -------- | ------ | -------------------- |
+| appToken | test   | 인증된 연결인지 확인 |
+| id       | KlasID | Klas id              |
+| pw       | KlasPW | Klas pw              |
 
-| 필드명   | 요청값                                         | 설명                                                         |
-| -------- | ---------------------------------------------- | ------------------------------------------------------------ |
-| semester | 2018_10<br />2018_15<br />2018_20<br />2018_25 | 학기 코드로 학교에서 사용하는 코드 조합이다<br />년도_학기로 이루어져 있다<br />1학기 -> 10<br />여름학기 -> 15<br />2학기 -> 20<br />겨울학기 -> 25 |
+| UrlPath       | 요청값                                         | 설명                                                         |
+| ------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| semester_code | 2018_10<br />2018_15<br />2018_20<br />2018_25 | 학기 코드로 학교에서 사용하는 코드 조합이다<br />년도_학기로 이루어져 있다<br />1학기 -> 10<br />여름학기 -> 15<br />2학기 -> 20<br />겨울학기 -> 25 |
 
 * Response
 
@@ -73,10 +71,10 @@ http://klashelper.ryulth.com/get_ass/
 }
 ```
 
-| 필드명     | 응답값                                                 | 설명                                                         |
-| ---------- | ------------------------------------------------------ | ------------------------------------------------------------ |
-| status     | OK<br />IdPwError<br />KlasPageError<br />NotUserError | OK  -> 성공<br />IdPwError -> IdPw 오류<br />KlasPageError -> KlasPage 응답시간 초과<br />NotUserError -> KlasHelper 로그인을 한번도 하지 않은 사용자 |
-| assignment | assignment List                                        | 과제 리스트                                                  |
+| 필드명     | 응답값                                                       | 설명                                                         |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| status     | OK<br />IdPwError<br />KlasPageError<br />SemesterCodeError<br />NotUserError | OK  -> 성공<br />IdPwError -> IdPw 오류<br />KlasPageError -> KlasPage 응답시간 초과<br />SemesterCodeError -> 자신의 수강 학기가 아님<br />NotUserError -> KlasHelper 로그인을 한번도 하지 않은 사용자 |
+| assignment | assignment List                                              | 과제 리스트                                                  |
 
 * Assignment Object
 
@@ -94,17 +92,16 @@ http://klashelper.ryulth.com/get_ass/
 
 
 
-#### get_semesters {post} / 수강했던 학기들 리스트를 보내준다.
+#### semesters {GET} / 수강했던 학기들 리스트를 보내준다.
 
-http://klashelper.ryulth.com/get_semesters/
+http://klashelper.ryulth.com/semesters
 
-* Request
+* RequestHeader
 
-```json
-{
-    "id" : "klasId"
-}
-```
+| Key      | Value  | 설명                 |
+| -------- | ------ | -------------------- |
+| appToken | test   | 인증된 연결인지 확인 |
+| id       | KlasID | Klas id              |
 
 * Response
 
