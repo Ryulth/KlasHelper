@@ -1,5 +1,7 @@
 package com.ryulth.klashelper.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +10,8 @@ import java.util.Calendar;
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor(onConstructor = @__(@JsonIgnore)) // Lombok builder use this
 @Table(name = "testComment")
 public class Comment {
     @Id
@@ -31,8 +35,13 @@ public class Comment {
     private Calendar updateTime;
 
     @Column(columnDefinition="TINYINT(1)")
-    private int flag = 1;
+    private int flag ;
 
+    @PrePersist// 새로운 것이 추가되었다. !!!
+    void setUp() {
+        this.flag = 1;
+        this.createTime = Calendar.getInstance();
+    }
     private Comment(){
     }
 }
