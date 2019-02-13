@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a5dc2d22-d2ba-4b62-9248-b8d66e861d91" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/controller/PostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/controller/PostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/PostService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/SimpleCommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/SimpleCommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/SimplePostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ryulth/klashelper/service/SimplePostService.java" afterDir="false" />
-    </list>
+    <list default="true" id="a5dc2d22-d2ba-4b62-9248-b8d66e861d91" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -334,7 +325,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550048336604" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1550048551428" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
@@ -379,9 +370,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="755" y="0" width="1172" height="1167" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18705036" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18705036" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -395,7 +385,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32913843" />
-      <window_info anchor="bottom" x="119" y="208" width="914" height="946" id="Terminal" order="7" sideWeight="0.49781182" type="WINDOWED" visible="true" weight="0.32913843" />
+      <window_info active="true" anchor="bottom" x="119" y="208" width="914" height="946" id="Terminal" order="7" sideWeight="0.49781182" type="WINDOWED" visible="true" weight="0.32913843" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5021882" side_tool="true" weight="0.32913843" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.4989059" weight="0.3288201" />
       <window_info anchor="bottom" id="Build" order="10" visible="true" weight="0.3301065" />
