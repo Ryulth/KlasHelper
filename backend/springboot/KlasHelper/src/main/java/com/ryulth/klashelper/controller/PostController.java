@@ -19,6 +19,22 @@ public class PostController {
     @Autowired
     PostService postService;
 
+    /*
+     * 게시글 작성
+     */
+    @PostMapping("/post")
+    public String writePost(
+            @RequestHeader("appToken") final String appToken,
+            @RequestBody String payload) throws IOException {
+        if (klashelperToken.equals(appToken)) {
+            return postService.writePost(payload);
+        }
+        return null;
+    }
+
+    /*
+     * 게시글 리스트
+     */
     @GetMapping("/posts/{semesterCode}/{classCode}")
     public ResponseEntity<PostListResponse> getPosts(
             @RequestHeader("appToken") final String appToken,
@@ -30,24 +46,45 @@ public class PostController {
         return null;
     }
 
-    @GetMapping("/post/{postId}")
-    public ResponseEntity<PostDetailResponse> getPostDetail(
+    /*
+     * 게시글 상세 정보
+     */
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<PostDetailResponse> getPostOne(
             @RequestHeader("appToken") final String appToken,
             @PathVariable("postId") Long postId) throws JsonProcessingException {
         if (klashelperToken.equals(appToken)) {
-            return postService.getPostDetail(postId);
+            return postService.getPostOne(postId);
         }
         return null;
     }
 
-    @PostMapping("/post")
-    public String writePost(
+    /*
+     * 게시글 수정
+     */
+    @PutMapping("/posts/{postId}")
+    public String updatePost(
             @RequestHeader("appToken") final String appToken,
+            @PathVariable("postId") Long postId,
             @RequestBody String payload) throws IOException {
         if (klashelperToken.equals(appToken)) {
-            return postService.writePost(payload);
+            return postService.updatePost(postId, payload);
         }
         return null;
     }
+
+    /*
+     * 게시글 삭제
+     */
+    @DeleteMapping("/posts/{postId}")
+    public String deletePost(
+            @RequestHeader("appToken") final String appToken,
+            @PathVariable("postId") Long postId) throws IOException {
+        if (klashelperToken.equals(appToken)) {
+            return postService.deletePost(postId);
+        }
+        return null;
+    }
+
 
 }

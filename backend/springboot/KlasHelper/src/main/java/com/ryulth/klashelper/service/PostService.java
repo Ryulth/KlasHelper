@@ -13,6 +13,8 @@ import java.io.IOException;
 public interface PostService {
     ObjectMapper mapper = new ObjectMapper();
     ResponseEntity<PostListResponse> getPosts(String semesterCode, String classCode) throws JsonProcessingException;
-    ResponseEntity<PostDetailResponse> getPostDetail(Long postId) throws JsonProcessingException;
+    ResponseEntity<PostDetailResponse> getPostOne(Long postId) throws JsonProcessingException;
+    String updatePost(Long postId, String payload) throws IOException;
+    String deletePost(Long postId) throws IOException;
     String writePost(String payload) throws IOException;
 }

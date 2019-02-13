@@ -1,8 +1,11 @@
 package com.ryulth.klashelper.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ryulth.klashelper.pojo.Response.CommentDetailResponse;
 import com.ryulth.klashelper.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -15,7 +18,7 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    @PostMapping("/comment/{postId}")
+    @PostMapping("/posts/{postId}/comment")
     public String writeComment(
             @RequestHeader("appToken") final String appToken,
             @RequestBody String payload,
@@ -25,12 +28,44 @@ public class CommentController {
         }
         return null;
     }
-    @GetMapping("/login")
-    public void Post(
+
+    /*
+     * 댓글 상세 정보
+     */
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<CommentDetailResponse> getCommentOne(
             @RequestHeader("appToken") final String appToken,
-            @RequestHeader("id") final String id,
-            @RequestHeader("pw") final String pw) throws IOException {
-        System.out.println(id);
-        System.out.println(pw);
+            @PathVariable("commentId") Long commentId) throws JsonProcessingException {
+        if (klashelperToken.equals(appToken)) {
+            return commentService.getCommentOne(commentId);
+        }
+        return null;
+    }
+
+    /*
+     * 댓글 수정
+     */
+    @PutMapping("/comments/{commentId}")
+    public String updateComment(
+            @RequestHeader("appToken") final String appToken,
+            @PathVariable("commentId") Long commentId,
+            @RequestBody String payload) throws IOException {
+        if (klashelperToken.equals(appToken)) {
+            return commentService.updateComment(commentId, payload);
+        }
+        return null;
+    }
+
+    /*
+     * 게시글 삭제
+     */
+    @DeleteMapping("/comments/{commentId}")
+    public String deletePost(
+            @RequestHeader("appToken") final String appToken,
+            @PathVariable("commentId") Long commentId) throws IOException {
+        if (klashelperToken.equals(appToken)) {
+            return commentService.deleteComment(commentId);
+        }
+        return null;
     }
 }
