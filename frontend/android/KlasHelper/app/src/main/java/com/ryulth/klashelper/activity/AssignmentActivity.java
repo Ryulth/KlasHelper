@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class AssignmentActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
+public class AssignmentActivity extends AppCompatActivity {
     private User user;
     private List<Assignment> assignments = new ArrayList<>();
     private List<Assignment> homeworks = new ArrayList<>();
@@ -103,7 +103,6 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
         this.getSemesters();
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
-        this.aSwitch = (Switch) findViewById(R.id.assignmentSwitch);
         //this.aSwitch.setOnCheckedChangeListener(this);
         /*TODO 첫 자동업데이트 고민
         if (firstLogin) {
@@ -147,22 +146,6 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()){
-            case R.id.assignmentSwitch:
-                Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
-                break;
-        }
-        Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
-
-        if (isChecked) {
-            // do something when check is selected
-            Log.d("Switch State=", ""+isChecked);
-        } else {
-            //do something when unchecked
-        }
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -214,19 +197,10 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
                             .build()).get();
             this.assignmentRepository.createTable(tableName);
             this.assignmentRepository.insertAssignments(assignments,tableName);
-
+            this.loadAssignment();
         } catch (Exception ignore) {
         }
     }
-
-    private void getSemesters() {
-        SemesterApi semesterApi = new SemesterApi();
-        try {
-            this.semesters = semesterApi.execute(user).get();
-        } catch (Exception ignore) {
-        }
-    }
-
     private void mappingAssignments() {
         this.homeworks.clear();
         this.lectures.clear();
@@ -256,22 +230,35 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
                 break;
         }
     }
+    private void getSemesters() {
+        SemesterApi semesterApi = new SemesterApi();
+        try {
+            this.semesters = semesterApi.execute(user).get();
+        } catch (Exception ignore) {
+        }
+    }
+
+
 
     private void setHomeworks() {
         AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
         assignmentsViewAdapter.setAssignments(homeworks);
+        assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);
     }
 
     private void setLectures() {
         AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
         assignmentsViewAdapter.setAssignments(lectures);
+        assignmentsViewAdapter.setTableName(tableName);
+
         listView.setAdapter(assignmentsViewAdapter);
     }
 
     private void setNotes() {
         AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
         assignmentsViewAdapter.setAssignments(notes);
+        assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);
     }
 
@@ -290,12 +277,12 @@ public class AssignmentActivity extends AppCompatActivity implements CompoundBut
 
 
     private Boolean loadAssignment() throws IOException {
-        assignments.clear();
+        this.assignments.clear();
         try {
-            assignments = assignmentRepository.getAllAssignments(tableName);
+            this.assignments = assignmentRepository.getAllAssignments(tableName);
         } catch (SQLiteException ignore) {
         }
-        if (assignments.isEmpty()) {
+        if (this.assignments.isEmpty()) {
             return false;
         }
         return true;
