@@ -7,20 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE490A0E22150E6900E303FE /* klashelper_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AE490A0D22150E6900E303FE /* klashelper_logo.png */; };
+		AE490A10221512A400E303FE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE490A0F221512A400E303FE /* Launch Screen.storyboard */; };
+		AE490A1222151CC000E303FE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE490A1122151CC000E303FE /* MainViewController.swift */; };
 		AE70EF3C220DA403003354BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3B220DA403003354BC /* AppDelegate.swift */; };
-		AE70EF3E220DA403003354BC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3D220DA403003354BC /* ViewController.swift */; };
+		AE70EF3E220DA403003354BC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3D220DA403003354BC /* LoginViewController.swift */; };
 		AE70EF41220DA403003354BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE70EF3F220DA403003354BC /* Main.storyboard */; };
 		AE70EF43220DA405003354BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE70EF42220DA405003354BC /* Assets.xcassets */; };
-		AE70EF46220DA405003354BC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE70EF44220DA405003354BC /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE490A08221502E000E303FE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
+		AE490A0D22150E6900E303FE /* klashelper_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = klashelper_logo.png; sourceTree = "<group>"; };
+		AE490A0F221512A400E303FE /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		AE490A1122151CC000E303FE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		AE70EF38220DA403003354BC /* KlasHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KlasHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE70EF3B220DA403003354BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AE70EF3D220DA403003354BC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AE70EF3D220DA403003354BC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		AE70EF40220DA403003354BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AE70EF42220DA405003354BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AE70EF45220DA405003354BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AE70EF47220DA405003354BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +40,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE490A0C22150E2700E303FE /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				AE490A0D22150E6900E303FE /* klashelper_logo.png */,
+			);
+			path = Image;
+			sourceTree = "<group>";
+		};
 		AE70EF2F220DA403003354BC = {
 			isa = PBXGroup;
 			children = (
@@ -54,12 +67,14 @@
 		AE70EF3A220DA403003354BC /* KlasHelper */ = {
 			isa = PBXGroup;
 			children = (
+				AE490A0C22150E2700E303FE /* Image */,
 				AE70EF3B220DA403003354BC /* AppDelegate.swift */,
-				AE70EF3D220DA403003354BC /* ViewController.swift */,
+				AE70EF3D220DA403003354BC /* LoginViewController.swift */,
+				AE490A1122151CC000E303FE /* MainViewController.swift */,
 				AE70EF3F220DA403003354BC /* Main.storyboard */,
 				AE70EF42220DA405003354BC /* Assets.xcassets */,
-				AE70EF44220DA405003354BC /* LaunchScreen.storyboard */,
 				AE70EF47220DA405003354BC /* Info.plist */,
+				AE490A0F221512A400E303FE /* Launch Screen.storyboard */,
 			);
 			path = KlasHelper;
 			sourceTree = "<group>";
@@ -122,8 +137,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE70EF46220DA405003354BC /* LaunchScreen.storyboard in Resources */,
 				AE70EF43220DA405003354BC /* Assets.xcassets in Resources */,
+				AE490A0E22150E6900E303FE /* klashelper_logo.png in Resources */,
+				AE490A10221512A400E303FE /* Launch Screen.storyboard in Resources */,
 				AE70EF41220DA403003354BC /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,7 +151,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE70EF3E220DA403003354BC /* ViewController.swift in Sources */,
+				AE70EF3E220DA403003354BC /* LoginViewController.swift in Sources */,
+				AE490A1222151CC000E303FE /* MainViewController.swift in Sources */,
 				AE70EF3C220DA403003354BC /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,16 +164,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				AE70EF40220DA403003354BC /* Base */,
+				AE490A08221502E000E303FE /* ko */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		AE70EF44220DA405003354BC /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				AE70EF45220DA405003354BC /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -166,6 +176,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -227,6 +238,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
