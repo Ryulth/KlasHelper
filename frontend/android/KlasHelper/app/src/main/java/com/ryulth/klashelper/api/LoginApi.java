@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class LoginApi  extends AsyncTask<User, Void, Boolean> {
-    static  final private String loginUrl = "http://Ryulth.com:11111/login/";
+    static  final private String loginUrl = ApiType.LOGIN.getUrl();
     @Override
     protected Boolean doInBackground(User... users) {
         Boolean isAuth = false;
@@ -41,6 +41,7 @@ public class LoginApi  extends AsyncTask<User, Void, Boolean> {
         ObjectMapper mapper = new ObjectMapper();
         HttpHeaders headers = new HttpHeaders(); // response Header
         headers.setContentType(MediaType.APPLICATION_JSON); // header need UTF8
+        headers.set("appToken","test");
         String responseBody = mapper.writeValueAsString(user);
         HttpEntity requestEntity = new HttpEntity(responseBody, headers);
         RestTemplate restTemplate = new RestTemplate();

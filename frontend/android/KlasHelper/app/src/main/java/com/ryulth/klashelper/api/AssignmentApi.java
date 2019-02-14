@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AssignmentApi extends AsyncTask<AssignmentRequest, Void, List<Assignment>> {
-    static  final private String getAssUrl = "http://Ryulth.com:11111/get_ass/";
+    static  final private String AssignmentsUrl = ApiType.ASSIGNMENT.getUrl();
     @Override
     protected List<Assignment> doInBackground(AssignmentRequest... assignmentRequests) {
         List<Assignment> assignments=null;
@@ -41,13 +42,15 @@ public class AssignmentApi extends AsyncTask<AssignmentRequest, Void, List<Assig
     }
 
     private List<Assignment> getAssignments(AssignmentRequest assignmentRequests) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
         HttpHeaders headers = new HttpHeaders(); // response Header
         headers.setContentType(MediaType.APPLICATION_JSON); // header need UTF8
-        String responseBody = mapper.writeValueAsString(assignmentRequests);
-        HttpEntity requestEntity = new HttpEntity(responseBody, headers);
+        headers.set("appToken","test");
+        headers.set("id",assignmentRequests.getId());
+        headers.set("pw",assignmentRequests.getPw());
+        HttpEntity entity = new HttpEntity(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<UpdateResponse > responseEntity = restTemplate.postForEntity(getAssUrl, requestEntity, UpdateResponse.class);
+        ResponseEntity<UpdateResponse> responseEntity = restTemplate.exchange(
+                AssignmentsUrl+"/"+assignmentRequests.getSemester(), HttpMethod.GET, entity, UpdateResponse.class);
         return responseEntity.getBody().getAssignments();
     }
 }

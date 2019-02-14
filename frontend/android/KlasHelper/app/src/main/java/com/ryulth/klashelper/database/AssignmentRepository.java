@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ryulth.klashelper.pojo.model.Assignment;
@@ -37,7 +38,7 @@ public class AssignmentRepository extends SQLiteOpenHelper {
     public List<Assignment> getAllAssignments(String tableName) throws SQLiteException {
         SQLiteDatabase db = getReadableDatabase();
         StringBuffer sb = new StringBuffer();
-        sb.append(" SELECT workCode, semester, workFile, workCourse, isSubmit, workType, workTitle, workCreateTime, workFinishTime, flag FROM ");
+        sb.append(" SELECT workCode, semester, workFile, workCourse, isSubmit, workType, workTitle, workCreateTime, workFinishTime, isAlarm, flag FROM ");
         sb.append(tableName);
         Cursor cursor = db.rawQuery(sb.toString(), null);
 
@@ -53,7 +54,8 @@ public class AssignmentRepository extends SQLiteOpenHelper {
                     .workTitle(cursor.getString(6))
                     .workCreateTime(cursor.getString(7))
                     .workFinishTime(cursor.getString(8))
-                    .flag(cursor.getInt(9)).build());
+                    .isAlarm(cursor.getInt(9))
+                    .flag(cursor.getInt(10)).build());
         }
         return assignments;
     }
@@ -73,32 +75,36 @@ public class AssignmentRepository extends SQLiteOpenHelper {
         sb.append(" workTitle TEXT, ");
         sb.append(" workCreateTime TEXT, ");
         sb.append(" workFinishTime TEXT, ");
+        sb.append("isAlarm INTEGER, ");
         sb.append("flag INTEGER )");
 
         db.execSQL(sb.toString());
     }
 
-    public void insertAssignment(Assignment assignment, String tableName) throws SQLiteConstraintException {
+    public void insertAssignments(List<Assignment> assignments, String tableName){
         SQLiteDatabase db = getWritableDatabase();
-        StringBuffer sb = new StringBuffer();
-        sb.append(" INSERT INTO ");
-        sb.append(tableName);
-        sb.append("( workCode, semester, workFile, workCourse, isSubmit, workType, workTitle, workCreateTime, workFinishTime, flag) ");
-        sb.append(" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?,? ) ");
-
-        db.execSQL(sb.toString(),
-                new Object[]{assignment.getWorkCode(),
-                        assignment.getSemester(),
-                        assignment.getWorkFile(),
-                        assignment.getWorkCourse(),
-                        assignment.getIsSubmit(),
-                        assignment.getWorkType(),
-                        assignment.getWorkTitle(),
-                        assignment.getWorkCreateTime(),
-                        assignment.getWorkFinishTime(),
-                        1});
-
+        for (Assignment assignment : assignments) {
+            try {
+                StringBuffer sb = new StringBuffer();
+                sb.append(" INSERT INTO ");
+                sb.append(tableName);
+                sb.append("( workCode, semester, workFile, workCourse, isSubmit, workType, workTitle, workCreateTime, workFinishTime,isAlarm,flag) ");
+                sb.append(" VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) ");
+                db.execSQL(sb.toString(),
+                        new Object[]{assignment.getWorkCode(),
+                                assignment.getSemester(),
+                                assignment.getWorkFile(),
+                                assignment.getWorkCourse(),
+                                assignment.getIsSubmit(),
+                                assignment.getWorkType(),
+                                assignment.getWorkTitle(),
+                                assignment.getWorkCreateTime(),
+                                assignment.getWorkFinishTime(),
+                                1,1});
+            } catch (SQLiteConstraintException e) {
+                // TODO UPDATE 코드
+            }
+        }
     }
-
 
 }

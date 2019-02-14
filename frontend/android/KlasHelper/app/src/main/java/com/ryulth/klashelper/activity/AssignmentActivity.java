@@ -12,13 +12,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.Toast;
 
 
@@ -39,7 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class AssignmentActivity extends AppCompatActivity {
+public class AssignmentActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener{
     private User user;
     private List<Assignment> assignments = new ArrayList<>();
     private List<Assignment> homeworks = new ArrayList<>();
@@ -57,6 +60,9 @@ public class AssignmentActivity extends AppCompatActivity {
     private String selectSemester;
     private String semesters;
     private Spinner spinner;
+    private Boolean firstLogin = true;
+    private Switch aSwitch;
+
 
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
@@ -68,6 +74,14 @@ public class AssignmentActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             activity.mappingAssignments();
+            //TODO 리스트 비교 할지 말지 고민중
+            if(msg.arg1==1)
+            {
+                Toast.makeText(activity, "자동 업데이트 완료",Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(activity, "수동 업데이트 완료",Toast.LENGTH_LONG).show();
+            }
             activity.swipeRefreshLayout.setRefreshing(false);
         }
     }
@@ -78,19 +92,32 @@ public class AssignmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assignment);
         Intent intent = getIntent();
         this.user = (User) intent.getSerializableExtra("userInfoIntent");
-
         this.assignmentRepository = new AssignmentRepository(getApplicationContext());
-        //TODO 나중에 학기 선택 가능 하도록 변경
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.myHandler = new MyHandler(this);
         this.listView = (ListView) findViewById(R.id.navigation_assignment);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
         this.toolbar.setTitle("");
         this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
+
         this.getSemesters();
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
-
+        this.aSwitch = (Switch) findViewById(R.id.assignmentSwitch);
+        //this.aSwitch.setOnCheckedChangeListener(this);
+        /*TODO 첫 자동업데이트 고민
+        if (firstLogin) {
+            firstLogin = false;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getAssignments();
+                    Message msg = myHandler.obtainMessage();
+                    msg.arg1=1;
+                    myHandler.sendMessage(msg);
+                }
+            }).start();
+        }*/
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -103,7 +130,6 @@ public class AssignmentActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 getAssignments();
-                                getSemesters();
                                 Message msg = myHandler.obtainMessage();
                                 myHandler.sendMessage(msg);
 
@@ -121,6 +147,22 @@ public class AssignmentActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case R.id.assignmentSwitch:
+                Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+                break;
+        }
+        Toast.makeText(this, "체크상태 = " + isChecked, Toast.LENGTH_SHORT).show();
+
+        if (isChecked) {
+            // do something when check is selected
+            Log.d("Switch State=", ""+isChecked);
+        } else {
+            //do something when unchecked
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -164,7 +206,6 @@ public class AssignmentActivity extends AppCompatActivity {
     private void getAssignments() {
         AssignmentApi assignmentApi = new AssignmentApi();
         try {
-            this.assignments = null;
             this.assignments = assignmentApi.execute(
                     AssignmentRequest.builder()
                             .id(user.getId())
@@ -172,14 +213,15 @@ public class AssignmentActivity extends AppCompatActivity {
                             .semester(selectSemester)
                             .build()).get();
             this.assignmentRepository.createTable(tableName);
-            this.insertAssignment();
+            this.assignmentRepository.insertAssignments(assignments,tableName);
+
         } catch (Exception ignore) {
         }
     }
-    private void getSemesters(){
-        SemesterApi semesterApi =new SemesterApi();
+
+    private void getSemesters() {
+        SemesterApi semesterApi = new SemesterApi();
         try {
-            this.semesters = null;
             this.semesters = semesterApi.execute(user).get();
         } catch (Exception ignore) {
         }
@@ -205,10 +247,13 @@ public class AssignmentActivity extends AppCompatActivity {
         switch (navigation.getSelectedItemId()) {
             case R.id.navigation_assignment:
                 this.setHomeworks();
+                break;
             case R.id.navigation_lecture:
                 this.setLectures();
+                break;
             case R.id.navigation_notes:
-                this.setHomeworks();
+                this.setNotes();
+                break;
         }
     }
 
@@ -248,29 +293,20 @@ public class AssignmentActivity extends AppCompatActivity {
         assignments.clear();
         try {
             assignments = assignmentRepository.getAllAssignments(tableName);
-        }catch (SQLiteException ignore ){
+        } catch (SQLiteException ignore) {
         }
-        if (assignments.isEmpty()){
+        if (assignments.isEmpty()) {
             return false;
         }
         return true;
     }
 
-    private void insertAssignment() {
-        for (Assignment assignment : assignments) {
-            try {
-                assignmentRepository.insertAssignment(assignment,tableName);
-            }
-            catch (SQLiteConstraintException e){
-            }
-        }
-    }
+
     public void addItemsToSpinner() {
 
-
-        List<String > myList = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
-        ArrayAdapter<String> adapter= new ArrayAdapter<>(this ,
-                android.R.layout.simple_spinner_item , myList);
+        List<String> myList = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, myList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         this.spinner.setAdapter(adapter);
@@ -282,7 +318,7 @@ public class AssignmentActivity extends AppCompatActivity {
                 String item = adapter.getItemAtPosition(position).toString();
 
                 selectSemester = item;
-                tableName= "a"+user.getId() + "_" +selectSemester ;
+                tableName = "a" + user.getId() + "_" + selectSemester;
                 try {
                     loadAssignment();
                     mappingAssignments();
@@ -291,9 +327,10 @@ public class AssignmentActivity extends AppCompatActivity {
                 }
 
                 // Showing selected spinner item
-                Toast.makeText(getApplicationContext(), "Selected  : " + item,
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Selected  : " + item,
+                //       Toast.LENGTH_LONG).show();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
