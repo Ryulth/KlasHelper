@@ -1,0 +1,21 @@
+PODS:
+  - HideShowPasswordTextField (0.3)
+
+DEPENDENCIES:
+  - HideShowPasswordTextField (from `https://github.com/Guidebook/HideShowPasswordTextField`)
+
+EXTERNAL SOURCES:
+  HideShowPasswordTextField:
+    :git: https://github.com/Guidebook/HideShowPasswordTextField
+
+CHECKOUT OPTIONS:
+  HideShowPasswordTextField:
+    :commit: 7203fdc9eaff6bb116b39faa40f0208654adbc1c
+    :git: https://github.com/Guidebook/HideShowPasswordTextField
+
+SPEC CHECKSUMS:
+  HideShowPasswordTextField: 9426177a6b6498a6084e29ad65bba7d1157951b7
+
+PODFILE CHECKSUM: 222bd3d18c0d9e9c512a261cfe23906b88f1a1f6
+
+COCOAPODS: 1.6.0

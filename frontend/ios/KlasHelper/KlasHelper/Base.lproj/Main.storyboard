@@ -74,44 +74,64 @@
             </objects>
             <point key="canvasLocation" x="529" y="1118"/>
         </scene>
-        <!--Login View Controller-->
+        <!--View Controller-->
         <scene sceneID="MyK-tW-rO4">
             <objects>
-                <viewController id="7Je-Qu-4Aj" customClass="LoginViewController" customModule="KlasHelper" sceneMemberID="viewController">
+                <viewController id="7Je-Qu-4Aj" customClass="ViewController" customModule="KlasHelper" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nio-Nf-p2x">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="klashelper_logo.png" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8SH-Qg-SKH">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="klashelper_logo.png" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8SH-Qg-SKH">
                                 <rect key="frame" x="53" y="108" width="308" height="356"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="356" id="B5e-4D-rM9"/>
+                                </constraints>
                             </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="PW" borderStyle="line" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pqR-hh-S08">
-                                <rect key="frame" x="53" y="587" width="308" height="59"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="PW" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pqR-hh-S08" customClass="HideShowPasswordTextField" customModule="KlasHelper" customModuleProvider="target">
+                                <rect key="frame" x="53" y="602" width="308" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="qwT-Yg-mSj"/>
+                                </constraints>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" name=".SFNSDisplay" family=".SF NS Display" pointSize="25"/>
                                 <textInputTraits key="textInputTraits" textContentType="password"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="25R-4m-Izm">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="25R-4m-Izm">
                                 <rect key="frame" x="53" y="739" width="308" height="61"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <segue destination="49e-gI-2Ge" kind="modal" id="lc7-0j-EIA"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="ID" borderStyle="line" textAlignment="natural" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCp-uM-enE">
+                            <textField opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="ID" borderStyle="line" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCp-uM-enE">
                                 <rect key="frame" x="53" y="507" width="308" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <textInputTraits key="textInputTraits" textContentType="nickname"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="trailing" secondItem="gCp-uM-enE" secondAttribute="trailing" id="A4e-VM-d7E"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="centerX" secondItem="Nio-Nf-p2x" secondAttribute="centerX" id="AdE-rI-87d"/>
+                            <constraint firstAttribute="bottom" secondItem="pqR-hh-S08" secondAttribute="bottom" constant="250" id="DmZ-4D-md2"/>
+                            <constraint firstItem="gCp-uM-enE" firstAttribute="top" secondItem="8SH-Qg-SKH" secondAttribute="bottom" constant="43" id="Lt2-rz-q7B"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="top" secondItem="gCp-uM-enE" secondAttribute="bottom" constant="20" id="PrZ-k6-Stm"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="leading" secondItem="gCp-uM-enE" secondAttribute="leading" id="Smw-kn-6uP"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="trailing" secondItem="25R-4m-Izm" secondAttribute="trailing" id="coj-pR-1Zb"/>
+                            <constraint firstItem="8SH-Qg-SKH" firstAttribute="top" secondItem="44G-0l-BF3" secondAttribute="top" constant="64" id="gC9-Cw-8yr"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="leading" secondItem="8SH-Qg-SKH" secondAttribute="leading" id="jdy-c8-YVs"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="trailing" secondItem="8SH-Qg-SKH" secondAttribute="trailing" id="nab-Cg-F1k"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="leading" secondItem="44G-0l-BF3" secondAttribute="leading" constant="53" id="sqR-yY-eO0"/>
+                            <constraint firstItem="pqR-hh-S08" firstAttribute="leading" secondItem="25R-4m-Izm" secondAttribute="leading" id="vNv-jK-3UB"/>
+                            <constraint firstItem="25R-4m-Izm" firstAttribute="top" secondItem="pqR-hh-S08" secondAttribute="bottom" constant="93" id="zVr-2V-rjv"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="44G-0l-BF3"/>
                     </view>
+                    <connections>
+                        <outlet property="passwordTextField" destination="pqR-hh-S08" id="kNX-mM-nt5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJD-Ti-ipP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -123,6 +143,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="49e-gI-2Ge" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yFY-23-ep9">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

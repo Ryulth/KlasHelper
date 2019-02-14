@@ -7,26 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2CBD03BF2DCA9C9BFA547ACC /* Pods_KlasHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2B3880186E7FC740321B2BE /* Pods_KlasHelper.framework */; };
+		AE1088E822156B4600D5B111 /* HideShowPasswordTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1088E722156B4600D5B111 /* HideShowPasswordTextField.swift */; };
+		AE1088F522156BA500D5B111 /* PasswordToggleVisibilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1088F222156B4D00D5B111 /* PasswordToggleVisibilityView.swift */; };
+		AE1088F622156BDC00D5B111 /* ic_password_checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088EA22156B4D00D5B111 /* ic_password_checkmark.png */; };
+		AE1088F722156BDC00D5B111 /* ic_eye_closed.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088EB22156B4D00D5B111 /* ic_eye_closed.png */; };
+		AE1088F822156BDC00D5B111 /* ic_password_checkmark@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088EC22156B4D00D5B111 /* ic_password_checkmark@3x.png */; };
+		AE1088F922156BDC00D5B111 /* ic_password_checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088ED22156B4D00D5B111 /* ic_password_checkmark@2x.png */; };
+		AE1088FA22156BDC00D5B111 /* ic_eye_closed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088EF22156B4D00D5B111 /* ic_eye_closed@2x.png */; };
+		AE1088FB22156BDC00D5B111 /* ic_eye_open.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088F022156B4D00D5B111 /* ic_eye_open.png */; };
+		AE1088FC22156BDC00D5B111 /* ic_eye_closed@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088F122156B4D00D5B111 /* ic_eye_closed@3x.png */; };
+		AE1088FD22156BDC00D5B111 /* PasswordToggleVisibilityView.swift in Resources */ = {isa = PBXBuildFile; fileRef = AE1088F222156B4D00D5B111 /* PasswordToggleVisibilityView.swift */; };
+		AE1088FE22156BDC00D5B111 /* ic_eye_open@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088F322156B4D00D5B111 /* ic_eye_open@2x.png */; };
+		AE1088FF22156BDC00D5B111 /* ic_eye_open@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = AE1088F422156B4D00D5B111 /* ic_eye_open@3x.png */; };
 		AE490A0E22150E6900E303FE /* klashelper_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AE490A0D22150E6900E303FE /* klashelper_logo.png */; };
 		AE490A10221512A400E303FE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE490A0F221512A400E303FE /* Launch Screen.storyboard */; };
 		AE490A1222151CC000E303FE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE490A1122151CC000E303FE /* MainViewController.swift */; };
 		AE70EF3C220DA403003354BC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3B220DA403003354BC /* AppDelegate.swift */; };
-		AE70EF3E220DA403003354BC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3D220DA403003354BC /* LoginViewController.swift */; };
+		AE70EF3E220DA403003354BC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE70EF3D220DA403003354BC /* ViewController.swift */; };
 		AE70EF41220DA403003354BC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE70EF3F220DA403003354BC /* Main.storyboard */; };
 		AE70EF43220DA405003354BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE70EF42220DA405003354BC /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2F6490642734A16842811644 /* Pods-KlasHelper.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KlasHelper.release.xcconfig"; path = "Target Support Files/Pods-KlasHelper/Pods-KlasHelper.release.xcconfig"; sourceTree = "<group>"; };
+		AE1088E722156B4600D5B111 /* HideShowPasswordTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HideShowPasswordTextField.swift; sourceTree = SOURCE_ROOT; };
+		AE1088EA22156B4D00D5B111 /* ic_password_checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_password_checkmark.png; sourceTree = "<group>"; };
+		AE1088EB22156B4D00D5B111 /* ic_eye_closed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_eye_closed.png; sourceTree = "<group>"; };
+		AE1088EC22156B4D00D5B111 /* ic_password_checkmark@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_password_checkmark@3x.png"; sourceTree = "<group>"; };
+		AE1088ED22156B4D00D5B111 /* ic_password_checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_password_checkmark@2x.png"; sourceTree = "<group>"; };
+		AE1088EF22156B4D00D5B111 /* ic_eye_closed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_eye_closed@2x.png"; sourceTree = "<group>"; };
+		AE1088F022156B4D00D5B111 /* ic_eye_open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_eye_open.png; sourceTree = "<group>"; };
+		AE1088F122156B4D00D5B111 /* ic_eye_closed@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_eye_closed@3x.png"; sourceTree = "<group>"; };
+		AE1088F222156B4D00D5B111 /* PasswordToggleVisibilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordToggleVisibilityView.swift; sourceTree = "<group>"; };
+		AE1088F322156B4D00D5B111 /* ic_eye_open@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_eye_open@2x.png"; sourceTree = "<group>"; };
+		AE1088F422156B4D00D5B111 /* ic_eye_open@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_eye_open@3x.png"; sourceTree = "<group>"; };
 		AE490A08221502E000E303FE /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Main.strings; sourceTree = "<group>"; };
 		AE490A0D22150E6900E303FE /* klashelper_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = klashelper_logo.png; sourceTree = "<group>"; };
 		AE490A0F221512A400E303FE /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		AE490A1122151CC000E303FE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		AE70EF38220DA403003354BC /* KlasHelper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KlasHelper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE70EF3B220DA403003354BC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		AE70EF3D220DA403003354BC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		AE70EF3D220DA403003354BC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		AE70EF40220DA403003354BC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		AE70EF42220DA405003354BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE70EF47220DA405003354BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E38F59110D605961CFBE08A2 /* Pods-KlasHelper.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KlasHelper.debug.xcconfig"; path = "Target Support Files/Pods-KlasHelper/Pods-KlasHelper.debug.xcconfig"; sourceTree = "<group>"; };
+		F2B3880186E7FC740321B2BE /* Pods_KlasHelper.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_KlasHelper.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,12 +61,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CBD03BF2DCA9C9BFA547ACC /* Pods_KlasHelper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		189731EFA7D382E76CA89343 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F2B3880186E7FC740321B2BE /* Pods_KlasHelper.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AE1088E922156B4D00D5B111 /* HideShowPasswordTextField */ = {
+			isa = PBXGroup;
+			children = (
+				AE1088E722156B4600D5B111 /* HideShowPasswordTextField.swift */,
+				AE1088EA22156B4D00D5B111 /* ic_password_checkmark.png */,
+				AE1088EB22156B4D00D5B111 /* ic_eye_closed.png */,
+				AE1088EC22156B4D00D5B111 /* ic_password_checkmark@3x.png */,
+				AE1088ED22156B4D00D5B111 /* ic_password_checkmark@2x.png */,
+				AE1088EF22156B4D00D5B111 /* ic_eye_closed@2x.png */,
+				AE1088F022156B4D00D5B111 /* ic_eye_open.png */,
+				AE1088F122156B4D00D5B111 /* ic_eye_closed@3x.png */,
+				AE1088F222156B4D00D5B111 /* PasswordToggleVisibilityView.swift */,
+				AE1088F322156B4D00D5B111 /* ic_eye_open@2x.png */,
+				AE1088F422156B4D00D5B111 /* ic_eye_open@3x.png */,
+			);
+			path = HideShowPasswordTextField;
+			sourceTree = "<group>";
+		};
 		AE490A0C22150E2700E303FE /* Image */ = {
 			isa = PBXGroup;
 			children = (
@@ -51,8 +105,11 @@
 		AE70EF2F220DA403003354BC = {
 			isa = PBXGroup;
 			children = (
+				AE1088E922156B4D00D5B111 /* HideShowPasswordTextField */,
 				AE70EF3A220DA403003354BC /* KlasHelper */,
 				AE70EF39220DA403003354BC /* Products */,
+				C07BA642AC3823BED982FF99 /* Pods */,
+				189731EFA7D382E76CA89343 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -69,7 +126,7 @@
 			children = (
 				AE490A0C22150E2700E303FE /* Image */,
 				AE70EF3B220DA403003354BC /* AppDelegate.swift */,
-				AE70EF3D220DA403003354BC /* LoginViewController.swift */,
+				AE70EF3D220DA403003354BC /* ViewController.swift */,
 				AE490A1122151CC000E303FE /* MainViewController.swift */,
 				AE70EF3F220DA403003354BC /* Main.storyboard */,
 				AE70EF42220DA405003354BC /* Assets.xcassets */,
@@ -79,6 +136,15 @@
 			path = KlasHelper;
 			sourceTree = "<group>";
 		};
+		C07BA642AC3823BED982FF99 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E38F59110D605961CFBE08A2 /* Pods-KlasHelper.debug.xcconfig */,
+				2F6490642734A16842811644 /* Pods-KlasHelper.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -86,9 +152,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AE70EF4A220DA405003354BC /* Build configuration list for PBXNativeTarget "KlasHelper" */;
 			buildPhases = (
+				8A192C0CDF2984BBA2D6BCDC /* [CP] Check Pods Manifest.lock */,
 				AE70EF34220DA403003354BC /* Sources */,
 				AE70EF35220DA403003354BC /* Frameworks */,
 				AE70EF36220DA403003354BC /* Resources */,
+				12BC339CCC930BCF26D05A8F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -137,6 +205,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE1088F622156BDC00D5B111 /* ic_password_checkmark.png in Resources */,
+				AE1088F722156BDC00D5B111 /* ic_eye_closed.png in Resources */,
+				AE1088F822156BDC00D5B111 /* ic_password_checkmark@3x.png in Resources */,
+				AE1088F922156BDC00D5B111 /* ic_password_checkmark@2x.png in Resources */,
+				AE1088FA22156BDC00D5B111 /* ic_eye_closed@2x.png in Resources */,
+				AE1088FB22156BDC00D5B111 /* ic_eye_open.png in Resources */,
+				AE1088FC22156BDC00D5B111 /* ic_eye_closed@3x.png in Resources */,
+				AE1088FD22156BDC00D5B111 /* PasswordToggleVisibilityView.swift in Resources */,
+				AE1088FE22156BDC00D5B111 /* ic_eye_open@2x.png in Resources */,
+				AE1088FF22156BDC00D5B111 /* ic_eye_open@3x.png in Resources */,
 				AE70EF43220DA405003354BC /* Assets.xcassets in Resources */,
 				AE490A0E22150E6900E303FE /* klashelper_logo.png in Resources */,
 				AE490A10221512A400E303FE /* Launch Screen.storyboard in Resources */,
@@ -146,12 +224,61 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		12BC339CCC930BCF26D05A8F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-KlasHelper/Pods-KlasHelper-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/HideShowPasswordTextField/HideShowPasswordTextField.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HideShowPasswordTextField.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-KlasHelper/Pods-KlasHelper-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8A192C0CDF2984BBA2D6BCDC /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-KlasHelper-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AE70EF34220DA403003354BC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE70EF3E220DA403003354BC /* LoginViewController.swift in Sources */,
+				AE1088F522156BA500D5B111 /* PasswordToggleVisibilityView.swift in Sources */,
+				AE1088E822156B4600D5B111 /* HideShowPasswordTextField.swift in Sources */,
+				AE70EF3E220DA403003354BC /* ViewController.swift in Sources */,
 				AE490A1222151CC000E303FE /* MainViewController.swift in Sources */,
 				AE70EF3C220DA403003354BC /* AppDelegate.swift in Sources */,
 			);
@@ -224,7 +351,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -280,7 +407,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -292,6 +419,7 @@
 		};
 		AE70EF4B220DA405003354BC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E38F59110D605961CFBE08A2 /* Pods-KlasHelper.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -309,6 +437,7 @@
 		};
 		AE70EF4C220DA405003354BC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2F6490642734A16842811644 /* Pods-KlasHelper.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
