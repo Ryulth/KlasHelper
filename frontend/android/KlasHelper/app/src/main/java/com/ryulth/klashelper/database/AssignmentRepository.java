@@ -106,5 +106,22 @@ public class AssignmentRepository extends SQLiteOpenHelper {
             }
         }
     }
+    public void updateIsAlarmByWorkCode(String workCode,int isAlarm,String tableName){
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            StringBuffer sb = new StringBuffer();
+            sb.append("UPDATE ");
+            sb.append(tableName);
+            sb.append(" SET isAlarm=");
+            sb.append(String.valueOf(isAlarm));
+            sb.append(" WHERE workCode=");
+            sb.append("\'");
+            sb.append(workCode);
+            sb.append("\'");
+            db.execSQL(sb.toString());
+        }catch (SQLiteConstraintException e) {
+            // TODO UPDATE 코드
+        }
+    }
 
 }
