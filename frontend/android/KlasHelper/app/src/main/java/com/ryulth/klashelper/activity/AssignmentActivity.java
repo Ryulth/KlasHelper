@@ -35,8 +35,9 @@ import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ryulth.klashelper.pojo.request.AssignmentRequest;
+import com.ryulth.klashelper.service.AssignmentService;
+import com.ryulth.klashelper.service.SimpleAssignmentService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,14 +55,12 @@ public class AssignmentActivity extends AppCompatActivity {
     private BottomNavigationView navigation;
     private Toolbar toolbar;
     private long lastTimeBackPressed; //뒤로가기 버튼이 클릭된 시간
-    private ObjectMapper mapper = new ObjectMapper();
-    private AssignmentRepository assignmentRepository;
     private String tableName;
     private String selectSemester;
     private String semesters;
     private Spinner spinner;
-    private Boolean firstLogin = true;
-    private Switch aSwitch;
+    private AssignmentService assignmentService;
+
 
 
     private static class MyHandler extends Handler {
@@ -92,17 +91,17 @@ public class AssignmentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_assignment);
         Intent intent = getIntent();
         this.user = (User) intent.getSerializableExtra("userInfoIntent");
-        this.assignmentRepository = new AssignmentRepository(getApplicationContext());
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.myHandler = new MyHandler(this);
         this.listView = (ListView) findViewById(R.id.navigation_assignment);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
         this.toolbar.setTitle("");
         this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
-
-        this.getSemesters();
+        this.assignmentService = new SimpleAssignmentService(getApplicationContext());
+        this.semesters = assignmentService.getSemesters(user);
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
+
         //this.aSwitch.setOnCheckedChangeListener(this);
         /*TODO 첫 자동업데이트 고민
         if (firstLogin) {
@@ -128,7 +127,8 @@ public class AssignmentActivity extends AppCompatActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                getAssignments();
+                                assignments=assignmentService.getAssignment(selectSemester,user);
+                                assignments=assignmentService.loadAssignment(tableName);
                                 Message msg = myHandler.obtainMessage();
                                 myHandler.sendMessage(msg);
 
@@ -185,22 +185,6 @@ public class AssignmentActivity extends AppCompatActivity {
             return false;
         }
     };
-
-    private void getAssignments() {
-        AssignmentApi assignmentApi = new AssignmentApi();
-        try {
-            this.assignments = assignmentApi.execute(
-                    AssignmentRequest.builder()
-                            .id(user.getId())
-                            .pw(user.getPw())
-                            .semester(selectSemester)
-                            .build()).get();
-            this.assignmentRepository.createTable(tableName);
-            this.assignmentRepository.insertAssignments(assignments,tableName);
-            this.loadAssignment();
-        } catch (Exception ignore) {
-        }
-    }
     private void mappingAssignments() {
         this.homeworks.clear();
         this.lectures.clear();
@@ -230,67 +214,9 @@ public class AssignmentActivity extends AppCompatActivity {
                 break;
         }
     }
-    private void getSemesters() {
-        SemesterApi semesterApi = new SemesterApi();
-        try {
-            this.semesters = semesterApi.execute(user).get();
-        } catch (Exception ignore) {
-        }
-    }
-
-
-
-    private void setHomeworks() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
-        assignmentsViewAdapter.setAssignments(homeworks);
-        assignmentsViewAdapter.setTableName(tableName);
-        listView.setAdapter(assignmentsViewAdapter);
-    }
-
-    private void setLectures() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
-        assignmentsViewAdapter.setAssignments(lectures);
-        assignmentsViewAdapter.setTableName(tableName);
-
-        listView.setAdapter(assignmentsViewAdapter);
-    }
-
-    private void setNotes() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
-        assignmentsViewAdapter.setAssignments(notes);
-        assignmentsViewAdapter.setTableName(tableName);
-        listView.setAdapter(assignmentsViewAdapter);
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
-        if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
-            this.finishAffinity();
-            return;
-        }
-        //'뒤로' 버튼 한번 클릭 시 메시지
-        Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
-        lastTimeBackPressed = System.currentTimeMillis();
-    }
-
-
-    private Boolean loadAssignment() throws IOException {
-        this.assignments.clear();
-        try {
-            this.assignments = assignmentRepository.getAllAssignments(tableName);
-        } catch (SQLiteException ignore) {
-        }
-        if (this.assignments.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
 
 
     public void addItemsToSpinner() {
-
         List<String> myList = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, myList);
@@ -303,30 +229,54 @@ public class AssignmentActivity extends AppCompatActivity {
                                        int position, long id) {
                 // On selecting a spinner item
                 String item = adapter.getItemAtPosition(position).toString();
-
                 selectSemester = item;
                 tableName = "a" + user.getId() + "_" + selectSemester;
                 try {
-                    loadAssignment();
+                    assignments=assignmentService.loadAssignment(tableName);
                     mappingAssignments();
 
-                } catch (IOException ignore) {
+                } catch (Exception ignore) {
                 }
-
-                // Showing selected spinner item
-                //Toast.makeText(getApplicationContext(), "Selected  : " + item,
-                //       Toast.LENGTH_LONG).show();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
-
             }
         });
 
     }
 
+    @Override
+    public void onBackPressed() {
+        //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
+        if (System.currentTimeMillis() - lastTimeBackPressed < 2000) {
+            this.finishAffinity();
+            return;
+        }
+        //'뒤로' 버튼 한번 클릭 시 메시지
+        Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        lastTimeBackPressed = System.currentTimeMillis();
+    }
+    private void setHomeworks() {
+        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        assignmentsViewAdapter.setAssignments(homeworks);
+        assignmentsViewAdapter.setTableName(tableName);
+        listView.setAdapter(assignmentsViewAdapter);
+    }
+
+    private void setLectures() {
+        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        assignmentsViewAdapter.setAssignments(lectures);
+        assignmentsViewAdapter.setTableName(tableName);
+        listView.setAdapter(assignmentsViewAdapter);
+    }
+
+    private void setNotes() {
+        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        assignmentsViewAdapter.setAssignments(notes);
+        assignmentsViewAdapter.setTableName(tableName);
+        listView.setAdapter(assignmentsViewAdapter);
+    }
     private void logout() {
         SharedPreferences userInfoFile = getSharedPreferences("userInfoFile", MODE_PRIVATE);
         SharedPreferences.Editor editor = userInfoFile.edit();
@@ -337,4 +287,5 @@ public class AssignmentActivity extends AppCompatActivity {
         intentHome.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intentHome);
     }
+
 }

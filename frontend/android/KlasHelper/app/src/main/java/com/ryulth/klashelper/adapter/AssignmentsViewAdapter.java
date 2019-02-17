@@ -7,17 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ryulth.klashelper.R;
-import com.ryulth.klashelper.activity.AssignmentActivity;
 import com.ryulth.klashelper.database.AssignmentRepository;
 import com.ryulth.klashelper.pojo.model.Assignment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
