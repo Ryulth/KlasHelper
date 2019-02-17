@@ -60,8 +60,7 @@ public class AssignmentActivity extends AppCompatActivity {
     private String semesters;
     private Spinner spinner;
     private AssignmentService assignmentService;
-
-
+    private List<String> semesterCodes;
 
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
@@ -74,12 +73,10 @@ public class AssignmentActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             activity.mappingAssignments();
             //TODO 리스트 비교 할지 말지 고민중
-            if(msg.arg1==1)
-            {
-                Toast.makeText(activity, "자동 업데이트 완료",Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(activity, "수동 업데이트 완료",Toast.LENGTH_LONG).show();
+            if (msg.arg1 == 1) {
+                Toast.makeText(activity, "자동 업데이트 완료", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(activity, "수동 업데이트 완료", Toast.LENGTH_LONG).show();
             }
             activity.swipeRefreshLayout.setRefreshing(false);
         }
@@ -99,6 +96,7 @@ public class AssignmentActivity extends AppCompatActivity {
         this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
         this.assignmentService = new SimpleAssignmentService(getApplicationContext());
         this.semesters = assignmentService.getSemesters(user);
+        this.semesterCodes = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
 
@@ -127,8 +125,8 @@ public class AssignmentActivity extends AppCompatActivity {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                assignments=assignmentService.getAssignment(selectSemester,user);
-                                assignments=assignmentService.loadAssignment(tableName);
+                                assignments = assignmentService.getAssignment(selectSemester, user);
+                                assignments = assignmentService.loadAssignment(tableName);
                                 Message msg = myHandler.obtainMessage();
                                 myHandler.sendMessage(msg);
 
@@ -185,6 +183,7 @@ public class AssignmentActivity extends AppCompatActivity {
             return false;
         }
     };
+
     private void mappingAssignments() {
         this.homeworks.clear();
         this.lectures.clear();
@@ -217,9 +216,10 @@ public class AssignmentActivity extends AppCompatActivity {
 
 
     public void addItemsToSpinner() {
-        List<String> myList = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
+        List<String> semesterNames =matchingSemesterName();
+
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, myList);
+                android.R.layout.simple_spinner_item, semesterNames);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         this.spinner.setAdapter(adapter);
@@ -228,16 +228,18 @@ public class AssignmentActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapter, View v,
                                        int position, long id) {
                 // On selecting a spinner item
-                String item = adapter.getItemAtPosition(position).toString();
+                //String item = adapter.getItemAtPosition(position).toString();
+                String item = semesterCodes.get(position);
                 selectSemester = item;
                 tableName = "a" + user.getId() + "_" + selectSemester;
                 try {
-                    assignments=assignmentService.loadAssignment(tableName);
+                    assignments = assignmentService.loadAssignment(tableName);
                     mappingAssignments();
 
                 } catch (Exception ignore) {
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
                 // TODO Auto-generated method stub
@@ -245,7 +247,30 @@ public class AssignmentActivity extends AppCompatActivity {
         });
 
     }
-
+    private List<String > matchingSemesterName(){
+        List<String> semesterNames = new ArrayList<>();
+        for (String semesterCode : semesterCodes) {
+            String[] temp = semesterCode.split("_");
+            switch (temp[1]) {
+                case "10":
+                    temp[1] = "1학기";
+                    break;
+                case "15":
+                    temp[1] = "여름학기";
+                    break;
+                case "20":
+                    temp[1] = "2학기";
+                    break;
+                case "25":
+                    temp[1] = "겨울학기";
+                    break;
+                default:
+                    break;
+            }
+            semesterNames.add(temp[0]+"년 "+temp[1]);
+        }
+        return semesterNames;
+    }
     @Override
     public void onBackPressed() {
         //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
@@ -257,6 +282,7 @@ public class AssignmentActivity extends AppCompatActivity {
         Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
         lastTimeBackPressed = System.currentTimeMillis();
     }
+
     private void setHomeworks() {
         AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
         assignmentsViewAdapter.setAssignments(homeworks);
@@ -277,6 +303,7 @@ public class AssignmentActivity extends AppCompatActivity {
         assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);
     }
+
     private void logout() {
         SharedPreferences userInfoFile = getSharedPreferences("userInfoFile", MODE_PRIVATE);
         SharedPreferences.Editor editor = userInfoFile.edit();
