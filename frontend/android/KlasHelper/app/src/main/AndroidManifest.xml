@@ -33,8 +33,13 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.AssignmentActivity"
-            android:label="@string/title_activity_assignment"></activity>
+        android:name=".activity.AssignmentActivity"
+        android:label="@string/title_activity_assignment"/>
+        <activity
+            android:name=".activity.DetailActivity"
+            android:label="@string/title_activity_detail">
+
+        </activity>
     </application>
 
 </manifest>

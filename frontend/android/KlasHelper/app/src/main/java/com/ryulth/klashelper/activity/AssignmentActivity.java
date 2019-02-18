@@ -109,13 +109,9 @@ public class AssignmentActivity extends AppCompatActivity {
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String toastMessage = ((Assignment)listView.getAdapter().getItem(position)).getWorkTitle()
-                        +"선택띠";
-                Toast.makeText(
-                        getApplicationContext(),
-                        toastMessage,
-                        Toast.LENGTH_SHORT
-                ).show();
+                Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
+                intent.putExtra("assignmentIntent",((Assignment)listView.getAdapter().getItem(position)));
+                startActivity(intent);
             }
         });
         this.swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);

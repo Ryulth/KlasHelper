@@ -2,6 +2,7 @@
     <string name="app_name">KlasHelper</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_assignment">AssignmentActivity</string>
+    <string name="title_activity_detail">DetailActivity</string>
     <string name="title_assignment">Assignment</string>
     <string name="title_lecture">Lecture</string>
     <string name="title_notes">Notes</string>
