@@ -1,6 +1,0 @@
-framework module Pods_KlasHelper {
-  umbrella header "Pods-KlasHelper-umbrella.h"
-
-  export *
-  module * { export * }
-}
