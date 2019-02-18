@@ -2,8 +2,6 @@ package com.ryulth.klashelper.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,23 +16,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.ryulth.klashelper.MainActivity;
 import com.ryulth.klashelper.R;
 import com.ryulth.klashelper.adapter.AssignmentsViewAdapter;
-import com.ryulth.klashelper.api.AssignmentApi;
-import com.ryulth.klashelper.api.SemesterApi;
-import com.ryulth.klashelper.database.AssignmentRepository;
 import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ryulth.klashelper.pojo.request.AssignmentRequest;
 import com.ryulth.klashelper.service.AssignmentService;
 import com.ryulth.klashelper.service.SimpleAssignmentService;
 
@@ -114,8 +106,20 @@ public class AssignmentActivity extends AppCompatActivity {
                 }
             }).start();
         }*/
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-        swipeRefreshLayout.setOnRefreshListener(
+        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String toastMessage = ((Assignment)listView.getAdapter().getItem(position)).getWorkTitle()
+                        +"선택띠";
+                Toast.makeText(
+                        getApplicationContext(),
+                        toastMessage,
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+        });
+        this.swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        this.swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
@@ -216,7 +220,7 @@ public class AssignmentActivity extends AppCompatActivity {
 
 
     public void addItemsToSpinner() {
-        List<String> semesterNames =matchingSemesterName();
+        List<String> semesterNames = matchingSemesterName();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, semesterNames);
@@ -227,15 +231,12 @@ public class AssignmentActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapter, View v,
                                        int position, long id) {
-                // On selecting a spinner item
-                //String item = adapter.getItemAtPosition(position).toString();
                 String item = semesterCodes.get(position);
                 selectSemester = item;
                 tableName = "a" + user.getId() + "_" + selectSemester;
                 try {
                     assignments = assignmentService.loadAssignment(tableName);
                     mappingAssignments();
-
                 } catch (Exception ignore) {
                 }
             }
@@ -247,7 +248,8 @@ public class AssignmentActivity extends AppCompatActivity {
         });
 
     }
-    private List<String > matchingSemesterName(){
+
+    private List<String> matchingSemesterName() {
         List<String> semesterNames = new ArrayList<>();
         for (String semesterCode : semesterCodes) {
             String[] temp = semesterCode.split("_");
@@ -267,10 +269,11 @@ public class AssignmentActivity extends AppCompatActivity {
                 default:
                     break;
             }
-            semesterNames.add(temp[0]+"년 "+temp[1]);
+            semesterNames.add(temp[0] + "년 " + temp[1]);
         }
         return semesterNames;
     }
+
     @Override
     public void onBackPressed() {
         //2초 이내에 뒤로가기 버튼을 재 클릭 시 앱 종료
