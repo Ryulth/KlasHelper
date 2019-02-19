@@ -1,6 +1,6 @@
 pw.txt
 mysql.cnf
-
+application-prod.properties
 **/**/**/.idea/
 # Created by https://www.gitignore.io/api/java,xcode,swift,django,python,android,pycharm,intellij,cocoapods,androidstudio
 # Edit at https://www.gitignore.io/?templates=java,xcode,swift,django,python,android,pycharm,intellij,cocoapods,androidstudio
