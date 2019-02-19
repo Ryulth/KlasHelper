@@ -285,7 +285,7 @@ def get_assignments(request, semester_code):
                 "workCreateTime": str(create_time).replace('.', '-'),
                 "workFinishTime": str(finish_time).replace('.', '-'),
                 "isSubmit": "1",  # 강의자료는 다 제출
-                "workFile": temp[4].split(')')[1] + "[*]" + temp[6]
+                "workFile": temp[4].split(')',1)[1] + "[*]" + temp[6]
             }
             res.append(temp_dict)
         elif len(temp) == 13:
@@ -310,7 +310,7 @@ def get_assignments(request, semester_code):
                 "workCreateTime": str(create_time).replace('.', '-'),
                 "workFinishTime": str(finish_time).replace('.', '-'),
                 "isSubmit": flag,
-                "workFile": temp[10].split(')')[1] + "[*]" + temp[12]
+                "workFile": temp[10].split(')',1)[1] + "[*]" + temp[12]
             }
             res.append(temp_dict)
         else:
