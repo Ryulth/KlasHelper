@@ -7,14 +7,12 @@ import android.support.v7.widget.Toolbar;
 
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ryulth.klashelper.R;
 import com.ryulth.klashelper.pojo.model.Assignment;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class DetailActivity extends AppCompatActivity {
@@ -29,8 +27,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
-        this.toolbar.setTitle("상세보기");
+        this.toolbar.setTitle("");
         this.setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         this.assignment = (Assignment) intent.getSerializableExtra("assignmentIntent");
         this.textViewCourse = (TextView) findViewById(R.id.textDetailCourse);
@@ -56,5 +55,15 @@ public class DetailActivity extends AppCompatActivity {
             textViewFile.setText(Html.fromHtml(stringBuffer.toString()));
         }
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:{ //toolbar의 back키 눌렀을 때 동작
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
