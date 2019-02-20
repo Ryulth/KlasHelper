@@ -9,11 +9,11 @@
 ### Product Manager
 
 * PM - [KKonzi](https://github.com/KKonzi)
+* UI/UX - [KKonzi](https://github.com/KKonzi)
 
 ### Frontend
 
 * Android - [Ryulth](https://github.com/Ryulth)
-
 * iOS - [devOTTO](https://github.com/devOTTO)
 
 ### Backend
