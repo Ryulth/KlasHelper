@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -53,7 +54,7 @@ public class AssignmentActivity extends AppCompatActivity {
     private Spinner spinner;
     private AssignmentService assignmentService;
     private List<String> semesterCodes;
-
+    private TabLayout tabLayout;
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
 
@@ -91,7 +92,7 @@ public class AssignmentActivity extends AppCompatActivity {
         this.semesterCodes = new ArrayList<>(Arrays.asList(semesters.split(",")));//your data here
         this.setSupportActionBar(toolbar);
         this.addItemsToSpinner();
-
+        this.fragmentSetting();
         //this.aSwitch.setOnCheckedChangeListener(this);
         /*TODO 첫 자동업데이트 고민
         if (firstLogin) {
@@ -143,7 +144,14 @@ public class AssignmentActivity extends AppCompatActivity {
         );
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
+    private void fragmentSetting(){
+        tabLayout = (TabLayout) findViewById(R.id.tapLayoutAssignment);
 
+        tabLayout.addTab(tabLayout.newTab().setText("진행 과제"));
+        tabLayout.addTab(tabLayout.newTab().setText("완료 과제"));
+        tabLayout.addTab(tabLayout.newTab().setText("지난 과제"));
+
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
