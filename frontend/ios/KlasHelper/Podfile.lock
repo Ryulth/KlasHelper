@@ -1,8 +1,17 @@
 PODS:
+  - Alamofire (4.8.1)
   - HideShowPasswordTextField (0.3)
+  - SwiftyJSON (4.0.0)
 
 DEPENDENCIES:
+  - Alamofire (~> 4.7)
   - HideShowPasswordTextField (from `https://github.com/Guidebook/HideShowPasswordTextField`)
+  - SwiftyJSON (~> 4.0.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   HideShowPasswordTextField:
@@ -14,8 +23,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Guidebook/HideShowPasswordTextField
 
 SPEC CHECKSUMS:
+  Alamofire: 16ce2c353fb72865124ddae8a57c5942388f4f11
   HideShowPasswordTextField: 9426177a6b6498a6084e29ad65bba7d1157951b7
+  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
 
-PODFILE CHECKSUM: 222bd3d18c0d9e9c512a261cfe23906b88f1a1f6
+PODFILE CHECKSUM: 272f637d4f51cf20db5c9c7d6082a29d769d7d63
 
 COCOAPODS: 1.6.0
