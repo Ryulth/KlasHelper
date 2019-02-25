@@ -11,7 +11,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +18,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.ryulth.klashelper.MainActivity;
 import com.ryulth.klashelper.R;
-import com.ryulth.klashelper.adapter.AssignmentsViewAdapter;
+import com.ryulth.klashelper.adapter.AssignmentsListViewAdapter;
 import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
 import com.ryulth.klashelper.service.AssignmentService;
@@ -291,21 +289,21 @@ public class AssignmentActivity extends AppCompatActivity {
     }
 
     private void setHomeworks() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
         assignmentsViewAdapter.setAssignments(homeworks);
         assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);
     }
 
     private void setLectures() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
         assignmentsViewAdapter.setAssignments(lectures);
         assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);
     }
 
     private void setNotes() {
-        AssignmentsViewAdapter assignmentsViewAdapter = new AssignmentsViewAdapter();
+        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
         assignmentsViewAdapter.setAssignments(notes);
         assignmentsViewAdapter.setTableName(tableName);
         listView.setAdapter(assignmentsViewAdapter);

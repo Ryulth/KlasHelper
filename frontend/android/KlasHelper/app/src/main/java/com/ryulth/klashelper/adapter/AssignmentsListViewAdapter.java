@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class AssignmentsViewAdapter extends BaseAdapter {
+public class AssignmentsListViewAdapter extends BaseAdapter {
     private LayoutInflater inflater = null;
     private List<Assignment> assignments = new ArrayList<>();
     private AssignmentRepository assignmentRepository;
