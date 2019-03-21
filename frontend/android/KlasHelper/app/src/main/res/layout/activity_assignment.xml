@@ -39,10 +39,6 @@
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextColor="#000000" />
-    <android.support.v4.view.ViewPager
-        android:id="@+id/assignmentPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
@@ -56,8 +52,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tapLayoutAssignment"
         app:layout_constraintVertical_bias="0.0">
 
-        <ListView
-            android:id="@+id/navigation_assignment"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/assignmentPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
