@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,14 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import com.ryulth.klashelper.MainActivity;
 import com.ryulth.klashelper.R;
-import com.ryulth.klashelper.adapter.AssignmentsListViewAdapter;
+import com.ryulth.klashelper.adapter.PagerAdapter;
 import com.ryulth.klashelper.model.User;
 import com.ryulth.klashelper.pojo.model.Assignment;
 import com.ryulth.klashelper.service.AssignmentService;
@@ -40,7 +40,6 @@ public class AssignmentActivity extends AppCompatActivity {
     private List<Assignment> homeworks = new ArrayList<>();
     private List<Assignment> lectures = new ArrayList<>();
     private List<Assignment> notes = new ArrayList<>();
-    private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private MyHandler myHandler;
     private BottomNavigationView navigation;
@@ -53,6 +52,8 @@ public class AssignmentActivity extends AppCompatActivity {
     private AssignmentService assignmentService;
     private List<String> semesterCodes;
     private TabLayout tabLayout;
+    private PagerAdapter pagerAdapter;
+
     private static class MyHandler extends Handler {
         AssignmentActivity activity;
 
@@ -81,7 +82,6 @@ public class AssignmentActivity extends AppCompatActivity {
         this.user = (User) intent.getSerializableExtra("userInfoIntent");
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
         this.myHandler = new MyHandler(this);
-        this.listView = (ListView) findViewById(R.id.navigation_assignment);
         this.toolbar = (Toolbar) findViewById(R.id.toolbarAssignment);
         this.toolbar.setTitle("");
         this.spinner = (Spinner) findViewById(R.id.spinnerSemester);
@@ -105,14 +105,6 @@ public class AssignmentActivity extends AppCompatActivity {
                 }
             }).start();
         }*/
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(),DetailActivity.class);
-                intent.putExtra("assignmentIntent",((Assignment)listView.getAdapter().getItem(position)));
-                startActivity(intent);
-            }
-        });
         this.swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         this.swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -149,6 +141,28 @@ public class AssignmentActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("완료 과제"));
         tabLayout.addTab(tabLayout.newTab().setText("지난 과제"));
 
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
+        final ViewPager viewPager = findViewById(R.id.assignmentPager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -289,24 +303,15 @@ public class AssignmentActivity extends AppCompatActivity {
     }
 
     private void setHomeworks() {
-        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
-        assignmentsViewAdapter.setAssignments(homeworks);
-        assignmentsViewAdapter.setTableName(tableName);
-        listView.setAdapter(assignmentsViewAdapter);
+        pagerAdapter.setData(homeworks, tableName);
     }
 
     private void setLectures() {
-        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
-        assignmentsViewAdapter.setAssignments(lectures);
-        assignmentsViewAdapter.setTableName(tableName);
-        listView.setAdapter(assignmentsViewAdapter);
+        pagerAdapter.setData(lectures, tableName);
     }
 
     private void setNotes() {
-        AssignmentsListViewAdapter assignmentsViewAdapter = new AssignmentsListViewAdapter();
-        assignmentsViewAdapter.setAssignments(notes);
-        assignmentsViewAdapter.setTableName(tableName);
-        listView.setAdapter(assignmentsViewAdapter);
+        pagerAdapter.setData(notes, tableName);
     }
 
     private void logout() {
