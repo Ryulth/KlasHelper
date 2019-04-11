@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'assignmentListView.dart';
-
+import 'assignmentFactory.dart';
 class Assignment extends StatefulWidget {
   const Assignment({Key key}) : super(key: key);
 
@@ -34,17 +33,18 @@ class AssignmentPageState extends State<Assignment>
         title: new Text('메뉴'))
   ];
   TabController _tabController;
-  AssignmentListView _assignmentListView;
+//  AssignmentListView _assignmentListView;
+//  AssignmentFactory _assignmentFactory;
   int _currentTopIndex = 0;
   int _currentBottomIndex = 0;
-  List<Widget> _todoAssignment;
-  List<Widget> _completeAssignment;
-  List<Widget> _lateAssignment;
+  Widget _todoAssignment;
+  Widget _completeAssignment;
+  Widget _lateAssignment;
 
   @override
   void initState() {
     super.initState();
-    _assignmentListView = new AssignmentListView();
+//    _assignmentListView = new AssignmentListView();
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
     _tabController.addListener(_handleTopTabSelection);
@@ -84,16 +84,10 @@ class AssignmentPageState extends State<Assignment>
           ),
           body: TabBarView(
             controller: _tabController,
-            children: [
-              new ListView(
-                children: _todoAssignment,
-              ),
-              new ListView(
-                children: _completeAssignment,
-              ),
-              new ListView(
-                children: _lateAssignment,
-              ),
+            children: <Widget>[
+              _todoAssignment,
+              _completeAssignment,
+              _lateAssignment,
             ],
           ),
         ),
@@ -115,8 +109,8 @@ class AssignmentPageState extends State<Assignment>
     });
   }
   void _settingListItems(){
-    _todoAssignment = _assignmentListView.getList(0);
-    _completeAssignment = _assignmentListView.getList(1);
-    _lateAssignment = _assignmentListView.getList(2);
+    _todoAssignment = AssignmentFactory(AssignmentType.TODO).build(context);
+    _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE).build(context);
+    _lateAssignment = AssignmentFactory(AssignmentType.LATE).build(context);
   }
 }
