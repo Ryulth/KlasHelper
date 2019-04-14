@@ -2,13 +2,28 @@ import 'package:flutter/material.dart';
 import 'assignmentFactory.dart';
 class AssignmentTodo extends AssignmentFactory{
   AssignmentTodo(): super.create();
+  @override
+  AssignmentTodoState createState() => AssignmentTodoState();
+}
+class AssignmentTodoState extends State<AssignmentTodo>{
+  int a = 0;
+  @override
+  void initState(){
+    super.initState();
+    a = a+1;
+    print("TODo inint"+a.toString());
+  }
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    print("TODO불름?");
+    return _getList();
+  }
   bool isSwitched = false;
-  int a = 1;
   final assignments = ["과제1", "과제2"];
   final isSwitches = [false,false];
 
-  @override
-  Widget getList() {
+  Widget _getList() {
     return ListView.builder(
       itemCount: assignments.length,
       itemBuilder: (context, index) {
@@ -23,8 +38,8 @@ class AssignmentTodo extends AssignmentFactory{
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
-                  getColumn(index),
-                  getSwitch(index),
+                  _getColumn(index),
+                  _getSwitch(index),
                 ],
               ),
             ),
@@ -34,7 +49,7 @@ class AssignmentTodo extends AssignmentFactory{
     );
   }
 
-  Widget getColumn(int index) {
+  Widget _getColumn(int index) {
     Widget column = Expanded(
       child: Column(
         // align the text to the left instead of centered
@@ -55,7 +70,7 @@ class AssignmentTodo extends AssignmentFactory{
     return column;
   }
 
-  Switch getSwitch(int index) {
+  Switch _getSwitch(int index) {
     return Switch(
       onChanged: (bool newValue){
         print(newValue);
@@ -67,10 +82,6 @@ class AssignmentTodo extends AssignmentFactory{
       },
       value: isSwitches[index],
     );
-  }
-  @override
-  Widget build(BuildContext context) {
-    return getList();
   }
 
 }

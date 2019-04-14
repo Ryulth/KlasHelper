@@ -4,7 +4,8 @@ import 'assignmentComplete.dart';
 import 'assignmentLate.dart';
 import 'assignment.dart';
 
-abstract class AssignmentFactory extends AssignmentPageState {
+
+abstract class AssignmentFactory extends StatefulWidget {
   AssignmentFactory.create();
 
   // ignore: missing_return
@@ -18,7 +19,6 @@ abstract class AssignmentFactory extends AssignmentPageState {
         return AssignmentLate();
     }
   }
-  Widget getList();
 }
 
 enum AssignmentType {

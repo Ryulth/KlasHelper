@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'assignmentFactory.dart';
-
 class AssignmentComplete extends AssignmentFactory{
   AssignmentComplete(): super.create();
+
+  @override
+  AssignmentCompleteState createState() => AssignmentCompleteState();
+}
+class AssignmentCompleteState extends State<AssignmentComplete>{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    print("Complet부름?");
+    return _getList();
+  }
   bool isSwitched = false;
   int a = 1;
   final assignments = ["과제1", "과제2"];
   final isSwitches = [false,false];
 
-  @override
-  Widget getList() {
+  Widget _getList() {
     return ListView.builder(
       itemCount: assignments.length,
       itemBuilder: (context, index) {
@@ -24,8 +33,8 @@ class AssignmentComplete extends AssignmentFactory{
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
-                  getColumn(index),
-                  getSwitch(index),
+                  _getColumn(index),
+                  _getSwitch(index),
                 ],
               ),
             ),
@@ -35,7 +44,7 @@ class AssignmentComplete extends AssignmentFactory{
     );
   }
 
-  Widget getColumn(int index) {
+  Widget _getColumn(int index) {
     Widget column = Expanded(
       child: Column(
         // align the text to the left instead of centered
@@ -46,7 +55,7 @@ class AssignmentComplete extends AssignmentFactory{
             style: TextStyle(fontSize: 8),
           ),
           Text(
-            assignments[index] +"완료",
+            assignments[index] +"지난",
             style: TextStyle(fontSize: 16),
           ),
           Text('마감기한'),
@@ -56,20 +65,18 @@ class AssignmentComplete extends AssignmentFactory{
     return column;
   }
 
-  Switch getSwitch(int index) {
+  Switch _getSwitch(int index) {
     return Switch(
-      value: isSwitches[index],
       onChanged: (bool newValue){
-        isSwitches[index] = newValue;
-        print(isSwitches.toString());
-      },
-    );
-  }
+        print(newValue);
+        setState(() {
+          isSwitches[index] = newValue;
+          print(isSwitches.toString());
+        });
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return getList();
+      },
+      value: isSwitches[index],
+    );
   }
 
 }

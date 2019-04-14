@@ -19,16 +19,14 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
   final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
+  TempSwitch tempSwitch = new TempSwitch();
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -55,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     return Assignment();
                   }));
                 }),
+            tempSwitch,
             Text(
               'You have pushed the button this many times:',
             ),
@@ -70,6 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+class TempSwitch extends StatefulWidget{
+  @override
+  TempSwitchState createState() => TempSwitchState();
+}
+class TempSwitchState extends State<TempSwitch>{
+  bool _value = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Switch(
+      onChanged: (bool newValue){
+        print(newValue);
+        setState(() {
+          _value = newValue;
+        });
+      },
+      value: _value,
     );
   }
 }
