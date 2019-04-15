@@ -1,5 +1,3 @@
-###### 2018년 마무리 못한 텀 프로젝트 [Fingp](https://github.com/fingp) 를 처음부터 다시 개발한다.
-
 # KlasHelper
 
 * 학교 Klas 사이트를 크롤링해 앱으로 전송
@@ -15,7 +13,7 @@
 
 * Android - [Ryulth](https://github.com/Ryulth)
 * iOS - [devOTTO](https://github.com/devOTTO)
-
+* Flutter - [Ryulth](https://github.com/Ryulth)
 ### Backend
 
 * Django - [Ryulth](https://github.com/Ryulth)
