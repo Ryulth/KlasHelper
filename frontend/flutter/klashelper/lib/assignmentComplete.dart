@@ -3,31 +3,31 @@ import 'assignmentFactory.dart';
 class AssignmentComplete extends AssignmentFactory{
   AssignmentComplete(): super.create();
 
+  final assignments = ["과제1", "과제2"];
+  final isSwitches = [false,false];
+
   @override
   AssignmentCompleteState createState() => AssignmentCompleteState();
 }
 class AssignmentCompleteState extends State<AssignmentComplete>{
   @override
+  void initState(){
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print("Complet부름?");
     return _getList();
   }
-  bool isSwitched = false;
-  int a = 1;
-  final assignments = ["과제1", "과제2"];
-  final isSwitches = [false,false];
 
   Widget _getList() {
     return ListView.builder(
-      itemCount: assignments.length,
+      itemCount: widget.assignments.length,
       itemBuilder: (context, index) {
         return Card(
           child: InkWell(
             onTap: () {
               print(index);
-              print(this.toString());
-              print(isSwitches.toString());
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -43,7 +43,6 @@ class AssignmentCompleteState extends State<AssignmentComplete>{
       },
     );
   }
-
   Widget _getColumn(int index) {
     Widget column = Expanded(
       child: Column(
@@ -55,7 +54,7 @@ class AssignmentCompleteState extends State<AssignmentComplete>{
             style: TextStyle(fontSize: 8),
           ),
           Text(
-            assignments[index] +"지난",
+            widget.assignments[index] +"완료",
             style: TextStyle(fontSize: 16),
           ),
           Text('마감기한'),
@@ -70,13 +69,12 @@ class AssignmentCompleteState extends State<AssignmentComplete>{
       onChanged: (bool newValue){
         print(newValue);
         setState(() {
-          isSwitches[index] = newValue;
-          print(isSwitches.toString());
+          widget.isSwitches[index] = newValue;
+          print(widget.isSwitches.toString());
         });
 
       },
-      value: isSwitches[index],
+      value: widget.isSwitches[index],
     );
   }
-
 }

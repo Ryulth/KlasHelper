@@ -37,9 +37,9 @@ class AssignmentPageState extends State<Assignment>
 //  AssignmentFactory _assignmentFactory;
   int _currentTopIndex = 0;
   int _currentBottomIndex = 0;
-  AssignmentFactory _todoAssignment;
-  AssignmentFactory _completeAssignment;
-  AssignmentFactory _lateAssignment;
+  Widget _todoAssignment;
+  Widget _completeAssignment;
+  Widget _lateAssignment;
 
   @override
   void initState() {
@@ -99,7 +99,6 @@ class AssignmentPageState extends State<Assignment>
     setState(() {
       _currentTopIndex = _tabController.index;
       print("TopIndex " + _currentTopIndex.toString());
-      print(_todoAssignment.toString());
     });
   }
 
@@ -110,7 +109,6 @@ class AssignmentPageState extends State<Assignment>
     });
   }
   void _settingListItems(){
-    print("불름?");
     _todoAssignment =AssignmentFactory(AssignmentType.TODO);
     _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE);
     _lateAssignment = AssignmentFactory(AssignmentType.LATE);
