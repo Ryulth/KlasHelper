@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'assignmentTodo.dart';
-import 'assignmentComplete.dart';
-import 'assignmentLate.dart';
-import 'assignment.dart';
-
+import 'package:klashelper/pages/assignmentTodo.dart';
+import 'package:klashelper/pages/assignmentComplete.dart';
+import 'package:klashelper/pages/assignmentLate.dart';
 
 abstract class AssignmentFactory extends StatefulWidget {
   AssignmentFactory.create();

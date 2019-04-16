@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'assignmentFactory.dart';
+import 'package:klashelper/pages/assignmentFactory.dart';
 class AssignmentLate extends AssignmentFactory{
   AssignmentLate(): super.create();
 

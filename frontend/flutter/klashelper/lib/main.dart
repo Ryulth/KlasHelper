@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'assignment.dart';
-
+import 'package:klashelper/pages/assignmentPage.dart';
+import 'package:klashelper/pages/loginPages.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),//MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                    return Assignment();
+                    return AssignmentPage();
                   }));
                 }),
             tempSwitch,

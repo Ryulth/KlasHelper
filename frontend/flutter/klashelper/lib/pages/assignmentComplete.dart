@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'assignmentFactory.dart';
+import 'package:klashelper/pages/assignmentFactory.dart';
 class AssignmentComplete extends AssignmentFactory{
   AssignmentComplete(): super.create();
 

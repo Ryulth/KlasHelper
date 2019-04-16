@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'assignmentFactory.dart';
-class Assignment extends StatefulWidget {
-  const Assignment({Key key}) : super(key: key);
+import 'package:klashelper/pages/assignmentFactory.dart';
+class AssignmentPage extends StatefulWidget {
+  AssignmentPage({Key key}) : super(key: key);
 
   @override
   AssignmentPageState createState() => new AssignmentPageState();
 }
 
-class AssignmentPageState extends State<Assignment>
+class AssignmentPageState extends State<AssignmentPage>
     with SingleTickerProviderStateMixin {
   final List<Tab> assignmentTabs = <Tab>[
     new Tab(text: "진행 과제"),
