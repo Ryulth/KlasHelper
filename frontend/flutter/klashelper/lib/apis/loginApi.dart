@@ -1,19 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:klashelper/models/user.dart';
+import 'package:klashelper/models/loginStatus.dart';
+
 const baseUrl = "http://klashelper.ryulth.com/login";
+Map <String, String> requestHeaders = {
+  "Content-Type": "application/json",
+  'appToken' : 'test'
+};
 
 class LoginApi {
-  Future<String> getLogin(Map body) async{
-    return http.post(baseUrl,body: body).then((http.Response response){
-      final int statusCode = response.statusCode;
-
-      if (statusCode < 200 || statusCode > 400 ||json == null) {
+  Future<LoginStatus> getLogin(Map data) async{
+    var requestBody = json.encode(data);
+    final response = await http.post(baseUrl,
+    headers: requestHeaders,
+    body: requestBody
+  );
+  final int statusCode = response.statusCode;
+  if (statusCode < 200 || statusCode > 400 ||json == null) {
         throw new Exception("Error while fetching data");
-      }
-      return json.decode(response.body);
-    });
-
+  }
+  return LoginStatus.fromJson(json.decode(response.body));
   }
 }

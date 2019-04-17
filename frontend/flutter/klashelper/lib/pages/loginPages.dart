@@ -1,25 +1,64 @@
 import 'package:flutter/material.dart';
+import 'assignmentPage.dart';
 import 'package:klashelper/models/user.dart';
 import 'package:klashelper/apis/loginApi.dart';
+import 'package:klashelper/models/loginStatus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
-
+  
   @override
   LoginPageState createState() => new LoginPageState();
 }
 class LoginPageState extends State<LoginPage>{
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   User user = new User();
-  _getLogin() async{
+  Future<Null> _getLogin() async{
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();// form 저장
       print(user.toJson());
       print(user.toString());
       print(user.id);
-      String  s = await  LoginApi().getLogin(user.toJson());
-      print(s);
+      print("get Lopgin");
+      if(await _isLogin()){
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return AssignmentPage(); 
+        }));
+      }
     }
-    return true;
+  }
+  Future<bool> _isLogin() async{
+    LoginStatus loginStatus = await  LoginApi().getLogin(user.toJson());
+      if(loginStatus.flag==1){//로그인 성공 TODO enum 
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString("userId", user.id);
+        prefs.setString("userPW", user.pw);
+        print("로그인성공");
+        return true;
+      }
+    print("로그인실패");
+    return false;
+  }
+  Future<Null> _loadUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //final String jsonString = prefs.getString("userInfoFile");
+    final String userId = prefs.getString("userId");
+    final String userPW = prefs.getString("userPW");
+    if (userId != null && userId.isNotEmpty) {
+       print(userId);
+       user.id =userId;
+       user.pw =userPW;
+       print(user.toJson().toString());
+       if(await _isLogin()){
+          Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return AssignmentPage(); 
+          }));
+       }
+    }
+    // default value
   }
   String _validateData(String value){
     if(value.length<1){
@@ -28,10 +67,16 @@ class LoginPageState extends State<LoginPage>{
     return null;
   }
   @override
+  void initState() {
+      super.initState();
+      print("initstate");
+      _loadUser();
+  } 
+
+  @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
-    // TODO: implement build
+// TODO: implement build
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Login'),
@@ -73,12 +118,8 @@ class LoginPageState extends State<LoginPage>{
                           color: Colors.white
                       ),
                     ),
-                    onPressed: () {
-                      _getLogin();
-                      //Navigator.push(context,
-                        //  MaterialPageRoute(builder: (BuildContext context) {
-                          //  return AssignmentPage();
-                          //}));
+                    onPressed: () async {
+                        await _getLogin();
                     },
                     color: Colors.blue,
                   ),
