@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:klashelper/pages/assignmentPage.dart';
 import 'package:klashelper/pages/loginPages.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,11 +9,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: AssignmentPage(),//MyHomePage(title: 'Flutter Demo Home Page'),
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+       home: AssignmentPage(),//MyHomePage(title: 'Flutter Demo Home Page'),
+        routes: {
+          '/assignmentPage': (context) => AssignmentPage(),
+          '/loginPage': (context) => LoginPage(),
+        }
     );
   }
 }
@@ -22,6 +25,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -29,6 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   TempSwitch tempSwitch = new TempSwitch();
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -52,8 +57,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (BuildContext context) {
-                    return AssignmentPage();
-                  }));
+                        return AssignmentPage();
+                      }));
                 }),
             tempSwitch,
             Text(
@@ -61,7 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .display1,
             ),
           ],
         ),
@@ -74,18 +82,20 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-class TempSwitch extends StatefulWidget{
+
+class TempSwitch extends StatefulWidget {
   @override
   TempSwitchState createState() => TempSwitchState();
 }
-class TempSwitchState extends State<TempSwitch>{
+
+class TempSwitchState extends State<TempSwitch> {
   bool _value = false;
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Switch(
-      onChanged: (bool newValue){
+      onChanged: (bool newValue) {
         print(newValue);
         setState(() {
           _value = newValue;
