@@ -18,6 +18,7 @@ class AssignmentPage extends StatefulWidget {
 
 class AssignmentPageState extends State<AssignmentPage>
     with SingleTickerProviderStateMixin {
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
   final List<Tab> assignmentTabs = <Tab>[
     new Tab(text: "진행 과제"),
     new Tab(text: "완료 과제"),
@@ -81,6 +82,28 @@ class AssignmentPageState extends State<AssignmentPage>
     Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
   }
 
+  _handleTopTabSelection() {
+    setState(() {
+      _currentTopIndex = _tabController.index;
+      print("TopIndex " + _currentTopIndex.toString());
+    });
+  }
+
+  void _handleBottomTabSelection(int index) {
+    setState(() {
+      _currentBottomIndex = index;
+      print("BottomIndex " + _currentBottomIndex.toString());
+    });
+  }
+
+  void _settingListItems() {
+    _todoAssignment = AssignmentFactory(AssignmentType.TODO);
+    _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE);
+    _lateAssignment = AssignmentFactory(AssignmentType.LATE);
+  }
+  Future<void> _onRefresh() async{
+    print("refresh");
+  }
   @override
   void initState() {
     super.initState();
@@ -130,7 +153,11 @@ class AssignmentPageState extends State<AssignmentPage>
               onTap: _handleBottomTabSelection,
               type: BottomNavigationBarType.fixed,
             ),
-            body: TabBarView(
+            body:
+            RefreshIndicator(
+              onRefresh: _onRefresh,
+            child: TabBarView(
+
               controller: _tabController,
               children: <Widget>[
                 _todoAssignment,
@@ -139,29 +166,10 @@ class AssignmentPageState extends State<AssignmentPage>
               ],
             ),
           ),
-        ),
+        ),),
       ),
       onWillPop: _onWillPop,
     );
   }
 
-  _handleTopTabSelection() {
-    setState(() {
-      _currentTopIndex = _tabController.index;
-      print("TopIndex " + _currentTopIndex.toString());
-    });
-  }
-
-  void _handleBottomTabSelection(int index) {
-    setState(() {
-      _currentBottomIndex = index;
-      print("BottomIndex " + _currentBottomIndex.toString());
-    });
-  }
-
-  void _settingListItems() {
-    _todoAssignment = AssignmentFactory(AssignmentType.TODO);
-    _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE);
-    _lateAssignment = AssignmentFactory(AssignmentType.LATE);
-  }
 }
