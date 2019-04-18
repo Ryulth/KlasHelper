@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:klashelper/response/loginResponse.dart';
 import 'dart:convert';
 import 'assignmentPage.dart';
@@ -15,6 +16,20 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends State<LoginPage>{
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   User user = new User();
+  DateTime lastTimeBackPressed = DateTime.fromMicrosecondsSinceEpoch(0);
+  
+   Future<bool> _onWillPop() async {
+     if (DateTime.now().difference(lastTimeBackPressed) < Duration(seconds: 2)) {
+            print("t");
+            SystemNavigator.pop();
+            return Future.value(true);
+        }
+        //'뒤로' 버튼 한번 클릭 시 메시지
+        //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        lastTimeBackPressed = DateTime.now();
+        print("false");
+        return Future.value(false);
+  }
   Future<Null> _getLogin() async{
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();// form 저장
@@ -66,13 +81,15 @@ class LoginPageState extends State<LoginPage>{
       print("initstate");
       //_loadUser();
   } 
-
+  
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 // TODO: implement build
-    return new Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       appBar: new AppBar(
+        automaticallyImplyLeading: false,
         title: new Text('Login'),
       ),
       body: new Container(
@@ -125,6 +142,7 @@ class LoginPageState extends State<LoginPage>{
             ),
           )
       ),
+      ), onWillPop: _onWillPop,
     );
   }
 }

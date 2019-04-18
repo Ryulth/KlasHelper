@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:klashelper/response/loginResponse.dart';
+import 'package:klashelper/response/assignmentResponse.dart';
+import 'package:klashelper/models/user.dart';
 
 const baseUrl = "http://klashelper.ryulth.com/assignments/";
 Map <String, String> requestHeaders = {
-  "Content-Type": "application/json",
-  'appToken' : 'test'
+  'appToken' : 'test',
+  'id' : '',
+  'pw': ''
 };
 
 class AssignmentApi {
-
-  Future<LoginResponse> getAssignment(String semesterCode) async{
+  Future<AssignmentResponse> getAssignment(User user, String semesterCode ) async{
+    requestHeaders['id'] = user.id;
+    requestHeaders['pw'] = user.pw;
     final response = await http.get(baseUrl+semesterCode,
     headers: requestHeaders,
   );
@@ -19,7 +22,7 @@ class AssignmentApi {
   if (statusCode < 200 || statusCode > 400 ||json == null) {
         throw new Exception("Error while fetching data");
   }
-  return LoginResponse.fromJson(json.decode(response.body));
+  return AssignmentResponse.fromJson(json.decode(response.body));
   }
 }
 

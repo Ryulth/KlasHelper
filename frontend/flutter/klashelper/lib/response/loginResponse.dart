@@ -10,12 +10,4 @@ class LoginResponse {
       status : json['status']
     );
   }
-
-  Map toJson(){
-    var map = new Map<String, dynamic>();
-    map['flag'] = flag;
-    map['status'] = status;
-
-    return map;
-  }
 }

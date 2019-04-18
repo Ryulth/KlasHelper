@@ -73,6 +73,14 @@ class AssignmentPageState extends State<AssignmentPage>
           }));
     }
   }
+  void _logout() {
+    // Causes the app to rebuild with the new _selectedChoice.
+    print("logtout button");
+    Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return LoginPage(); 
+    }));
+  }
   @override
   void initState() {
     super.initState();
@@ -100,7 +108,14 @@ class AssignmentPageState extends State<AssignmentPage>
         length: assignmentTabs.length,
         child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text('과제 현황'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.settings),
+                onPressed: _logout,
+              )
+            ],
             bottom: TabBar(
               // map 함수는 리스트의 요소를 하나씩 전달한 결과로
               // Iterable 객체를 생성하기 때문에 toList 함수로 변환
