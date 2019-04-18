@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/response/loginResponse.dart';
+import 'dart:convert';
 import 'assignmentPage.dart';
 import 'package:klashelper/models/user.dart';
 import 'package:klashelper/apis/loginApi.dart';
-import 'package:klashelper/models/loginStatus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +23,8 @@ class LoginPageState extends State<LoginPage>{
       print(user.id);
       print("get Lopgin");
       if(await _isLogin()){
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString("userInfoFile",json.encode(user.toJson()));
           Navigator.push(context,
               MaterialPageRoute(builder: (BuildContext context) {
                 return AssignmentPage(); 
@@ -30,11 +33,8 @@ class LoginPageState extends State<LoginPage>{
     }
   }
   Future<bool> _isLogin() async{
-    LoginStatus loginStatus = await  LoginApi().getLogin(user.toJson());
-      if(loginStatus.flag==1){//로그인 성공 TODO enum 
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString("userId", user.id);
-        prefs.setString("userPW", user.pw);
+    LoginResponse loginStatus = await  LoginApi().getLogin(user.toJson());
+      if(loginStatus.flag==1){//로그인 성공 TODO enum  
         print("로그인성공");
         return true;
       }
@@ -43,15 +43,12 @@ class LoginPageState extends State<LoginPage>{
   }
   Future<Null> _loadUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    //final String jsonString = prefs.getString("userInfoFile");
-    final String userId = prefs.getString("userId");
-    final String userPW = prefs.getString("userPW");
-    if (userId != null && userId.isNotEmpty) {
-       print(userId);
-       user.id =userId;
-       user.pw =userPW;
-       print(user.toJson().toString());
-       if(await _isLogin()){
+    final String userInfo = prefs.getString("userInfoFile");
+    if (userInfo != null && userInfo.isNotEmpty) {
+      print(userInfo);
+      user = User.fromJson(json.decode(userInfo));
+      print(user.id);
+      if(await _isLogin()){
           Navigator.push(context,
               MaterialPageRoute(builder: (BuildContext context) {
                 return AssignmentPage(); 

@@ -1,11 +1,11 @@
-class LoginStatus  {
+class LoginResponse {
   int flag;
   String status;
 
-  LoginStatus({this.flag,this.status});
+  LoginResponse({this.flag,this.status});
 
-  factory LoginStatus.fromJson(Map<String,dynamic> json){
-    return LoginStatus(
+  factory LoginResponse.fromJson(Map<String,dynamic> json){
+    return LoginResponse(
       flag : json['flag'],
       status : json['status']
     );
