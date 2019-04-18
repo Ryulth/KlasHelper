@@ -66,7 +66,7 @@ def get_assignment(req):
     try:
         semester = req['semester']
     except:
-        semester = "2018_20"
+        semester = "2019_10" # TODO 나중에 변경
     class_dict = json.loads(user_set.lectures)
     class_list = str(class_dict[semester]).split(',')
     class_list.pop()
@@ -132,7 +132,7 @@ def get_assignment(req):
         create_time, finish_time = check_time(temp[2].split("기간:")[1])
         temp_dict = {
             "semester": semester,
-            "workType": "0",
+            "workType": "HOMEWORK",
             "workCode": temp[4],
             "workCourse": temp[0],
             "workTitle": temp[1],
@@ -148,13 +148,13 @@ def get_assignment(req):
             create_time, finish_time = check_time(temp[2].split("기간:")[1])
             temp_dict = {
                 "semester": semester,
-                "workType": "2",  # 2강의자료
+                "workType": "NOTE",  # 2강의자료
                 "workCode": temp[5],
                 "workCourse": temp[0],
                 "workTitle": temp[1],
                 "workCreateTime": str(create_time).replace('.', '-'),
                 "workFinishTime": str(finish_time).replace('.', '-'),
-                "isSubmit": "1",  # 강의자료는 다 제출
+                "isSubmit": 1,  # 강의자료는 다 제출
                 "workFile": temp[4].split(')')[1] + "[*]" + temp[6]
             }
             res.append(temp_dict)
@@ -173,7 +173,7 @@ def get_assignment(req):
                 flag = 0
             temp_dict = {
                 "semester": semester,
-                "workType": "1",  # 1인강
+                "workType": "ONLINE",  # 1인강
                 "workCode": temp[11],
                 "workCourse": temp[0],
                 "workTitle": temp[1],
