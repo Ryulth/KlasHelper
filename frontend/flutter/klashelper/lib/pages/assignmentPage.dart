@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:klashelper/models/user.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'loginPages.dart';
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
-
+  User user = new User();
   @override
   AssignmentPageState createState() => new AssignmentPageState();
 }
@@ -40,15 +46,43 @@ class AssignmentPageState extends State<AssignmentPage>
   Widget _todoAssignment;
   Widget _completeAssignment;
   Widget _lateAssignment;
+  DateTime lastTimeBackPressed = DateTime.fromMicrosecondsSinceEpoch(0);
 
+  Future<bool> _onWillPop() async {
+     if (DateTime.now().difference(lastTimeBackPressed) < Duration(seconds: 2)) {
+            print("t");
+            Navigator.pop(context);
+            return Future.value(true);
+        }
+        //'뒤로' 버튼 한번 클릭 시 메시지
+        //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+        lastTimeBackPressed = DateTime.now();
+        print("false");
+        return Future.value(false);
+  }
+  Future<Null> _loadUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userInfo = prefs.getString("userInfoFile");
+    if (userInfo != null && userInfo.isNotEmpty) {
+      
+    }
+    else {
+      Navigator.push(context,
+              MaterialPageRoute(builder: (BuildContext context) {
+                return LoginPage(); 
+          }));
+    }
+  }
   @override
   void initState() {
     super.initState();
-//    _assignmentListView = new AssignmentListView();
+    // final SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final String userInfo = prefs.getString("userInfoFile");
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
-    _tabController.addListener(_handleTopTabSelection);
-    _settingListItems();
+      _tabController.addListener(_handleTopTabSelection);
+      _settingListItems();
+    _loadUser();    
   }
 
   @override
@@ -60,7 +94,8 @@ class AssignmentPageState extends State<AssignmentPage>
   @override
   Widget build(BuildContext context) {
     // 가장 간단하고 쉽게 사용할 수 있는 기본 탭바 컨트롤러. 탭바와 탭바뷰 연결.
-    return MaterialApp(
+    return WillPopScope( 
+    child: MaterialApp(
       home: DefaultTabController(
         length: assignmentTabs.length,
         child: Scaffold(
@@ -90,8 +125,10 @@ class AssignmentPageState extends State<AssignmentPage>
               _lateAssignment,
             ],
           ),
-        ),
+        ), 
       ),
+      ),
+       onWillPop: _onWillPop,
     );
   }
 

@@ -25,10 +25,7 @@ class LoginPageState extends State<LoginPage>{
       if(await _isLogin()){
         final prefs = await SharedPreferences.getInstance();
         prefs.setString("userInfoFile",json.encode(user.toJson()));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) {
-                return AssignmentPage(); 
-        }));
+        Navigator.pop(context);
       }
     }
   }
@@ -67,7 +64,7 @@ class LoginPageState extends State<LoginPage>{
   void initState() {
       super.initState();
       print("initstate");
-      _loadUser();
+      //_loadUser();
   } 
 
   @override

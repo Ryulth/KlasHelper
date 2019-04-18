@@ -22,3 +22,4 @@ class AssignmentApi {
   return LoginResponse.fromJson(json.decode(response.body));
   }
 }
+
