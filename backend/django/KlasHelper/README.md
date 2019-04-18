@@ -88,7 +88,7 @@ http://klashelper.ryulth.com/assignments/<semester_code>
 | workFinishTime | String                                  | 과제 마감 시간                                               |
 | semester       | String                                  | 학기 코드                                                    |
 | workTitle      | String                                  | 과제 명                                                      |
-| workType       | 0<br />1<br />2                         | 0 -> 과제<br />1 -> 인터넷 강의<br />2 -> 강의 자료만 올라와있는 경우 |
+| workType       | String                      | HOMEWORK -> 과제<br />ONLINE -> 인터넷 강의<br />NOTE -> 강의 자료만 올라와있는 경우 |
 
 
 
