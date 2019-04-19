@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
+
+// ignore: must_be_immutable
 class AssignmentLate extends AssignmentFactory{
   AssignmentLate(): super.create();
 
-  final assignments = ["과제1", "과제2"];
-  final isSwitches = [false,false];
+  WorkType _workType;
+  var assignments ;
+  final isSwitches = [false, false];
+  
+  @override
+  void setWorkType(WorkType workType) {
+    this._workType = workType;
+    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];  
+  }
 
   @override
   AssignmentLateState createState() => AssignmentLateState();
 }
-class AssignmentLateState extends State<AssignmentLate>{
+class AssignmentLateState extends State<AssignmentLate> with AutomaticKeepAliveClientMixin<AssignmentLate>{
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState(){
     super.initState();

@@ -2,26 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:klashelper/pages/assignmentTodo.dart';
 import 'package:klashelper/pages/assignmentComplete.dart';
 import 'package:klashelper/pages/assignmentLate.dart';
-
+import 'assignmentType.dart';
+import 'package:klashelper/models/workType.dart';
 abstract class AssignmentFactory extends StatefulWidget {
   AssignmentFactory.create();
 
   // ignore: missing_return
-  factory AssignmentFactory(AssignmentType type) {
-    switch (type) {
+  factory AssignmentFactory(AssignmentType assignmentType ) {
+    switch (assignmentType) {
       case AssignmentType.TODO:
-        return AssignmentTodo();
+        return new AssignmentTodo();
       case AssignmentType.COMPLETE:
-        return AssignmentComplete();
+        return new AssignmentComplete();
       case AssignmentType.LATE:
-        return AssignmentLate();
+        return new AssignmentLate();
     }
   }
+
+  void setWorkType(WorkType workType);
 }
 
-enum AssignmentType {
-  //@arg position = 0: 진행 1: 완료 2: 지난
-  TODO,
-  COMPLETE,
-  LATE
-}

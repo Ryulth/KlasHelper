@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 
+// ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
-
-  final assignments = ["과제1", "과제2"];
+  
+  WorkType _workType;
+  var assignments ;
   final isSwitches = [false, false];
-
+  
+  @override
+  void setWorkType(WorkType workType) {
+    this._workType = workType;
+    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];  
+  }
   @override
   AssignmentTodoState createState() => AssignmentTodoState();
 }
 
-class AssignmentTodoState extends State<AssignmentTodo> {
+class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveClientMixin<AssignmentTodo> {
+  @override
+  bool get wantKeepAlive => true;
+  
   Future<void> _onRefresh() async{
     await Future.delayed(Duration(seconds: 3));
     print("refresh");
@@ -37,6 +48,9 @@ class AssignmentTodoState extends State<AssignmentTodo> {
             child: InkWell(
               onTap: () {
                 print(index);
+                print(this.toString());
+                print(widget._workType.toString());
+                print(widget.assignments.toString());
               },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

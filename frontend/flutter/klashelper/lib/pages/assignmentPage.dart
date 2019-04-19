@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klashelper/models/user.dart';
+import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'loginPages.dart';
+import 'assignmentType.dart';
 
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
@@ -45,9 +47,9 @@ class AssignmentPageState extends State<AssignmentPage>
 
   int _currentTopIndex = 0;
   int _currentBottomIndex = 0;
-  Widget _todoAssignment;
-  Widget _completeAssignment;
-  Widget _lateAssignment;
+  AssignmentFactory _todoAssignment;
+  AssignmentFactory _completeAssignment;
+  AssignmentFactory _lateAssignment;
   DateTime lastTimeBackPressed = DateTime.fromMicrosecondsSinceEpoch(0);
 
   Future<bool> _onWillPop() async {
@@ -90,16 +92,23 @@ class AssignmentPageState extends State<AssignmentPage>
   }
 
   void _handleBottomTabSelection(int index) {
-    setState(() {
-      _currentBottomIndex = index;
-      print("BottomIndex " + _currentBottomIndex.toString());
-    });
+    if(_currentBottomIndex != index){
+      setState(() {
+        _currentBottomIndex = index;
+        print("BottomIndex " + _currentBottomIndex.toString());
+        if(index <3){
+          _settingAssignmentItems(WorkType.values[index]);//
+        }
+      });
+    }
   }
-
-  void _settingListItems() {
+  void _settingAssignmentItems(WorkType workType) {
     _todoAssignment = AssignmentFactory(AssignmentType.TODO);
+    _todoAssignment.setWorkType(workType);
     _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE);
+    _completeAssignment.setWorkType(workType);
     _lateAssignment = AssignmentFactory(AssignmentType.LATE);
+    _lateAssignment.setWorkType(workType);
   }
   Future<void> _onRefresh() async{
     print("refresh");
@@ -110,7 +119,7 @@ class AssignmentPageState extends State<AssignmentPage>
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
     _tabController.addListener(_handleTopTabSelection);
-    _settingListItems();
+    _settingAssignmentItems(WorkType.HOMEWORK);
     _loadUser();
   }
 
@@ -138,8 +147,6 @@ class AssignmentPageState extends State<AssignmentPage>
                 )
               ],
               bottom: TabBar(
-                // map 함수는 리스트의 요소를 하나씩 전달한 결과로
-                // Iterable 객체를 생성하기 때문에 toList 함수로 변환
                 controller: _tabController,
                 tabs: assignmentTabs,
                 isScrollable: false, // 많으면 자동 스크롤 근데 false 면 사이즈가 딱 맞네?
@@ -154,19 +161,16 @@ class AssignmentPageState extends State<AssignmentPage>
               type: BottomNavigationBarType.fixed,
             ),
             body:
-            RefreshIndicator(
-              onRefresh: _onRefresh,
-            child: TabBarView(
-
+             TabBarView(
               controller: _tabController,
-              children: <Widget>[
-                _todoAssignment,
-                _completeAssignment,
-                _lateAssignment,
+                children: <Widget>[
+                  _todoAssignment,
+                  _completeAssignment,
+                  _lateAssignment,
               ],
             ),
           ),
-        ),),
+        ),
       ),
       onWillPop: _onWillPop,
     );
