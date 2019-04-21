@@ -10,12 +10,13 @@ class Assignment  {
   String semester;
   String workTitle;
   WorkType workType;
-  int isAlarm = 1;
-  int flag = 1;
+  int isAlarm ;
+  int flag ;
 
   Assignment({this.workCode,this.workFile,this.workCourse,
   this.isSubmit,this.workCreateTime,this.workFinishTime,
-  this.semester,this.workTitle,this.workType});
+  this.semester,this.workTitle,this.workType,
+  this.isAlarm,this.flag});
 
   factory Assignment.fromJson(Map<String,dynamic> json){
     return Assignment(
@@ -27,7 +28,9 @@ class Assignment  {
       workFinishTime : json['workFinishTime'],
       semester : json['semester'],
       workTitle : json['workTitle'],
-      workType : WorkType.values.firstWhere((e) => e.toString() == 'WorkType.' + json['workType'])
+      workType : WorkType.values.firstWhere((e) => e.toString() == 'WorkType.' + json['workType']),
+      isAlarm: json['isAlarm'] == null ? 1 : json['isAlarm'],
+      flag: json['flag'] == null ? 1 : json['flag'],
     );
   }
 

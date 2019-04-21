@@ -14,13 +14,13 @@ class AssignmentDao {
     String dbPath = join(databasesPath, 'klashelper.db');
     database = await openDatabase(
       dbPath, version: 1,
-      onCreate: createTable
+      onCreate: _createTable
     );
     print("asgfaffas");
     return true;
   }
-
-  void createTable(Database db, int version) async {
+  Future<bool> createTable() async {
+    final Database db =  database;
     StringBuffer sb = new StringBuffer();
     sb.write(" CREATE TABLE IF NOT EXISTS ");
     sb.write(tableName);
@@ -35,6 +35,25 @@ class AssignmentDao {
     sb.write(" workFinishTime TEXT, ");
     sb.write("isAlarm INTEGER, ");
     sb.write("flag INTEGER )");
+    await db.execute(sb.toString());
+    return true;
+  }
+  void _createTable(Database db, int version) async {
+    StringBuffer sb = new StringBuffer();
+    sb.write(" CREATE TABLE IF NOT EXISTS ");
+    sb.write(tableName);
+    sb.write(" ( workCode TEXT PRIMARY KEY, ");
+    sb.write(" semester TEXT, ");
+    sb.write(" workFile TEXT, ");
+    sb.write(" workCourse TEXT, ");
+    sb.write(" isSubmit INTEGER, ");
+    sb.write(" workType TEXT, ");
+    sb.write(" workTitle TEXT, ");
+    sb.write(" workCreateTime TEXT, ");
+    sb.write(" workFinishTime TEXT, ");
+    sb.write("isAlarm INTEGER, ");
+    sb.write("flag INTEGER )");
+    print("default table");
     await db.execute(sb.toString());
   }
 

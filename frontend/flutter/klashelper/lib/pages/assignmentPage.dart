@@ -125,23 +125,26 @@ class AssignmentPageState extends State<AssignmentPage>
     widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
     print("createTable");
     if(await widget.assignmentDao.setConnection()){
+      widget.assignmentDao.createTable();
       print("insertAssignments");
-     // await widget.assignmentDao.insertAssignments(assignments);
-      //print("insertAssignments");
-       List<Assignment> assignmentsUpdated = await widget.assignmentDao.getAllAssignment();
+      await widget.assignmentDao.insertAssignments(assignments);
+      print("insertAssignments");
+      List<Assignment> assignmentsUpdated = await widget.assignmentDao.getAllAssignment();
+      print(assignmentsUpdated[1].toJson().toString());
     }
   }
 
   @override
   void initState() {
     super.initState();
+    widget.semesterCode = "2018_20";
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
     _tabController.addListener(_handleTopTabSelection);
     _settingAssignmentItems(WorkType.HOMEWORK);
     _loadUser();
     //widget.assignmentDao.getConnection();
-    widget.semesterCode = "2019_10";
+
   }
 
   @override
