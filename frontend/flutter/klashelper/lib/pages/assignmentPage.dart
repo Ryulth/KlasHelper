@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:klashelper/models/user.dart';
@@ -17,7 +16,9 @@ class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
   User user = new User();
   AssignmentDao assignmentDao = new AssignmentDao();
-  String semesterCode;
+  String semesterCode ;
+  List<Assignment> _totalAssignments = [];
+  bool hasData = false;
   @override
   AssignmentPageState createState() => new AssignmentPageState();
 }
@@ -67,28 +68,14 @@ class AssignmentPageState extends State<AssignmentPage>
     return Future.value(false);
   }
 
-  Future<Null> _loadUser() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String userInfo = prefs.getString("userInfoFile");
-    if (userInfo != null && userInfo.isNotEmpty) {
-      print("자동로그인");
-      widget.user = User.fromJson(json.decode(userInfo));
-      print(widget.user.toJson().toString());
-    } else {
-      print("유저 정보가 없어서 로그인 ㄱㄱ");
-      Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
-    }
-  }
-
   void _logout() async {
     // Causes the app to rebuild with the new _selectedChoice.
-    print("logtout button");
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("userInfoFile");
     Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
   }
 
-  _handleTopTabSelection() {
+ void  _handleTopTabSelection() {
     setState(() {
       _currentTopIndex = _tabController.index;
       print("TopIndex " + _currentTopIndex.toString());
@@ -99,12 +86,64 @@ class AssignmentPageState extends State<AssignmentPage>
     if(_currentBottomIndex != index){
       setState(() {
         _currentBottomIndex = index;
-        print("BottomIndex " + _currentBottomIndex.toString());
         if(index <3){
+          print("BottomIndex " + WorkType.values[index].toString());
+          if(!widget.hasData){
+            _initData();
+          }
           _settingAssignmentItems(WorkType.values[index]);//
         }
       });
     }
+  }
+  Future<void> _onRefresh() async{
+    _fetchAssignment();
+  }
+  Future<void> _fetchAssignment() async{
+    _setSemesterCode();
+    AssignmentResponse assignmentResponse = await AssignmentApi().getAssignment(widget.user, widget.semesterCode);
+    Iterable iterable = assignmentResponse.assignmentList;
+    List<Assignment> assignments = iterable.map((model)=>Assignment.fromJson(model)).toList();
+    widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
+    if(await widget.assignmentDao.setConnection()){
+      widget.assignmentDao.createTable();
+      await widget.assignmentDao.insertAssignments(assignments);
+      widget._totalAssignments = await widget.assignmentDao.getAllAssignment();
+      _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
+    }
+
+  }
+  void _setSemesterCode(){
+    widget.semesterCode = "2019_10";
+  }
+  void _initData() async{
+    _setSemesterCode();
+    if(await _loadUser()){
+       _loadData();
+       widget.hasData = true;
+    }
+  }
+  Future<bool> _loadUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String userInfo = prefs.getString("userInfoFile");
+    if (userInfo != null && userInfo.isNotEmpty) {
+      widget.user = User.fromJson(json.decode(userInfo));
+      print(widget.user.toJson().toString());
+      return true;
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
+      return false;
+    }
+  }
+  Future<Null> _loadData() async {
+    _setSemesterCode();
+    print("loadDATA");
+    widget.assignmentDao.tableName = "a"+widget.user.id+'_'+widget.semesterCode;
+    if(await widget.assignmentDao.setConnection()){
+      widget.assignmentDao.createTable();
+      widget._totalAssignments = await widget.assignmentDao.getAllAssignment();
+    }
+    _settingAssignmentItems(WorkType.HOMEWORK);
   }
   void _settingAssignmentItems(WorkType workType) {
     _todoAssignment = AssignmentFactory(AssignmentType.TODO);
@@ -113,38 +152,29 @@ class AssignmentPageState extends State<AssignmentPage>
     _completeAssignment.setWorkType(workType);
     _lateAssignment = AssignmentFactory(AssignmentType.LATE);
     _lateAssignment.setWorkType(workType);
+    _classifyAssignment(workType);
   }
-  Future<void> _onRefresh() async{
-    _fetchAssignment();
-    print("refresh");
-  }
-  Future<void> _fetchAssignment() async{
-    AssignmentResponse assignmentResponse = await AssignmentApi().getAssignment(widget.user, widget.semesterCode);
-    Iterable iterable = assignmentResponse.assignmentList;
-    List<Assignment> assignments = iterable.map((model)=>Assignment.fromJson(model)).toList();
-    widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
-    print("createTable");
-    if(await widget.assignmentDao.setConnection()){
-      widget.assignmentDao.createTable();
-      print("insertAssignments");
-      await widget.assignmentDao.insertAssignments(assignments);
-      print("insertAssignments");
-      List<Assignment> assignmentsUpdated = await widget.assignmentDao.getAllAssignment();
-      print(assignmentsUpdated[1].toJson().toString());
+  void _classifyAssignment(WorkType workType){
+    List<Assignment> _tempTodoAssignments = [] ;
+    List<Assignment> _tempcompleteAssignment;
+    List<Assignment> _lateAssignment;
+    for(final assignment in widget._totalAssignments){
+      if(assignment.workType == workType){
+        _tempTodoAssignments.add(assignment);
+      }
     }
+    _todoAssignment.setAssignments(_tempTodoAssignments);
   }
-
   @override
   void initState() {
     super.initState();
-    widget.semesterCode = "2018_20";
+    _setSemesterCode();
+    _settingAssignmentItems(WorkType.HOMEWORK);
+    print(widget.semesterCode);
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
     _tabController.addListener(_handleTopTabSelection);
-    _settingAssignmentItems(WorkType.HOMEWORK);
-    _loadUser();
-    //widget.assignmentDao.getConnection();
-
+    _initData();
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 
@@ -18,6 +19,11 @@ class AssignmentLate extends AssignmentFactory{
 
   @override
   AssignmentLateState createState() => AssignmentLateState();
+
+  @override
+  void setAssignments(List<Assignment> assignments) {
+    // TODO: implement setAssignments
+  }
 }
 class AssignmentLateState extends State<AssignmentLate> with AutomaticKeepAliveClientMixin<AssignmentLate>{
   @override

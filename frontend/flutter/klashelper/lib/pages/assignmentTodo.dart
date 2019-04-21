@@ -6,16 +6,19 @@ import 'package:klashelper/models/assignment.dart';
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
 
-  List<Assignment> assignmentList;
+  List<Assignment> _assignments =[];
   WorkType _workType;
-  var assignments ;
-  final isSwitches = [false, false];
   
   @override
   void setWorkType(WorkType workType) {
     this._workType = workType;
-    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];  
   }
+
+  @override
+  void setAssignments(List<Assignment> assignments) {
+    this._assignments = assignments;
+  }
+
   @override
   AssignmentTodoState createState() => AssignmentTodoState();
 }
@@ -30,6 +33,7 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
   }
   @override
   void initState() {
+    print("init todo");
     super.initState();
   }
 
@@ -43,7 +47,7 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
     return //RefreshIndicator(
       //onRefresh: _onRefresh,
       ListView.builder(
-        itemCount: widget.assignments.length,
+        itemCount: widget._assignments.length,
         itemBuilder: (context, index) {
           return Card(
             child: InkWell(
@@ -51,7 +55,7 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
                 print(index);
                 print(this.toString());
                 print(widget._workType.toString());
-                print(widget.assignments.toString());
+                print(widget._assignments.toString());
                 StringBuffer stringBuffer = new StringBuffer();
                 stringBuffer.write("test");
                 stringBuffer.write("test");
@@ -81,14 +85,14 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '데이터 센터 프로그래밍',
-            style: TextStyle(fontSize: 8),
+            widget._assignments[index].workCourse,
+            style: TextStyle(fontSize: 10),
           ),
           Text(
-            widget.assignments[index] + "진행",
+            widget._assignments[index].workTitle,
             style: TextStyle(fontSize: 16),
           ),
-          Text('마감기한'),
+          Text(widget._assignments[index].workFinishTime),
         ],
       ),
     );
@@ -100,11 +104,11 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
       onChanged: (bool newValue) {
         print(newValue);
         setState(() {
-          widget.isSwitches[index] = newValue;
-          print(widget.isSwitches.toString());
+          int isAlarm = (newValue) ? 1 : 0;
+          widget._assignments[index].isAlarm = isAlarm;
         });
       },
-      value: widget.isSwitches[index],
+      value: (widget._assignments[index].isAlarm == 1) ? true : false,
     );
   }
 }

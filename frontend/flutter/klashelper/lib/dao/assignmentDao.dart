@@ -14,7 +14,7 @@ class AssignmentDao {
     String dbPath = join(databasesPath, 'klashelper.db');
     database = await openDatabase(
       dbPath, version: 1,
-      onCreate: _createTable
+      //onCreate: _createTable
     );
     print("asgfaffas");
     return true;
@@ -37,24 +37,6 @@ class AssignmentDao {
     sb.write("flag INTEGER )");
     await db.execute(sb.toString());
     return true;
-  }
-  void _createTable(Database db, int version) async {
-    StringBuffer sb = new StringBuffer();
-    sb.write(" CREATE TABLE IF NOT EXISTS ");
-    sb.write(tableName);
-    sb.write(" ( workCode TEXT PRIMARY KEY, ");
-    sb.write(" semester TEXT, ");
-    sb.write(" workFile TEXT, ");
-    sb.write(" workCourse TEXT, ");
-    sb.write(" isSubmit INTEGER, ");
-    sb.write(" workType TEXT, ");
-    sb.write(" workTitle TEXT, ");
-    sb.write(" workCreateTime TEXT, ");
-    sb.write(" workFinishTime TEXT, ");
-    sb.write("isAlarm INTEGER, ");
-    sb.write("flag INTEGER )");
-    print("default table");
-    await db.execute(sb.toString());
   }
 
   Future<void> insertAssignments(List<Assignment> assignments) async {
@@ -81,7 +63,6 @@ class AssignmentDao {
   Future<List<Assignment>> getAllAssignment()async{
     final Database db = database;
     final List<Map<String,dynamic>> maps = await db.query(tableName);
-    print(maps.toString());
     return List.generate(maps.length, (index){
       return Assignment.fromJson(maps[index]);
     });

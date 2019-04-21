@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/pages/assignmentTodo.dart';
 import 'package:klashelper/pages/assignmentComplete.dart';
 import 'package:klashelper/pages/assignmentLate.dart';
@@ -20,5 +21,6 @@ abstract class AssignmentFactory extends StatefulWidget {
   }
 
   void setWorkType(WorkType workType);
+  void setAssignments(List<Assignment> assignments);
 }
 

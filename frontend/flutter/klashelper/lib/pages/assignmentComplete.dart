@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 
@@ -13,11 +14,16 @@ class AssignmentComplete extends AssignmentFactory{
   @override
   void setWorkType(WorkType workType) {
     this._workType = workType;
-    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];  
+    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];
   }
 
   @override
   AssignmentCompleteState createState() => AssignmentCompleteState();
+
+  @override
+  void setAssignments(List<Assignment> assignments) {
+    // TODO: implement setAssignments
+  }
 }
 class AssignmentCompleteState extends State<AssignmentComplete> with AutomaticKeepAliveClientMixin<AssignmentComplete>{
   @override
