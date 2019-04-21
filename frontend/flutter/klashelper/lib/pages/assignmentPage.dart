@@ -6,14 +6,18 @@ import 'package:klashelper/models/user.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'loginPages.dart';
 import 'assignmentType.dart';
+import 'package:klashelper/models/assignment.dart';
+import 'package:klashelper/apis/assignmentApi.dart';
+import 'package:klashelper/response/assignmentResponse.dart';
+import 'package:klashelper/dao/assignmentDao.dart';
 
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
   User user = new User();
-
+  AssignmentDao assignmentDao = new AssignmentDao();
+  String semesterCode;
   @override
   AssignmentPageState createState() => new AssignmentPageState();
 }
@@ -54,14 +58,12 @@ class AssignmentPageState extends State<AssignmentPage>
 
   Future<bool> _onWillPop() async {
     if (DateTime.now().difference(lastTimeBackPressed) < Duration(seconds: 2)) {
-      print("t");
       SystemNavigator.pop();
       return Future.value(true);
     }
     //'뒤로' 버튼 한번 클릭 시 메시지
     //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
     lastTimeBackPressed = DateTime.now();
-    print("false");
     return Future.value(false);
   }
 
@@ -69,7 +71,9 @@ class AssignmentPageState extends State<AssignmentPage>
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String userInfo = prefs.getString("userInfoFile");
     if (userInfo != null && userInfo.isNotEmpty) {
-      print("유저 정보가 자동로그인");
+      print("자동로그인");
+      widget.user = User.fromJson(json.decode(userInfo));
+      print(widget.user.toJson().toString());
     } else {
       print("유저 정보가 없어서 로그인 ㄱㄱ");
       Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
@@ -111,8 +115,23 @@ class AssignmentPageState extends State<AssignmentPage>
     _lateAssignment.setWorkType(workType);
   }
   Future<void> _onRefresh() async{
+    _fetchAssignment();
     print("refresh");
   }
+  Future<void> _fetchAssignment() async{
+    AssignmentResponse assignmentResponse = await AssignmentApi().getAssignment(widget.user, widget.semesterCode);
+    Iterable iterable = assignmentResponse.assignmentList;
+    List<Assignment> assignments = iterable.map((model)=>Assignment.fromJson(model)).toList();
+    widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
+    print("createTable");
+    if(await widget.assignmentDao.setConnection()){
+      print("insertAssignments");
+     // await widget.assignmentDao.insertAssignments(assignments);
+      //print("insertAssignments");
+       List<Assignment> assignmentsUpdated = await widget.assignmentDao.getAllAssignment();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -121,6 +140,8 @@ class AssignmentPageState extends State<AssignmentPage>
     _tabController.addListener(_handleTopTabSelection);
     _settingAssignmentItems(WorkType.HOMEWORK);
     _loadUser();
+    //widget.assignmentDao.getConnection();
+    widget.semesterCode = "2019_10";
   }
 
   @override
@@ -144,6 +165,10 @@ class AssignmentPageState extends State<AssignmentPage>
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: _logout,
+                ),
+                IconButton(
+                  icon: Icon(Icons.refresh),
+                  onPressed: _onRefresh,
                 )
               ],
               bottom: TabBar(

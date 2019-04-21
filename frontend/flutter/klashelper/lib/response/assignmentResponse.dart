@@ -1,7 +1,7 @@
-
+import 'package:klashelper/models/assignment.dart';
 class AssignmentResponse {
   String status;
-  String assignmentList;
+  List<dynamic> assignmentList;
 
   AssignmentResponse({this.status,this.assignmentList});
 
@@ -11,4 +11,6 @@ class AssignmentResponse {
       assignmentList : json['assignment']
     );
   }
+
+
 }

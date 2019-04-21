@@ -10,6 +10,8 @@ class Assignment  {
   String semester;
   String workTitle;
   WorkType workType;
+  int isAlarm = 1;
+  int flag = 1;
 
   Assignment({this.workCode,this.workFile,this.workCourse,
   this.isSubmit,this.workCreateTime,this.workFinishTime,
@@ -29,13 +31,21 @@ class Assignment  {
     );
   }
 
-  // Map toJson(){
-  //   var map = new Map<String, dynamic>();
-  //   map['id'] = id;
-  //   map['pw'] = pw;
-
-  //   return map;
-  // }
+  Map toJson(){
+     var map = new Map<String, dynamic>();
+     map['workCode'] = workCode;
+     map['workFile'] = workFile;
+     map['workCourse'] = workCourse;
+     map['isSubmit'] = isSubmit;
+     map['workCreateTime'] = workCreateTime;
+     map['workFinishTime'] = workFinishTime;
+     map['workType'] = workType.toString().split('WorkType.')[1];
+     map['semester'] = semester;
+     map['workTitle'] = workTitle;
+     map['isAlarm'] = isAlarm;
+     map['flag'] = flag;
+     return map;
+   }
 }
 
 /*

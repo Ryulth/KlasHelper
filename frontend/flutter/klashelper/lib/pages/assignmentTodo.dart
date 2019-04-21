@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
-
+import 'package:klashelper/models/assignment.dart';
 // ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
-  
+
+  List<Assignment> assignmentList;
   WorkType _workType;
   var assignments ;
   final isSwitches = [false, false];
@@ -51,7 +52,12 @@ class AssignmentTodoState extends State<AssignmentTodo> with AutomaticKeepAliveC
                 print(this.toString());
                 print(widget._workType.toString());
                 print(widget.assignments.toString());
-              },
+                StringBuffer stringBuffer = new StringBuffer();
+                stringBuffer.write("test");
+                stringBuffer.write("test");
+                print(stringBuffer.toString());
+                print(WorkType.HOMEWORK.toString().split('WorkType.')[1]);
+                },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
