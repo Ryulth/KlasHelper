@@ -28,7 +28,6 @@ class AssignmentPageState extends State<AssignmentPage>
   var refreshKey = GlobalKey<RefreshIndicatorState>();
   final List<Tab> assignmentTabs = <Tab>[
     new Tab(text: "진행 과제"),
-    new Tab(text: "완료 과제"),
     new Tab(text: "지난 과제")
   ];
   final List<BottomNavigationBarItem> assignmentBottomsTabs =
@@ -87,17 +86,19 @@ class AssignmentPageState extends State<AssignmentPage>
       setState(() {
         _currentBottomIndex = index;
         if(index <3){
-          print("BottomIndex " + WorkType.values[index].toString());
-          if(!widget.hasData){
+//          print("BottomIndex " + WorkType.values[index].toString());
+          if(widget.hasData ) {
+            _settingAssignmentItems(WorkType.values[index]);//
+          }
+          else{
             _initData();
           }
-          _settingAssignmentItems(WorkType.values[index]);//
         }
       });
     }
   }
   Future<void> _onRefresh() async{
-    _fetchAssignment();
+    await _fetchAssignment();
   }
   Future<void> _fetchAssignment() async{
     _setSemesterCode();
@@ -105,6 +106,7 @@ class AssignmentPageState extends State<AssignmentPage>
     Iterable iterable = assignmentResponse.assignmentList;
     List<Assignment> assignments = iterable.map((model)=>Assignment.fromJson(model)).toList();
     widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
+    print(widget.assignmentDao.tableName);
     if(await widget.assignmentDao.setConnection()){
       widget.assignmentDao.createTable();
       await widget.assignmentDao.insertAssignments(assignments);
@@ -137,8 +139,8 @@ class AssignmentPageState extends State<AssignmentPage>
   }
   Future<Null> _loadData() async {
     _setSemesterCode();
-    print("loadDATA");
     widget.assignmentDao.tableName = "a"+widget.user.id+'_'+widget.semesterCode;
+    print(widget.assignmentDao.tableName);
     if(await widget.assignmentDao.setConnection()){
       widget.assignmentDao.createTable();
       widget._totalAssignments = await widget.assignmentDao.getAllAssignment();
@@ -146,24 +148,40 @@ class AssignmentPageState extends State<AssignmentPage>
     _settingAssignmentItems(WorkType.HOMEWORK);
   }
   void _settingAssignmentItems(WorkType workType) {
-    _todoAssignment = AssignmentFactory(AssignmentType.TODO);
-    _todoAssignment.setWorkType(workType);
-    _completeAssignment = AssignmentFactory(AssignmentType.COMPLETE);
-    _completeAssignment.setWorkType(workType);
-    _lateAssignment = AssignmentFactory(AssignmentType.LATE);
-    _lateAssignment.setWorkType(workType);
-    _classifyAssignment(workType);
+    setState(() {
+      _todoAssignment = AssignmentFactory(AssignmentType.TODO);
+      _todoAssignment.setWorkType(workType);
+      _lateAssignment = AssignmentFactory(AssignmentType.LATE);
+      _lateAssignment.setWorkType(workType);
+      _classifyAssignment(workType);
+    });
+
   }
   void _classifyAssignment(WorkType workType){
     List<Assignment> _tempTodoAssignments = [] ;
-    List<Assignment> _tempcompleteAssignment;
-    List<Assignment> _lateAssignment;
+    List<Assignment> _templateAssignment = [];
     for(final assignment in widget._totalAssignments){
       if(assignment.workType == workType){
-        _tempTodoAssignments.add(assignment);
+        var now = DateTime.now();
+        String workFinishTime = assignment.workFinishTime;
+        if(workFinishTime != "0"){
+          workFinishTime = (workFinishTime.length<11) ? workFinishTime +" 24:00" : workFinishTime;
+          workFinishTime = workFinishTime.replaceAll("(RE)", "");
+          var finishDateTime = DateTime.parse(workFinishTime);
+          if(now.isAfter(finishDateTime)){
+            _templateAssignment.add(assignment);
+          }
+          else{
+            _tempTodoAssignments.add(assignment);
+          }
+        }
+        else{
+          _tempTodoAssignments.add(assignment);
+        }
       }
     }
     _todoAssignment.setAssignments(_tempTodoAssignments);
+    _lateAssignment.setAssignments(_templateAssignment);
   }
   @override
   void initState() {
@@ -222,9 +240,14 @@ class AssignmentPageState extends State<AssignmentPage>
              TabBarView(
               controller: _tabController,
                 children: <Widget>[
-                  _todoAssignment,
-                  _completeAssignment,
-                  _lateAssignment,
+                  RefreshIndicator(
+                    child: _todoAssignment,
+                    onRefresh: _onRefresh,
+                  ),
+                  RefreshIndicator(
+                    child: _lateAssignment,
+                    onRefresh: _onRefresh,
+                  ),
               ],
             ),
           ),

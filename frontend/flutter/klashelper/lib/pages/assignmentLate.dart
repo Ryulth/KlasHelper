@@ -1,37 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
+import 'package:klashelper/models/assignment.dart';
 
 // ignore: must_be_immutable
-class AssignmentLate extends AssignmentFactory{
-  AssignmentLate(): super.create();
+class AssignmentLate extends AssignmentFactory {
+  AssignmentLate() : super.create();
 
+  List<Assignment> _assignments = [];
   WorkType _workType;
-  var assignments ;
-  final isSwitches = [false, false];
-  
+
   @override
   void setWorkType(WorkType workType) {
     this._workType = workType;
-    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];  
+  }
+
+  @override
+  void setAssignments(List<Assignment> assignments) {
+    this._assignments = assignments;
   }
 
   @override
   AssignmentLateState createState() => AssignmentLateState();
-
-  @override
-  void setAssignments(List<Assignment> assignments) {
-    // TODO: implement setAssignments
-  }
 }
-class AssignmentLateState extends State<AssignmentLate> with AutomaticKeepAliveClientMixin<AssignmentLate>{
+
+class AssignmentLateState extends State<AssignmentLate>
+    with AutomaticKeepAliveClientMixin<AssignmentLate> {
   @override
   bool get wantKeepAlive => true;
+
+  Future<void> _onRefresh() async {
+    await Future.delayed(Duration(seconds: 3));
+    print("refresh");
+  }
+
   @override
-  void initState(){
+  void initState() {
+    print("init todo");
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -39,28 +47,33 @@ class AssignmentLateState extends State<AssignmentLate> with AutomaticKeepAliveC
   }
 
   Widget _getList() {
-    return ListView.builder(
-      itemCount: widget.assignments.length,
-      itemBuilder: (context, index) {
-        return Card(
-          child: InkWell(
-            onTap: () {
-              print(index);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  _getColumn(index),
-                  _getSwitch(index),
-                ],
+    return //RefreshIndicator(
+      //onRefresh: _onRefresh,
+      ListView.builder(
+        itemCount: widget._assignments.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: InkWell(
+              onTap: () {
+                print(index);
+                print(widget._assignments[index].toJson().toString());
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: <Widget>[
+                    _getColumn(index),
+                    _getSwitch(index),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    //);
   }
+
   Widget _getColumn(int index) {
     Widget column = Expanded(
       child: Column(
@@ -68,31 +81,50 @@ class AssignmentLateState extends State<AssignmentLate> with AutomaticKeepAliveC
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            '데이터 센터 프로그래밍',
-            style: TextStyle(fontSize: 8),
+            widget._assignments[index].workCourse,
+            style: TextStyle(fontSize: 10),
           ),
           Text(
-            widget.assignments[index] +"늦음",
+            widget._assignments[index].workTitle,
             style: TextStyle(fontSize: 16),
           ),
-          Text('마감기한'),
+          Text.rich(TextSpan(
+              text: widget._assignments[index].workFinishTime,
+              children: <TextSpan>[
+                _isComplete(index)
+              ])),
         ],
       ),
     );
     return column;
   }
-
+  TextSpan _isComplete(int index){
+    if(widget._assignments[index].isSubmit == 1){
+      return TextSpan(
+          text: " 제출",
+          style: TextStyle(
+            color: Colors.green,
+            textBaseline: TextBaseline.ideographic
+          ));
+    }
+    else{
+      return TextSpan(
+          text: " 미제출",
+          style: TextStyle(
+            color: Colors.red,
+          ));
+    }
+  }
   Switch _getSwitch(int index) {
     return Switch(
-      onChanged: (bool newValue){
+      onChanged: (bool newValue) {
         print(newValue);
         setState(() {
-          widget.isSwitches[index] = newValue;
-          print(widget.isSwitches.toString());
+          int isAlarm = (newValue) ? 1 : 0;
+          widget._assignments[index].isAlarm = isAlarm;
         });
-
       },
-      value: widget.isSwitches[index],
+      value: (widget._assignments[index].isAlarm == 1) ? true : false,
     );
   }
 }

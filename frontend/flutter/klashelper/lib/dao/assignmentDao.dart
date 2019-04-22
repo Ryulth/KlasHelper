@@ -16,11 +16,12 @@ class AssignmentDao {
       dbPath, version: 1,
       //onCreate: _createTable
     );
-    print("asgfaffas");
+
     return true;
   }
   Future<bool> createTable() async {
     final Database db =  database;
+    print(tableName);
     StringBuffer sb = new StringBuffer();
     sb.write(" CREATE TABLE IF NOT EXISTS ");
     sb.write(tableName);
