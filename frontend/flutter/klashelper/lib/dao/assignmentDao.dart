@@ -12,15 +12,18 @@ class AssignmentDao {
   Future<bool> setConnection() async {
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'klashelper.db');
-    database = await openDatabase(
+    this.database = await openDatabase(
       dbPath, version: 1,
-      //onCreate: _createTable
     );
-
+    print("setConnection");
     return true;
   }
   Future<bool> createTable() async {
-    final Database db =  database;
+    if(database ==null){
+      await setConnection();
+    }
+    final Database db =  this.database;
+    
     print(tableName);
     StringBuffer sb = new StringBuffer();
     sb.write(" CREATE TABLE IF NOT EXISTS ");
@@ -41,7 +44,7 @@ class AssignmentDao {
   }
 
   Future<void> insertAssignments(List<Assignment> assignments) async {
-    final Database db =  database;
+    final Database db =  this.database;
 
     for (final assignment in assignments) {
       db.insert(
@@ -62,6 +65,9 @@ class AssignmentDao {
   }
 
   Future<List<Assignment>> getAllAssignment()async{
+    if(database ==null){
+      await setConnection();
+    }
     final Database db = database;
     final List<Map<String,dynamic>> maps = await db.query(tableName);
     return List.generate(maps.length, (index){

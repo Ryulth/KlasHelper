@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:klashelper/apis/semesterApi.dart';
+import 'package:klashelper/models/semester.dart';
 import 'package:klashelper/models/user.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
+import 'package:klashelper/response/semesterResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'assignmentType.dart';
 import 'package:klashelper/models/assignment.dart';
@@ -14,18 +17,15 @@ import 'package:klashelper/dao/assignmentDao.dart';
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
-  User user = new User();
-  AssignmentDao assignmentDao = new AssignmentDao();
-  String semesterCode ;
-  List<Assignment> _totalAssignments = [];
-  bool hasData = false;
+  
   @override
   AssignmentPageState createState() => new AssignmentPageState();
 }
 
 class AssignmentPageState extends State<AssignmentPage>
     with SingleTickerProviderStateMixin {
-  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+      
   final List<Tab> assignmentTabs = <Tab>[
     new Tab(text: "진행 과제"),
     new Tab(text: "지난 과제")
@@ -48,11 +48,14 @@ class AssignmentPageState extends State<AssignmentPage>
         icon: new Icon(Icons.menu), title: new Text('메뉴'))
   ];
   TabController _tabController;
-
+  User _user = new User();
+  AssignmentDao _assignmentDao = new AssignmentDao();
+  String _semesterCode = "" ;
+  List<Assignment> _totalAssignments = [];
+  bool hasData = false;
   int _currentTopIndex = 0;
   int _currentBottomIndex = 0;
   AssignmentFactory _todoAssignment;
-  AssignmentFactory _completeAssignment;
   AssignmentFactory _lateAssignment;
   DateTime lastTimeBackPressed = DateTime.fromMicrosecondsSinceEpoch(0);
 
@@ -61,14 +64,12 @@ class AssignmentPageState extends State<AssignmentPage>
       SystemNavigator.pop();
       return Future.value(true);
     }
-    //'뒤로' 버튼 한번 클릭 시 메시지
     //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
     lastTimeBackPressed = DateTime.now();
     return Future.value(false);
   }
 
   void _logout() async {
-    // Causes the app to rebuild with the new _selectedChoice.
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("userInfoFile");
     Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
@@ -86,13 +87,7 @@ class AssignmentPageState extends State<AssignmentPage>
       setState(() {
         _currentBottomIndex = index;
         if(index <3){
-//          print("BottomIndex " + WorkType.values[index].toString());
-          if(widget.hasData ) {
-            _settingAssignmentItems(WorkType.values[index]);//
-          }
-          else{
-            _initData();
-          }
+          _settingAssignmentItems(WorkType.values[index]);//
         }
       });
     }
@@ -101,36 +96,65 @@ class AssignmentPageState extends State<AssignmentPage>
     await _fetchAssignment();
   }
   Future<void> _fetchAssignment() async{
-    _setSemesterCode();
-    AssignmentResponse assignmentResponse = await AssignmentApi().getAssignment(widget.user, widget.semesterCode);
+    AssignmentResponse assignmentResponse = await AssignmentApi().getAssignment(_user, _semesterCode);
     Iterable iterable = assignmentResponse.assignmentList;
     List<Assignment> assignments = iterable.map((model)=>Assignment.fromJson(model)).toList();
-    widget.assignmentDao.tableName = 'a'+widget.user.id+'_'+widget.semesterCode;
-    print(widget.assignmentDao.tableName);
-    if(await widget.assignmentDao.setConnection()){
-      widget.assignmentDao.createTable();
-      await widget.assignmentDao.insertAssignments(assignments);
-      widget._totalAssignments = await widget.assignmentDao.getAllAssignment();
-      _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
-    }
-
+    String tableName = 'a'+_user.id+'_'+_semesterCode;
+    _assignmentDao.tableName = tableName;
+    _assignmentDao.setConnection();
+    await _assignmentDao.createTable();
+    await _assignmentDao.insertAssignments(assignments);
+    _totalAssignments = await _assignmentDao.getAllAssignment();
+    _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
   }
-  void _setSemesterCode(){
-    widget.semesterCode = "2019_10";
+  _setSemesterCode() {
+    _semesterCode = "2019_10";  
+  }
+  List<Semester> _semesters = [];
+  Future<Null> _setSemesters() async{
+      _semesters.clear();
+      SemesterResponse semesterResponse = await SemesterApi().getSemester(_user);
+      List<String> semesterCodes =semesterResponse.semesters.split(",");
+      for (final semesterCode in semesterCodes){
+        Semester semester = new Semester();
+        semester.semesterCode =semesterCode;
+        semester.semesterName = getSemesterName(semesterCode);
+        _semesters.add(semester);
+      }
+      print(semesterResponse.semesters);
+  }
+  String getSemesterName(String semesterCode){
+    List<String> temp = semesterCode.split("_");
+    switch (temp[1]) {
+        case "10":
+            temp[1] = "1학기";
+            break;
+        case "15":
+            temp[1] = "여름학기";
+            break;
+        case "20":
+            temp[1] = "2학기";
+            break;
+        case "25":
+            temp[1] = "겨울학기";
+            break;
+        default:
+            break;
+    }
+    return(temp[0] + "년 " + temp[1]);
   }
   void _initData() async{
-    _setSemesterCode();
     if(await _loadUser()){
-       _loadData();
-       widget.hasData = true;
+      print("load?");
+      await _setSemesters();
+      await _loadData();
     }
   }
   Future<bool> _loadUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String userInfo = prefs.getString("userInfoFile");
     if (userInfo != null && userInfo.isNotEmpty) {
-      widget.user = User.fromJson(json.decode(userInfo));
-      print(widget.user.toJson().toString());
+      _user = User.fromJson(json.decode(userInfo));  
       return true;
     } else {
       Navigator.pushNamedAndRemoveUntil(context, '/loginPage', (_) => false);
@@ -138,13 +162,11 @@ class AssignmentPageState extends State<AssignmentPage>
     }
   }
   Future<Null> _loadData() async {
-    _setSemesterCode();
-    widget.assignmentDao.tableName = "a"+widget.user.id+'_'+widget.semesterCode;
-    print(widget.assignmentDao.tableName);
-    if(await widget.assignmentDao.setConnection()){
-      widget.assignmentDao.createTable();
-      widget._totalAssignments = await widget.assignmentDao.getAllAssignment();
-    }
+    String tableName = "a"+_user.id+'_'+_semesterCode;
+    _assignmentDao.tableName = tableName;
+    _assignmentDao.setConnection();
+    await _assignmentDao.createTable();
+    _totalAssignments = await _assignmentDao.getAllAssignment();
     _settingAssignmentItems(WorkType.HOMEWORK);
   }
   void _settingAssignmentItems(WorkType workType) {
@@ -160,7 +182,7 @@ class AssignmentPageState extends State<AssignmentPage>
   void _classifyAssignment(WorkType workType){
     List<Assignment> _tempTodoAssignments = [] ;
     List<Assignment> _templateAssignment = [];
-    for(final assignment in widget._totalAssignments){
+    for(final assignment in _totalAssignments){
       if(assignment.workType == workType){
         var now = DateTime.now();
         String workFinishTime = assignment.workFinishTime;
@@ -188,11 +210,12 @@ class AssignmentPageState extends State<AssignmentPage>
     super.initState();
     _setSemesterCode();
     _settingAssignmentItems(WorkType.HOMEWORK);
-    print(widget.semesterCode);
+    _initData();
+    print("initState");
     _tabController =
         new TabController(vsync: this, length: assignmentTabs.length);
     _tabController.addListener(_handleTopTabSelection);
-    _initData();
+    
   }
 
   @override
@@ -203,19 +226,23 @@ class AssignmentPageState extends State<AssignmentPage>
 
   @override
   Widget build(BuildContext context) {
-    // 가장 간단하고 쉽게 사용할 수 있는 기본 탭바 컨트롤러. 탭바와 탭바뷰 연결.
     return WillPopScope(
       child: MaterialApp(
         home: DefaultTabController(
           length: assignmentTabs.length,
           child: Scaffold(
+            key : _scaffoldKey,
+            drawer: _buildDrawer(),
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              title: Text('과제 현황'),
-              actions: <Widget>[
+               leading: IconButton(icon: new Icon(Icons.menu),
+                onPressed: () => _scaffoldKey.currentState.openDrawer()
+                ),
+                actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.settings),
                   onPressed: _logout,
+                  
                 ),
                 IconButton(
                   icon: Icon(Icons.refresh),
@@ -256,5 +283,36 @@ class AssignmentPageState extends State<AssignmentPage>
       onWillPop: _onWillPop,
     );
   }
+  Drawer _buildDrawer(){
+  return Drawer(
+     child: ListView.builder(
+        itemCount: _semesters.length == null ? 1 : _semesters.length + 1,
+        itemBuilder: (context, index) {
+          if(index ==0){
+             return UserAccountsDrawerHeader(
+              accountName: Text(_user.id),
+              accountEmail: Text("ashishrawat2911@gmail.com"),
+              currentAccountPicture: CircleAvatar(
+              backgroundColor:Colors.white,
+                  child: Text(
+                  "김",
+                  style: TextStyle(fontSize: 40.0),
+                  ),
+                ),
+              );
+          }
+          index -=1;
+          return ListTile(
+            title: Text(_semesters[index].semesterName),
+            trailing: Icon(Icons.arrow_forward),
+            onTap: (){ print(_semesters[index]);},
+          );
+        }
+        ),
+  
+  );
+}
 
 }
+
+
