@@ -107,8 +107,11 @@ class AssignmentPageState extends State<AssignmentPage>
     _totalAssignments = await _assignmentDao.getAllAssignment();
     _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
   }
-  _setSemesterCode() {
-    _semesterCode = "2019_10";  
+  _setSemesterCode(int index) {
+    setState(() {
+      _semesterCode = _semesters[index].semesterCode;    
+    });
+    
   }
   List<Semester> _semesters = [];
   Future<Null> _setSemesters() async{
@@ -121,7 +124,6 @@ class AssignmentPageState extends State<AssignmentPage>
         semester.semesterName = getSemesterName(semesterCode);
         _semesters.add(semester);
       }
-      print(semesterResponse.semesters);
   }
   String getSemesterName(String semesterCode){
     List<String> temp = semesterCode.split("_");
@@ -147,6 +149,7 @@ class AssignmentPageState extends State<AssignmentPage>
     if(await _loadUser()){
       print("load?");
       await _setSemesters();
+      _setSemesterCode(0);
       await _loadData();
     }
   }
@@ -167,7 +170,7 @@ class AssignmentPageState extends State<AssignmentPage>
     _assignmentDao.setConnection();
     await _assignmentDao.createTable();
     _totalAssignments = await _assignmentDao.getAllAssignment();
-    _settingAssignmentItems(WorkType.HOMEWORK);
+    _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
   }
   void _settingAssignmentItems(WorkType workType) {
     setState(() {
@@ -208,7 +211,6 @@ class AssignmentPageState extends State<AssignmentPage>
   @override
   void initState() {
     super.initState();
-    _setSemesterCode();
     _settingAssignmentItems(WorkType.HOMEWORK);
     _initData();
     print("initState");
@@ -234,20 +236,17 @@ class AssignmentPageState extends State<AssignmentPage>
             key : _scaffoldKey,
             drawer: _buildDrawer(),
             appBar: AppBar(
+              title: Text(_semesterCode),
               automaticallyImplyLeading: false,
-               leading: IconButton(icon: new Icon(Icons.menu),
+               leading: IconButton(icon: new Icon(Icons.dehaze),
                 onPressed: () => _scaffoldKey.currentState.openDrawer()
                 ),
                 actions: <Widget>[
                 IconButton(
-                  icon: Icon(Icons.settings),
+                  icon: Icon(Icons.directions_run),
                   onPressed: _logout,
                   
                 ),
-                IconButton(
-                  icon: Icon(Icons.refresh),
-                  onPressed: _onRefresh,
-                )
               ],
               bottom: TabBar(
                 controller: _tabController,
@@ -295,7 +294,7 @@ class AssignmentPageState extends State<AssignmentPage>
               currentAccountPicture: CircleAvatar(
               backgroundColor:Colors.white,
                   child: Text(
-                  "김",
+                  "A",
                   style: TextStyle(fontSize: 40.0),
                   ),
                 ),
@@ -305,7 +304,11 @@ class AssignmentPageState extends State<AssignmentPage>
           return ListTile(
             title: Text(_semesters[index].semesterName),
             trailing: Icon(Icons.arrow_forward),
-            onTap: (){ print(_semesters[index]);},
+            onTap: (){ 
+              _setSemesterCode(index);
+              _loadData();
+              Navigator.pop(context);
+            },
           );
         }
         ),
