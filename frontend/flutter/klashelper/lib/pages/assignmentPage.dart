@@ -13,7 +13,7 @@ import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/apis/assignmentApi.dart';
 import 'package:klashelper/response/assignmentResponse.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
-
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
@@ -115,8 +115,10 @@ class AssignmentPageState extends State<AssignmentPage>
   }
   List<Semester> _semesters = [];
   Future<Null> _setSemesters() async{
-      _semesters.clear();
-      SemesterResponse semesterResponse = await SemesterApi().getSemester(_user);
+    _semesters.clear();
+    SemesterResponse semesterResponse = await SemesterApi().getSemester(_user);
+    setState(() {
+      
       List<String> semesterCodes =semesterResponse.semesters.split(",");
       for (final semesterCode in semesterCodes){
         Semester semester = new Semester();
@@ -124,6 +126,7 @@ class AssignmentPageState extends State<AssignmentPage>
         semester.semesterName = getSemesterName(semesterCode);
         _semesters.add(semester);
       }
+      });
   }
   String getSemesterName(String semesterCode){
     List<String> temp = semesterCode.split("_");
@@ -236,17 +239,13 @@ class AssignmentPageState extends State<AssignmentPage>
             key : _scaffoldKey,
             drawer: _buildDrawer(),
             appBar: AppBar(
-              title: Text(_semesterCode),
+              title: Text("과제 현황"),
               automaticallyImplyLeading: false,
                leading: IconButton(icon: new Icon(Icons.dehaze),
                 onPressed: () => _scaffoldKey.currentState.openDrawer()
                 ),
                 actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.directions_run),
-                  onPressed: _logout,
-                  
-                ),
+                
               ],
               bottom: TabBar(
                 controller: _tabController,
@@ -282,37 +281,56 @@ class AssignmentPageState extends State<AssignmentPage>
       onWillPop: _onWillPop,
     );
   }
-  Drawer _buildDrawer(){
-  return Drawer(
-     child: ListView.builder(
-        itemCount: _semesters.length == null ? 1 : _semesters.length + 1,
-        itemBuilder: (context, index) {
-          if(index ==0){
-             return UserAccountsDrawerHeader(
+  SizedBox _buildDrawer(){
+  return 
+  SizedBox(
+    width: MediaQuery.of(context).size.width * 0.70,//20.0,     
+    child: Drawer(
+    child: ListView(
+    children: <Widget>[
+        UserAccountsDrawerHeader(
               accountName: Text(_user.id),
               accountEmail: Text("ashishrawat2911@gmail.com"),
               currentAccountPicture: CircleAvatar(
               backgroundColor:Colors.white,
                   child: Text(
-                  "A",
+                  _user.id.substring(2,4),
                   style: TextStyle(fontSize: 40.0),
                   ),
                 ),
-              );
-          }
-          index -=1;
-          return ListTile(
-            title: Text(_semesters[index].semesterName),
-            trailing: Icon(Icons.arrow_forward),
-            onTap: (){ 
-              _setSemesterCode(index);
-              _loadData();
-              Navigator.pop(context);
-            },
-          );
-        }
-        ),
-  
+              ),
+                ExpansionTile(
+                  title: Text("수강 학기"),
+                  children: <Widget>[
+                   ListView.builder(
+                     physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap :true,
+                    itemCount: _semesters.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: (_semesters[index].semesterCode == _semesterCode) ? Icon(Icons.check):Text(""),
+                        title: Text(_semesters[index].semesterName ),
+                        trailing: Icon(Icons.arrow_forward),
+                        onTap: (){ 
+                          _setSemesterCode(index);
+                          _loadData();
+                          Navigator.pop(context);
+                        },
+                      );
+                    }
+                    ),
+                ],
+                ),
+                ListTile(
+                  leading: Icon(FontAwesomeIcons.signOutAlt),
+                  title: Text("로그아웃"),
+                  //onTap: _logout,
+                  ),
+                  ListTile(leading: Icon(Icons.settings),
+                  title: Text("설정"),
+                  ),
+          ],
+    ),),
   );
 }
 

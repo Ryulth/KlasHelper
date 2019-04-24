@@ -2,7 +2,7 @@ class User  {
   String id;
   String pw;
 
-  User({this.id = "",this.pw = ""});
+  User({this.id = "2000",this.pw = ""});
 
   factory User.fromJson(Map<String,dynamic> json){
     return User(
