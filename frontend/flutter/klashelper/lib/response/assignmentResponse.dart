@@ -5,7 +5,6 @@ class AssignmentResponse {
   AssignmentResponse({this.status,this.assignmentList});
 
   factory AssignmentResponse.fromJson(Map<String,dynamic> json){
-    print(json.toString());
     return AssignmentResponse(
       status : json['status'],
       assignmentList : json['assignment']

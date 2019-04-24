@@ -10,7 +10,6 @@ Map<String, String> requestHeaders = {'appToken': 'test', 'id': ''};
 class SemesterApi {
   Future<SemesterResponse> getSemester(User user) async {
     requestHeaders['id'] = user.id;
-    print(requestHeaders.toString());
     final response = await http.get(
       baseUrl,
       headers: requestHeaders,
@@ -19,7 +18,6 @@ class SemesterApi {
     if (statusCode < 200 || statusCode > 400 || json == null) {
       throw new Exception("Error while fetching data");
     }
-    print(json.decode(response.body));
     return SemesterResponse.fromJson(json.decode(response.body));
   }
 }

@@ -4,17 +4,21 @@ import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 
 // ignore: must_be_immutable
-class AssignmentComplete extends AssignmentFactory{
-  AssignmentComplete(): super.create();
+class AssignmentComplete extends AssignmentFactory {
+  AssignmentComplete() : super.create();
 
   WorkType _workType;
-  var assignments ;
+  var assignments;
+
   final isSwitches = [false, false];
-  
+
   @override
   void setWorkType(WorkType workType) {
     this._workType = workType;
-    assignments = [this._workType.toString()+"과제1", this._workType.toString()+"과제2"];
+    assignments = [
+      this._workType.toString() + "과제1",
+      this._workType.toString() + "과제2"
+    ];
   }
 
   @override
@@ -25,13 +29,17 @@ class AssignmentComplete extends AssignmentFactory{
     // TODO: implement setAssignments
   }
 }
-class AssignmentCompleteState extends State<AssignmentComplete> with AutomaticKeepAliveClientMixin<AssignmentComplete>{
+
+class AssignmentCompleteState extends State<AssignmentComplete>
+    with AutomaticKeepAliveClientMixin<AssignmentComplete> {
   @override
   bool get wantKeepAlive => true;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -61,6 +69,7 @@ class AssignmentCompleteState extends State<AssignmentComplete> with AutomaticKe
       },
     );
   }
+
   Widget _getColumn(int index) {
     Widget column = Expanded(
       child: Column(
@@ -72,7 +81,7 @@ class AssignmentCompleteState extends State<AssignmentComplete> with AutomaticKe
             style: TextStyle(fontSize: 8),
           ),
           Text(
-            widget.assignments[index] +"완료",
+            widget.assignments[index] + "완료",
             style: TextStyle(fontSize: 16),
           ),
           Text('마감기한'),
@@ -84,13 +93,12 @@ class AssignmentCompleteState extends State<AssignmentComplete> with AutomaticKe
 
   Switch _getSwitch(int index) {
     return Switch(
-      onChanged: (bool newValue){
+      onChanged: (bool newValue) {
         print(newValue);
         setState(() {
           widget.isSwitches[index] = newValue;
           print(widget.isSwitches.toString());
         });
-
       },
       value: widget.isSwitches[index],
     );

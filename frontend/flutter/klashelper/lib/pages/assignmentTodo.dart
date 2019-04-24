@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
+import 'package:klashelper/dao/assignmentDao.dart';
 
 // ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
-
   List<Assignment> _assignments = [];
+
   WorkType _workType;
 
   @override
@@ -26,18 +27,16 @@ class AssignmentTodo extends AssignmentFactory {
 
 class AssignmentTodoState extends State<AssignmentTodo>
     with AutomaticKeepAliveClientMixin<AssignmentTodo> {
+  AssignmentDao _assignmentDao = new AssignmentDao();
+
   @override
   bool get wantKeepAlive => true;
 
-  Future<void> _onRefresh() async {
-    await Future.delayed(Duration(seconds: 3));
-    print("refresh");
-  }
-
   @override
   void initState() {
-    print("init todo");
     super.initState();
+    String tableName = "assignment_" + "2013104068";
+    _assignmentDao.setDatabase(tableName);
   }
 
   @override
@@ -98,15 +97,15 @@ class AssignmentTodoState extends State<AssignmentTodo>
     );
     return column;
   }
-  TextSpan _isComplete(int index){
-    if(widget._assignments[index].isSubmit == 1){
+
+  TextSpan _isComplete(int index) {
+    if (widget._assignments[index].isSubmit == 1) {
       return TextSpan(
           text: " 제출",
           style: TextStyle(
             color: Colors.green,
           ));
-    }
-    else{
+    } else {
       return TextSpan(
           text: " 미제출",
           style: TextStyle(
@@ -114,13 +113,14 @@ class AssignmentTodoState extends State<AssignmentTodo>
           ));
     }
   }
+
   Switch _getSwitch(int index) {
     return Switch(
       onChanged: (bool newValue) {
-        print(newValue);
         setState(() {
           int isAlarm = (newValue) ? 1 : 0;
           widget._assignments[index].isAlarm = isAlarm;
+          _assignmentDao.updateAssignment(widget._assignments[index]);
         });
       },
       value: (widget._assignments[index].isAlarm == 1) ? true : false,

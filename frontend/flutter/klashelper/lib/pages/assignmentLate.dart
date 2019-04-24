@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
+import 'package:klashelper/dao/assignmentDao.dart';
 
 // ignore: must_be_immutable
 class AssignmentLate extends AssignmentFactory {
@@ -26,18 +27,16 @@ class AssignmentLate extends AssignmentFactory {
 
 class AssignmentLateState extends State<AssignmentLate>
     with AutomaticKeepAliveClientMixin<AssignmentLate> {
+  AssignmentDao _assignmentDao = new AssignmentDao();
+
   @override
   bool get wantKeepAlive => true;
 
-  Future<void> _onRefresh() async {
-    await Future.delayed(Duration(seconds: 3));
-    print("refresh");
-  }
-
   @override
   void initState() {
-    print("init todo");
     super.initState();
+    String tableName = "assignment_" + "2013104068";
+    _assignmentDao.setDatabase(tableName);
   }
 
   @override
@@ -48,29 +47,29 @@ class AssignmentLateState extends State<AssignmentLate>
 
   Widget _getList() {
     return //RefreshIndicator(
-      //onRefresh: _onRefresh,
-      ListView.builder(
-        itemCount: widget._assignments.length,
-        itemBuilder: (context, index) {
-          return Card(
-            child: InkWell(
-              onTap: () {
-                print(index);
-                print(widget._assignments[index].toJson().toString());
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: <Widget>[
-                    _getColumn(index),
-                    _getSwitch(index),
-                  ],
-                ),
+        //onRefresh: _onRefresh,
+        ListView.builder(
+      itemCount: widget._assignments.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: InkWell(
+            onTap: () {
+              print(index);
+              print(widget._assignments[index].toJson().toString());
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  _getColumn(index),
+                  _getSwitch(index),
+                ],
               ),
             ),
-          );
-        },
-      );
+          ),
+        );
+      },
+    );
     //);
   }
 
@@ -90,24 +89,20 @@ class AssignmentLateState extends State<AssignmentLate>
           ),
           Text.rich(TextSpan(
               text: widget._assignments[index].workFinishTime,
-              children: <TextSpan>[
-                _isComplete(index)
-              ])),
+              children: <TextSpan>[_isComplete(index)])),
         ],
       ),
     );
     return column;
   }
-  TextSpan _isComplete(int index){
-    if(widget._assignments[index].isSubmit == 1){
+
+  TextSpan _isComplete(int index) {
+    if (widget._assignments[index].isSubmit == 1) {
       return TextSpan(
           text: " 제출",
           style: TextStyle(
-            color: Colors.green,
-            textBaseline: TextBaseline.ideographic
-          ));
-    }
-    else{
+              color: Colors.green, textBaseline: TextBaseline.ideographic));
+    } else {
       return TextSpan(
           text: " 미제출",
           style: TextStyle(
@@ -115,13 +110,14 @@ class AssignmentLateState extends State<AssignmentLate>
           ));
     }
   }
+
   Switch _getSwitch(int index) {
     return Switch(
       onChanged: (bool newValue) {
-        print(newValue);
         setState(() {
           int isAlarm = (newValue) ? 1 : 0;
           widget._assignments[index].isAlarm = isAlarm;
+          _assignmentDao.updateAssignment(widget._assignments[index]);
         });
       },
       value: (widget._assignments[index].isAlarm == 1) ? true : false,
