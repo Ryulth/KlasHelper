@@ -96,23 +96,50 @@ class AssignmentLateState extends State<AssignmentLate>
     return column;
   }
 
+  
   TextSpan _isComplete(int index) {
-    if (widget._assignments[index].isSubmit == 1) {
-      return TextSpan(
-          text: " 제출",
-          style: TextStyle(
-              color: Colors.green, textBaseline: TextBaseline.ideographic));
-    } else {
-      return TextSpan(
-          text: " 미제출",
-          style: TextStyle(
-            color: Colors.red,
-          ));
+    if(widget._workType == WorkType.HOMEWORK){
+      if (widget._assignments[index].isSubmit == 1) {
+        return TextSpan(
+            text: " 제출",
+            style: TextStyle(
+              color: Colors.green, textBaseline: TextBaseline.ideographic
+            ));
+      } else {
+        return TextSpan(
+            text: " 미제출",
+            style: TextStyle(
+              color: Colors.red,
+            ));
+      }
     }
+    else if(widget._workType == WorkType.ONLINE){
+      if (widget._assignments[index].isSubmit == 1) {
+        return TextSpan(
+            text: " 수강완료",
+            style: TextStyle(
+              color: Colors.green,
+            ));
+      } else {
+        return TextSpan(
+            text: " 미수강",
+            style: TextStyle(
+              color: Colors.red,
+            ));
+      }
+    }
+    else{
+      return TextSpan(
+            text: "",
+            style: TextStyle(
+              color: Colors.red,
+            ));
+      }
   }
 
   Switch _getSwitch(int index) {
     return Switch(
+      activeColor: Color(0xFFA40F16),
       onChanged: (bool newValue) {
         setState(() {
           int isAlarm = (newValue) ? 1 : 0;

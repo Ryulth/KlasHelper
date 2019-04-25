@@ -22,7 +22,7 @@ class AssignmentDao {
     );
   }
   Future<void> _createTable(Database db,int version) async{
-    await db.execute('''
+    await db.execute("""
         CREATE TABLE IF NOT EXISTS $_tableName (
           workCode TEXT PRIMARY KEY,
           semester TEXT, 
@@ -35,7 +35,7 @@ class AssignmentDao {
           workFinishTime TEXT, 
           isAlarm INTEGER, 
           flag INTEGER )
-    '''
+    """
     );
   }
 
@@ -61,10 +61,10 @@ class AssignmentDao {
   }
   Future<void> updateAssignmentByWorkCode(Assignment assignment) async{
     final Database db = _database;
-    await db.rawUpdate('''
+    await db.rawUpdate("""
       UPDATE $_tableName
       SET isAlarm = 
-    '''
+    """
     );
   }
   Future<List<Assignment>> getAllAssignment()async{

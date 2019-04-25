@@ -194,7 +194,7 @@ class AssignmentPageState extends State<AssignmentPage>
     List<Assignment> _tempTodoAssignments = [];
     List<Assignment> _templateAssignment = [];
     for (final assignment in _totalAssignments) {
-      if (assignment.workType == workType) {
+      if (assignment.workType == workType && assignment.flag == 1) {
         var now = DateTime.now();
         String workFinishTime = assignment.workFinishTime;
         if (workFinishTime != "0") {
@@ -232,11 +232,15 @@ class AssignmentPageState extends State<AssignmentPage>
     _tabController.dispose();
     super.dispose();
   }
-
+  static const _primaryColor = const Color(0xFF0D326F);
+  // const Color(0xFF151026); 검정 #AD1D19 다홍? #A40F16 기본 빨강  #dc143c크림슨 0D326F 남색 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: _primaryColor,
+        ),
         home: DefaultTabController(
           length: assignmentTabs.length,
           child: Scaffold(
@@ -250,6 +254,7 @@ class AssignmentPageState extends State<AssignmentPage>
                   onPressed: () => _scaffoldKey.currentState.openDrawer()),
               actions: <Widget>[],
               bottom: TabBar(
+                indicatorColor:  Color(0xFFA40F16),
                 controller: _tabController,
                 tabs: assignmentTabs,
                 isScrollable: false, // 많으면 자동 스크롤 근데 false 면 사이즈가 딱 맞네?
@@ -323,13 +328,17 @@ class AssignmentPageState extends State<AssignmentPage>
               ],
             ),
             ListTile(
-              leading: Icon(FontAwesomeIcons.signOutAlt),
-              title: Text("로그아웃"),
-              //onTap: _logout,
+              leading: Icon(FontAwesomeIcons.trash),
+              title: Text("휴지통"),
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("설정"),
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.signOutAlt),
+              title: Text("로그아웃"),
+              //onTap: _logout,
             ),
           ],
         ),
