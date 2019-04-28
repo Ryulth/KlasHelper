@@ -14,6 +14,7 @@ import 'package:klashelper/apis/assignmentApi.dart';
 import 'package:klashelper/response/assignmentResponse.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
@@ -25,6 +26,7 @@ class AssignmentPage extends StatefulWidget {
 
 class AssignmentPageState extends State<AssignmentPage>
     with SingleTickerProviderStateMixin {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final List<Tab> assignmentTabs = <Tab>[
@@ -90,6 +92,9 @@ class AssignmentPageState extends State<AssignmentPage>
         _currentBottomIndex = index;
         if (index < 3) {
           _settingAssignmentItems(WorkType.values[index]); //
+        }
+        else{
+          _showNotification();
         }
       });
     }
@@ -160,6 +165,34 @@ class AssignmentPageState extends State<AssignmentPage>
       _setSemesterCode(0);
       await _loadData();
     }
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initializationSettings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,onSelectNotification: onSelectNotification);
+  }
+  Future onSelectNotification(String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: $payload');
+    };
+    showDialog(context: context,builder: (_)=> new AlertDialog(
+      title: new Text('notification'),
+      content: new Text("$payload"),
+    ));
+    //Navigator.pushNamedAndRemoveUntil(
+    //            context, '/assignmentPage', (_) => false);
+  }
+  _showNotification() async{
+    var scheduledNotificationDateTime =  new DateTime.now().add(new Duration(seconds: 5));
+    var android = new AndroidNotificationDetails('channelId', 'channelName', 'channelDescription');
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(0, "new video is out", "flutter noti local body", platform,payload: "test payload ");
+    await flutterLocalNotificationsPlugin.schedule(0, "5초 뒤 알람 is out", "flutter noti local body",scheduledNotificationDateTime, platform,payload: "test payload ");
+    scheduledNotificationDateTime =  new DateTime.now().add(new Duration(seconds: 10));
+    await flutterLocalNotificationsPlugin.schedule(1, "10초 뒤 알람 is out", "flutter noti local body",scheduledNotificationDateTime, platform,payload: "test payload ");
+
+
   }
 
   Future<bool> _loadUser() async {
