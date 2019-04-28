@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:klashelper/models/assignment.dart';
+import 'package:date_format/date_format.dart';
 
 final AssignmentNotification assignmentNotification =new AssignmentNotification._private();
 
@@ -55,10 +57,10 @@ class AssignmentNotification {
   }
   enrollAssignments(List<Assignment> assignments) async {
     for (final assignment in assignments) {
-      await enrollAssignment(assignment);
+      await enrollAssignment(assignment,false);
     }
   }
-  enrollAssignment(Assignment assignment) async {
+  enrollAssignment(Assignment assignment, bool onToast) async {
     String workFinishTime = assignment.workFinishTime;
     var now = DateTime.now();
     if (workFinishTime != "0" && assignment.isAlarm == 1) {
@@ -73,12 +75,23 @@ class AssignmentNotification {
         await flutterLocalNotificationsPlugin.schedule(
             assignment.workCode.hashCode, "과제 1 일전!", assignment.workTitle,
             scheduledNotificationDateTime, platform);
-        print(scheduledNotificationDateTime);
+
+        if(onToast) {
+          String enrollTime = formatDate(scheduledNotificationDateTime, [yyyy,'년 ',mm, '월 ', dd, '일 ', HH, ':', nn]);
+          Fluttertoast.showToast(
+              msg: '$enrollTime 알림 등록',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.grey,
+              textColor: Colors.black,
+              fontSize: 14.0
+          );
+        }
       }
     }
   }
-  deleteAssignment(Assignment assignment) async{
-    print(assignment.toJson().toString());
+  removeAssignment(Assignment assignment) async{
     await flutterLocalNotificationsPlugin.cancel(assignment.workCode.hashCode);
   }
 }

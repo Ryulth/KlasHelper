@@ -14,8 +14,8 @@ import 'package:klashelper/apis/assignmentApi.dart';
 import 'package:klashelper/response/assignmentResponse.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:klashelper/service/assignmentNotification.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
@@ -39,7 +39,7 @@ class AssignmentPageState extends State<AssignmentPage>
       title: new Text('과제'),
     ),
     new BottomNavigationBarItem(
-      icon: new Icon(Icons.class_),
+      icon: new Icon(Icons.live_tv),
       title: new Text('온라인 강의'),
     ),
     new BottomNavigationBarItem(
@@ -47,7 +47,7 @@ class AssignmentPageState extends State<AssignmentPage>
       title: new Text('강의 자료'),
     ),
     new BottomNavigationBarItem(
-        icon: new Icon(Icons.menu), title: new Text('메뉴'))
+        icon: new Icon(FontAwesomeIcons.clipboardList), title: new Text('게시판'))
   ];
   TabController _tabController;
   User _user = new User();
@@ -68,6 +68,15 @@ class AssignmentPageState extends State<AssignmentPage>
       return Future.value(true);
     }
     //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
+    Fluttertoast.showToast(
+        msg: '뒤로 버튼을 한번 더 누르시면 앱이 종료됩니다',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 2,
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+        fontSize: 14.0
+    );
     lastTimeBackPressed = DateTime.now();
     return Future.value(false);
   }
@@ -312,6 +321,7 @@ class AssignmentPageState extends State<AssignmentPage>
               ),
             ),
             ExpansionTile(
+              leading: Icon(FontAwesomeIcons.book),
               title: Text("수강 학기"),
               children: <Widget>[
                 ListView.builder(
@@ -336,16 +346,24 @@ class AssignmentPageState extends State<AssignmentPage>
               ],
             ),
             ListTile(
+              leading: Icon(FontAwesomeIcons.download),
+              title: Text("다운자료"),
+            ),
+            ListTile(
               leading: Icon(FontAwesomeIcons.trash),
               title: Text("휴지통"),
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("설정"),
+              onTap: (){
+                print("asd");
+              },
             ),
             ListTile(
               leading: Icon(FontAwesomeIcons.signOutAlt),
               title: Text("로그아웃"),
+
               //onTap: _logout,
             ),
           ],

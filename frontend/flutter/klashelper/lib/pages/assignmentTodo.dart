@@ -4,6 +4,8 @@ import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:klashelper/service/assignmentNotification.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 // ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
@@ -106,7 +108,7 @@ class AssignmentTodoState extends State<AssignmentTodo>
   }
 
   TextSpan _isComplete(int index) {
-    if(widget._workType == WorkType.HOMEWORK){
+    if (widget._workType == WorkType.HOMEWORK) {
       if (widget._assignments[index].isSubmit == 1) {
         return TextSpan(
             text: " 제출",
@@ -120,8 +122,7 @@ class AssignmentTodoState extends State<AssignmentTodo>
               color: Colors.red,
             ));
       }
-    }
-    else if(widget._workType == WorkType.ONLINE){
+    } else if (widget._workType == WorkType.ONLINE) {
       if (widget._assignments[index].isSubmit == 1) {
         return TextSpan(
             text: " 수강완료",
@@ -135,16 +136,14 @@ class AssignmentTodoState extends State<AssignmentTodo>
               color: Colors.red,
             ));
       }
-    }
-    else{
+    } else {
       return TextSpan(
-            text: "",
-            style: TextStyle(
-              color: Colors.red,
-            ));
-      }
+          text: "",
+          style: TextStyle(
+            color: Colors.red,
+          ));
+    }
   }
-  
 
   Switch _getSwitch(int index) {
     return Switch(
@@ -154,11 +153,10 @@ class AssignmentTodoState extends State<AssignmentTodo>
           int isAlarm = (newValue) ? 1 : 0;
           widget._assignments[index].isAlarm = isAlarm;
           _assignmentDao.updateAssignment(widget._assignments[index]);
-          if(newValue){
-            assignmentNotification.enrollAssignment(widget._assignments[index]);
-          }
-          else{
-            assignmentNotification.deleteAssignment(widget._assignments[index]);
+          if (newValue) {
+            assignmentNotification.enrollAssignment(widget._assignments[index],true);
+          } else {
+            assignmentNotification.removeAssignment(widget._assignments[index]);
           }
         });
       },

@@ -28,6 +28,9 @@ dependencies:
   cupertino_icons: ^0.1.2
   font_awesome_flutter: ^8.4.0
   flutter_local_notifications: ^0.7.0
+  fluttertoast: ^3.0.4
+  date_format: ^1.0.6
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
