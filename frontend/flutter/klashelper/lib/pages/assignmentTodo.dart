@@ -3,7 +3,7 @@ import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
-
+import 'package:klashelper/service/assignmentNotification.dart';
 // ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
   AssignmentTodo() : super.create();
@@ -23,6 +23,12 @@ class AssignmentTodo extends AssignmentFactory {
 
   @override
   AssignmentTodoState createState() => AssignmentTodoState();
+
+  @override
+  List<Assignment> getAssignments() {
+    // TODO: implement getAssignments
+    return _assignments;
+  }
 }
 
 class AssignmentTodoState extends State<AssignmentTodo>
@@ -56,6 +62,7 @@ class AssignmentTodoState extends State<AssignmentTodo>
             onTap: () {
               print(index);
               print(widget._assignments[index].toJson().toString());
+              print(widget._assignments[index].workCode.hashCode);
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -147,6 +154,12 @@ class AssignmentTodoState extends State<AssignmentTodo>
           int isAlarm = (newValue) ? 1 : 0;
           widget._assignments[index].isAlarm = isAlarm;
           _assignmentDao.updateAssignment(widget._assignments[index]);
+          if(newValue){
+            assignmentNotification.enrollAssignment(widget._assignments[index]);
+          }
+          else{
+            assignmentNotification.deleteAssignment(widget._assignments[index]);
+          }
         });
       },
       value: (widget._assignments[index].isAlarm == 1) ? true : false,

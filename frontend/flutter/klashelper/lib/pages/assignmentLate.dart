@@ -23,6 +23,12 @@ class AssignmentLate extends AssignmentFactory {
 
   @override
   AssignmentLateState createState() => AssignmentLateState();
+
+  @override
+  List<Assignment> getAssignments() {
+    // TODO: implement getAssignments
+    return _assignments;
+  }
 }
 
 class AssignmentLateState extends State<AssignmentLate>

@@ -28,6 +28,12 @@ class AssignmentComplete extends AssignmentFactory {
   void setAssignments(List<Assignment> assignments) {
     // TODO: implement setAssignments
   }
+
+  @override
+  List<Assignment> getAssignments() {
+    // TODO: implement getAssignments
+    return null;
+  }
 }
 
 class AssignmentCompleteState extends State<AssignmentComplete>

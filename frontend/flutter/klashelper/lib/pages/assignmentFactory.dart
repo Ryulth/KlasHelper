@@ -24,4 +24,5 @@ abstract class AssignmentFactory extends StatefulWidget {
   void setWorkType(WorkType workType);
 
   void setAssignments(List<Assignment> assignments);
+  List<Assignment> getAssignments();
 }

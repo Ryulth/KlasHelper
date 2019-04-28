@@ -15,7 +15,7 @@ import 'package:klashelper/response/assignmentResponse.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:klashelper/service/assignmentNotification.dart';
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
@@ -26,7 +26,6 @@ class AssignmentPage extends StatefulWidget {
 
 class AssignmentPageState extends State<AssignmentPage>
     with SingleTickerProviderStateMixin {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final List<Tab> assignmentTabs = <Tab>[
@@ -94,7 +93,7 @@ class AssignmentPageState extends State<AssignmentPage>
           _settingAssignmentItems(WorkType.values[index]); //
         }
         else{
-          _showNotification();
+          assignmentNotification.showNotification();
         }
       });
     }
@@ -114,6 +113,9 @@ class AssignmentPageState extends State<AssignmentPage>
     _totalAssignments =
         await _assignmentDao.getAllAssignmentBySemesterCode(_semesterCode);
     _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
+    print(_todoAssignment.getAssignments());
+    assignmentNotification.enrollAssignments(_totalAssignments);
+
   }
 
   _setSemesterCode(int index) {
@@ -165,34 +167,6 @@ class AssignmentPageState extends State<AssignmentPage>
       _setSemesterCode(0);
       await _loadData();
     }
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOS = new IOSInitializationSettings();
-    var initializationSettings = new InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,onSelectNotification: onSelectNotification);
-  }
-  Future onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: $payload');
-    };
-    showDialog(context: context,builder: (_)=> new AlertDialog(
-      title: new Text('notification'),
-      content: new Text("$payload"),
-    ));
-    //Navigator.pushNamedAndRemoveUntil(
-    //            context, '/assignmentPage', (_) => false);
-  }
-  _showNotification() async{
-    var scheduledNotificationDateTime =  new DateTime.now().add(new Duration(seconds: 5));
-    var android = new AndroidNotificationDetails('channelId', 'channelName', 'channelDescription');
-    var iOS = new IOSNotificationDetails();
-    var platform = new NotificationDetails(android, iOS);
-    await flutterLocalNotificationsPlugin.show(0, "new video is out", "flutter noti local body", platform,payload: "test payload ");
-    await flutterLocalNotificationsPlugin.schedule(0, "5초 뒤 알람 is out", "flutter noti local body",scheduledNotificationDateTime, platform,payload: "test payload ");
-    scheduledNotificationDateTime =  new DateTime.now().add(new Duration(seconds: 10));
-    await flutterLocalNotificationsPlugin.schedule(1, "10초 뒤 알람 is out", "flutter noti local body",scheduledNotificationDateTime, platform,payload: "test payload ");
-
-
   }
 
   Future<bool> _loadUser() async {
@@ -225,7 +199,7 @@ class AssignmentPageState extends State<AssignmentPage>
 
   void _classifyAssignment(WorkType workType) {
     List<Assignment> _tempTodoAssignments = [];
-    List<Assignment> _templateAssignment = [];
+    List<Assignment> _tempLateAssignment = [];
     for (final assignment in _totalAssignments) {
       if (assignment.workType == workType && assignment.flag == 1) {
         var now = DateTime.now();
@@ -237,7 +211,7 @@ class AssignmentPageState extends State<AssignmentPage>
           workFinishTime = workFinishTime.replaceAll("(RE)", "");
           var finishDateTime = DateTime.parse(workFinishTime);
           if (now.isAfter(finishDateTime)) {
-            _templateAssignment.add(assignment);
+            _tempLateAssignment.add(assignment);
           } else {
             _tempTodoAssignments.add(assignment);
           }
@@ -247,12 +221,13 @@ class AssignmentPageState extends State<AssignmentPage>
       }
     }
     _todoAssignment.setAssignments(_tempTodoAssignments);
-    _lateAssignment.setAssignments(_templateAssignment);
+    _lateAssignment.setAssignments(_tempLateAssignment);
   }
 
   @override
   void initState() {
     super.initState();
+    assignmentNotification.init(context);
     _settingAssignmentItems(WorkType.HOMEWORK);
     _initData();
     _tabController =
