@@ -2,6 +2,7 @@ import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:klashelper/models/workType.dart';
+import 'package:klashelper/pages/assignmentDetailPage.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
@@ -51,13 +52,7 @@ class AssignmentTodoState extends State<AssignmentTodo>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return _getList();
-  }
-
-  Widget _getList() {
-    return //RefreshIndicator(
-        //onRefresh: _onRefresh,
-        ListView.builder(
+    return  ListView.builder(
       itemCount: widget._assignments.length,
       itemBuilder: (context, index) {
         return Card(
@@ -66,6 +61,8 @@ class AssignmentTodoState extends State<AssignmentTodo>
               print(index);
               print(widget._assignments[index].toJson().toString());
               print(widget._assignments[index].workCode.hashCode);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AssignmentDetailPage()));
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -80,7 +77,6 @@ class AssignmentTodoState extends State<AssignmentTodo>
         );
       },
     );
-    //);
   }
 
   Widget _getColumn(int index) {

@@ -384,8 +384,7 @@ class AssignmentPageState extends State<AssignmentPage>
             ListTile(
               leading: Icon(FontAwesomeIcons.signOutAlt),
               title: Text("로그아웃"),
-
-              //onTap: _logout,
+              onTap: _logout,
             ),
           ],
         ),

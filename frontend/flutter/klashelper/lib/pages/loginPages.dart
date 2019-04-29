@@ -65,57 +65,65 @@ class LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  static const _primaryColor = const Color(0xFF0D326F);
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 // TODO: implement build
     return WillPopScope(
-      child: Scaffold(
-        appBar: new AppBar(
-          automaticallyImplyLeading: false,
-          title: new Text('Login'),
+      child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: _primaryColor,
         ),
-        body: new Container(
-            padding: new EdgeInsets.all(20.0),
-            child: new Form(
-              key: this._formKey,
-              child: new ListView(
-                children: <Widget>[
-                  new TextFormField(
-                      keyboardType: TextInputType.text,
-                      // Use email input type for emails.
+        home: Scaffold(
+          appBar: new AppBar(
+            automaticallyImplyLeading: false,
+            title: new Text('Login'),
+          ),
+          body: new Container(
+              padding: new EdgeInsets.all(20.0),
+              child: new Form(
+                key: this._formKey,
+                child: new ListView(
+                  children: <Widget>[
+                    new TextFormField(
+                        keyboardType: TextInputType.text,
+                        // Use email input type for emails.
+                        decoration: new InputDecoration(
+                            hintText: 'ID', labelText: 'Enter your id'),
+                        validator: this._validateData,
+                        onSaved: (String id) {
+                          user.id = id;
+                        }),
+                    new TextFormField(
+                      obscureText: true, // Use secure text for passwords.
                       decoration: new InputDecoration(
-                          hintText: 'ID', labelText: 'Enter your id'),
+                          hintText: 'Password',
+                          labelText: 'Enter your password'),
                       validator: this._validateData,
-                      onSaved: (String id) {
-                        user.id = id;
-                      }),
-                  new TextFormField(
-                    obscureText: true, // Use secure text for passwords.
-                    decoration: new InputDecoration(
-                        hintText: 'Password', labelText: 'Enter your password'),
-                    validator: this._validateData,
-                    onSaved: (String pw) {
-                      user.pw = pw;
-                    },
-                  ),
-                  new Container(
-                    width: screenSize.width,
-                    child: new RaisedButton(
-                      child: new Text(
-                        'Login',
-                        style: new TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () async {
-                        await _getLogin();
+                      onSaved: (String pw) {
+                        user.pw = pw;
                       },
-                      color: Colors.blue,
                     ),
-                    margin: new EdgeInsets.only(top: 20.0),
-                  )
-                ],
-              ),
-            )),
+                    new Container(
+                      width: screenSize.width,
+                      child: new RaisedButton(
+                        child: new Text(
+                          'Login',
+                          style: new TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () async {
+                          await _getLogin();
+                        },
+                        color: _primaryColor,
+                      ),
+                      margin: new EdgeInsets.only(top: 20.0),
+                    )
+                  ],
+                ),
+              )),
+        ),
       ),
       onWillPop: _onWillPop,
     );

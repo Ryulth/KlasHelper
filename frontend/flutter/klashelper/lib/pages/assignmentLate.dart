@@ -48,13 +48,7 @@ class AssignmentLateState extends State<AssignmentLate>
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return _getList();
-  }
-
-  Widget _getList() {
-    return //RefreshIndicator(
-        //onRefresh: _onRefresh,
-        ListView.builder(
+    return  ListView.builder(
       itemCount: widget._assignments.length,
       itemBuilder: (context, index) {
         return Card(
@@ -76,7 +70,6 @@ class AssignmentLateState extends State<AssignmentLate>
         );
       },
     );
-    //);
   }
 
   Widget _getColumn(int index) {
