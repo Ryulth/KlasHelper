@@ -43,10 +43,13 @@ class AssignmentDao {
     final Database db =  this._database;
 
     for (final assignment in assignments) {
+      String workCode = assignment.workCode;
+      final List<Map<String,dynamic>> temp = await db.rawQuery("""SELECT isAlarm FROM $_tableName WHERE workCode = '$workCode';""");
+      assignment.isAlarm = temp[0]['isAlarm'];
       db.insert(
         _tableName,
         assignment.toJson(),
-        conflictAlgorithm: ConflictAlgorithm.ignore,
+        conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
   }

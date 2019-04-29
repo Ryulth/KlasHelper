@@ -49,6 +49,10 @@ class Assignment  {
      map['flag'] = flag;
      return map;
    }
+   String getValue(){
+     String workTypeString = workType.toString().split('WorkType.')[1];
+     return """( '$workCode', '$semester', '$workFile', '$workCourse', $isSubmit, '$workTypeString', '$workTitle', '$workCreateTime', '$workFinishTime', $isAlarm, $flag)""";
+   }
 }
 
 /*

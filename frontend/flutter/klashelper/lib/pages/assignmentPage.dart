@@ -310,6 +310,8 @@ class AssignmentPageState extends State<AssignmentPage>
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
+              margin: EdgeInsets.all(0.0),
+              
               accountName: Text(_user.id),
               accountEmail: Text("ashishrawat2911@gmail.com"),
               currentAccountPicture: CircleAvatar(
@@ -321,8 +323,9 @@ class AssignmentPageState extends State<AssignmentPage>
               ),
             ),
             ExpansionTile(
+              
               leading: Icon(FontAwesomeIcons.book),
-              title: Text("수강 학기"),
+              title: Text("과제 현황"),
               children: <Widget>[
                 ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
@@ -348,10 +351,12 @@ class AssignmentPageState extends State<AssignmentPage>
             ListTile(
               leading: Icon(FontAwesomeIcons.download),
               title: Text("다운자료"),
+              onTap: (){},
             ),
             ListTile(
               leading: Icon(FontAwesomeIcons.trash),
               title: Text("휴지통"),
+            onTap: (){},
             ),
             ListTile(
               leading: Icon(Icons.settings),
