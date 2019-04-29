@@ -33,6 +33,7 @@ class AssignmentDao {
           workTitle TEXT, 
           workCreateTime TEXT, 
           workFinishTime TEXT, 
+          workAlarmTime TEXT,
           isAlarm INTEGER, 
           flag INTEGER )
     """
@@ -41,11 +42,13 @@ class AssignmentDao {
 
   Future<void> insertAssignments(List<Assignment> assignments) async {
     final Database db =  this._database;
-
     for (final assignment in assignments) {
       String workCode = assignment.workCode;
-      final List<Map<String,dynamic>> temp = await db.rawQuery("""SELECT isAlarm FROM $_tableName WHERE workCode = '$workCode';""");
+      final List<Map<String,dynamic>> temp = await db.rawQuery("""SELECT isAlarm,workAlarmTime FROM $_tableName WHERE workCode = '$workCode';""");
+      if(temp.length !=0){
       assignment.isAlarm = temp[0]['isAlarm'];
+      assignment.workAlarmTime = temp[0]['workAlarmTime'];
+      }
       db.insert(
         _tableName,
         assignment.toJson(),

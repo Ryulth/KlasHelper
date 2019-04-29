@@ -56,39 +56,22 @@ class AssignmentNotification {
         scheduledNotificationDateTime, platform, payload: "test payload ");
   }
   enrollAssignments(List<Assignment> assignments) async {
+    var now = DateTime.now();
     for (final assignment in assignments) {
-      await enrollAssignment(assignment,false);
+      String workFinishTime = assignment.workFinishTime;
+      var finishDateTime = DateTime.parse(workFinishTime);
+      if (now.isBefore(finishDateTime) && assignment.isAlarm == 1) {
+      await enrollAssignment(assignment);
+      }
     }
   }
-  enrollAssignment(Assignment assignment, bool onToast) async {
-    String workFinishTime = assignment.workFinishTime;
-    var now = DateTime.now();
-    if (workFinishTime != "0" && assignment.isAlarm == 1) {
-      workFinishTime = (workFinishTime.length < 11)
-          ? workFinishTime + " 24:00"
-          : workFinishTime;
-      workFinishTime = workFinishTime.replaceAll("(RE)", "");
-      var finishDateTime = DateTime.parse(workFinishTime);
-      if (now.isBefore(finishDateTime)) {
-        var scheduledNotificationDateTime = finishDateTime.add(
-            new Duration(days: -1));
+  enrollAssignment(Assignment assignment) async {
+    String workAlarmTime = assignment.workAlarmTime;
+    if (workAlarmTime != "0") {
+        var scheduledNotificationDateTime = DateTime.parse(workAlarmTime);
         await flutterLocalNotificationsPlugin.schedule(
             assignment.workCode.hashCode, "과제 1 일전!", assignment.workTitle,
             scheduledNotificationDateTime, platform);
-
-        if(onToast) {
-          String enrollTime = formatDate(scheduledNotificationDateTime, [yyyy,'년 ',mm, '월 ', dd, '일 ', HH, ':', nn]);
-          Fluttertoast.showToast(
-              msg: '$enrollTime 알림 등록',
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.grey,
-              textColor: Colors.black,
-              fontSize: 14.0
-          );
-        }
-      }
     }
   }
   removeAssignment(Assignment assignment) async{

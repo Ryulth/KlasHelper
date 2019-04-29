@@ -16,6 +16,7 @@ import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:klashelper/service/assignmentNotification.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 // ignore: must_be_immutable
 class AssignmentPage extends StatefulWidget {
   AssignmentPage({Key key}) : super(key: key);
@@ -91,7 +92,7 @@ class AssignmentPageState extends State<AssignmentPage>
     setState(() {
       _currentTopIndex = _tabController.index;
       print("TopIndex " + _currentTopIndex.toString());
-    });
+      });
   }
 
   void _handleBottomTabSelection(int index) {
@@ -101,9 +102,16 @@ class AssignmentPageState extends State<AssignmentPage>
         if (index < 3) {
           _settingAssignmentItems(WorkType.values[index]); //
         }
-        else{
-          assignmentNotification.showNotification();
-        }
+        else {
+        DatePicker.showDatePicker(context,
+                              showTitleActions: true,
+                              minTime: DateTime(2018, 3, 5),
+                              maxTime: DateTime(2019, 6, 7), onChanged: (date) {
+                            print('change $date');
+                          }, onConfirm: (date) {
+                            print('confirm $date');
+                          }, currentTime: DateTime.now(), locale: LocaleType.ko);
+    }
       });
     }
   }
@@ -122,7 +130,15 @@ class AssignmentPageState extends State<AssignmentPage>
     _totalAssignments =
         await _assignmentDao.getAllAssignmentBySemesterCode(_semesterCode);
     _settingAssignmentItems(WorkType.values[_currentBottomIndex]);
-    print(_todoAssignment.getAssignments());
+    Fluttertoast.showToast(
+        msg: '업데이트 완료',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 2,
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+        fontSize: 14.0
+    );
     assignmentNotification.enrollAssignments(_totalAssignments);
 
   }

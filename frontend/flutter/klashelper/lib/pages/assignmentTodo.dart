@@ -1,10 +1,11 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:klashelper/models/workType.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 import 'package:klashelper/service/assignmentNotification.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class AssignmentTodo extends AssignmentFactory {
@@ -154,7 +155,20 @@ class AssignmentTodoState extends State<AssignmentTodo>
           widget._assignments[index].isAlarm = isAlarm;
           _assignmentDao.updateAssignment(widget._assignments[index]);
           if (newValue) {
-            assignmentNotification.enrollAssignment(widget._assignments[index],true);
+            assignmentNotification.enrollAssignment(widget._assignments[index]);
+            if(widget._assignments[index].workAlarmTime !="0"){
+            var scheduledNotificationDateTime = DateTime.parse(widget._assignments[index].workAlarmTime);
+            String enrollTime = formatDate(scheduledNotificationDateTime, [yyyy,'년 ',mm, '월 ', dd, '일 ', HH, ':', nn]);
+            Fluttertoast.showToast(
+              msg: '$enrollTime 알림 등록',
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.grey,
+              textColor: Colors.black,
+              fontSize: 14.0
+            );     
+            }
           } else {
             assignmentNotification.removeAssignment(widget._assignments[index]);
           }

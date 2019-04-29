@@ -30,7 +30,7 @@ dependencies:
   flutter_local_notifications: ^0.7.0
   fluttertoast: ^3.0.4
   date_format: ^1.0.6
-
+  flutter_datetime_picker: ^1.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter
