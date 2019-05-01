@@ -62,7 +62,7 @@ class AssignmentTodoState extends State<AssignmentTodo>
               print(widget._assignments[index].toJson().toString());
               print(widget._assignments[index].workCode.hashCode);
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => AssignmentDetailPage()));
+                  MaterialPageRoute(builder: (context) => AssignmentDetailPage(assignment: widget._assignments[index])));
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

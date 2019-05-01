@@ -70,7 +70,7 @@ class AssignmentPageState extends State<AssignmentPage>
     }
     //Toast.makeText(this, "'뒤로' 버튼을 한번 더 누르시면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show();
     Fluttertoast.showToast(
-        msg: '뒤로 버튼을 한번 더 누르시면 앱이 종료됩니다',
+        msg: 'page 뒤로 버튼을 한번 더 누르시면 앱이 종료됩니다',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIos: 2,
@@ -269,8 +269,10 @@ class AssignmentPageState extends State<AssignmentPage>
   // const Color(0xFF151026); 검정 #AD1D19 다홍? #A40F16 기본 빨강  #dc143c크림슨 0D326F 남색 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: MaterialApp(
+    return
+//      WillPopScope(
+//      child:
+      MaterialApp(
         theme: ThemeData(
           primaryColor: _primaryColor,
         ),
@@ -314,8 +316,8 @@ class AssignmentPageState extends State<AssignmentPage>
             ),
           ),
         ),
-      ),
-      onWillPop: _onWillPop,
+//      ),
+//      onWillPop: _onWillPop,
     );
   }
 
