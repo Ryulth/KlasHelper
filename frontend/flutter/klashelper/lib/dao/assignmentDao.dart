@@ -11,6 +11,7 @@ class AssignmentDao {
     _tableName = tableName;
     if (_database == null) {
       _database = await _setConnection();
+      
     }
   }
   Future<Database> _setConnection() async {
@@ -82,7 +83,8 @@ class AssignmentDao {
     });
   }
   Future<List<Assignment>> getAllAssignmentBySemesterCode(String semesterCode) async{
-    final Database db = _database;
+      final Database db = _database;
+    await _createTable(db,1);
     final List<Map<String,dynamic>> maps = await db.rawQuery('SELECT * FROM $_tableName WHERE semester = \'$semesterCode\' ');
     print(maps.toString());
     return List.generate(maps.length, (index){

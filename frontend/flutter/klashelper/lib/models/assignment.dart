@@ -26,6 +26,7 @@ class Assignment  {
             ? tempFinishTime + " 24:00"
             : tempFinishTime;
         tempFinishTime = tempFinishTime.replaceAll("(RE)", "");
+        tempFinishTime = tempFinishTime.replaceAll("RE)", "");
         var finishDateTime = DateTime.parse(tempFinishTime);
         return finishDateTime.add(new Duration(days: -1)).toString();
       }
