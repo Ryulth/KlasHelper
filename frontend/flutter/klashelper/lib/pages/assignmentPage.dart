@@ -214,9 +214,9 @@ class AssignmentPageState extends State<AssignmentPage>
 
   void _settingAssignmentItems(WorkType workType) {
     setState(() {
-      _todoAssignment = AssignmentFactory(AssignmentType.TODO);
+      _todoAssignment = AssignmentFactory(AssignmentType.TODO,this._user);
       _todoAssignment.setWorkType(workType);
-      _lateAssignment = AssignmentFactory(AssignmentType.LATE);
+      _lateAssignment = AssignmentFactory(AssignmentType.LATE,this._user);
       _lateAssignment.setWorkType(workType);
       _classifyAssignment(workType);
     });
@@ -270,8 +270,6 @@ class AssignmentPageState extends State<AssignmentPage>
   @override
   Widget build(BuildContext context) {
     return
-//      WillPopScope(
-//      child:
       MaterialApp(
         theme: ThemeData(
           primaryColor: _primaryColor,
@@ -316,8 +314,6 @@ class AssignmentPageState extends State<AssignmentPage>
             ),
           ),
         ),
-//      ),
-//      onWillPop: _onWillPop,
     );
   }
 

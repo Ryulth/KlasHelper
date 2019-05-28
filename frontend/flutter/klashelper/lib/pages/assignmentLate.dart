@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:klashelper/models/user.dart';
 import 'package:klashelper/models/workType.dart';
+import 'package:klashelper/pages/assignmentDetailPage.dart';
 import 'package:klashelper/pages/assignmentFactory.dart';
 import 'package:klashelper/models/assignment.dart';
 import 'package:klashelper/dao/assignmentDao.dart';
 
 // ignore: must_be_immutable
 class AssignmentLate extends AssignmentFactory {
-  AssignmentLate() : super.create();
+  final User user;
+  AssignmentLate({@required this.user}) : super.create();
 
   List<Assignment> _assignments = [];
   WorkType _workType;
@@ -41,7 +44,7 @@ class AssignmentLateState extends State<AssignmentLate>
   @override
   void initState() {
     super.initState();
-    String tableName = "assignment_" + "2013104068";
+    String tableName = "assignment_" + widget.user.id;
     _assignmentDao.setDatabase(tableName);
   }
 
@@ -54,8 +57,8 @@ class AssignmentLateState extends State<AssignmentLate>
         return Card(
           child: InkWell(
             onTap: () {
-              print(index);
-              print(widget._assignments[index].toJson().toString());
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => AssignmentDetailPage(assignment: widget._assignments[index], platform:Theme.of(context).platform)));
             },
             child: Padding(
               padding: const EdgeInsets.all(8.0),

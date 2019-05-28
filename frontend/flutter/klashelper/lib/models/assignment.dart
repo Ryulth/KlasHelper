@@ -67,6 +67,17 @@ class Assignment  {
      String workTypeString = workType.toString().split('WorkType.')[1];
      return """( '$workCode', '$semester', '$workFile', '$workCourse', $isSubmit, '$workTypeString', '$workTitle', '$workCreateTime', '$workFinishTime', '$workAlarmTime', $isAlarm, $flag)""";
    }
+   String getFileName(){
+     List<String> fileNames = this.workFile.split("[*]");
+     print(fileNames.toString());
+     return fileNames[0] == "" ? "파일 없음" : fileNames[0];
+   }
+   String getFileUrl(){
+     List<String> fileNames = this.workFile.split("[*]");
+     print(fileNames.toString());
+     //return fileNames[0] == "" ? "파일 없음" : fileNames[0];
+     return fileNames[1];
+   }
 }
 
 /*
