@@ -70,13 +70,10 @@ class Assignment  {
    }
    String getFileName(){
      List<String> fileNames = this.workFile.split("[*]");
-     print(fileNames.toString());
      return fileNames[0] == "" ? "파일 없음" : fileNames[0];
    }
    String getFileUrl(){
      List<String> fileNames = this.workFile.split("[*]");
-     print(fileNames.toString());
-     //return fileNames[0] == "" ? "파일 없음" : fileNames[0];
      return fileNames[1];
    }
 }
