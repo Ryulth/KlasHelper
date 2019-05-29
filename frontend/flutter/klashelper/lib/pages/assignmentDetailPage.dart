@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart'; 
+import 'package:open_file/open_file.dart';
 class AssignmentDetailPage extends StatefulWidget {
   final Assignment assignment;
   final TargetPlatform platform;
@@ -22,31 +24,40 @@ class AssignmentDetailPage extends StatefulWidget {
 
 class AssignmentDetailPageState extends State < AssignmentDetailPage > {
   String _localPath;
-  bool _permissisonReady;
-  void downloadFile(_fileName,_link) async{
-    final taskId = await FlutterDownloader.enqueue(
+  
+  void downloadFile(_fileName,_link)async{
+    var _downloadPath = await getDownloadFilePath(_fileName, _link);
+    Timer.periodic(new Duration(seconds: 1), (timer) {
+      OpenFile.open(_downloadPath).then((res){
+      if(res == "done"){
+        timer.cancel();
+        }
+      });
+    });
+    //}
+    
+  }
+
+  Future<String> getDownloadFilePath(_fileName,_link) async{
+    final taskId =  await FlutterDownloader.enqueue(
     url: _link,
     savedDir: _localPath,
     fileName: _fileName,
-    showNotification: true, // show download progress in status bar (for Android)
-    openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+    showNotification: false, // show download progress in status bar (for Android)
+    openFileFromNotification: false, // click on notification to open downloaded file (for Android)
     );
-    print(_localPath);
-    print(taskId);
+    return _localPath+"/"+_fileName;
   }
   
   Future<String> _findLocalPath() async {
-    print(widget.platform.toString());
     final directory = widget.platform == TargetPlatform.android
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    print("디렉토리"+directory.toString());
     return directory.path;
   }
   Future<Null> _prepare() async {
-    _permissisonReady = await _checkPermission();
-    print(_permissisonReady.toString());
-    _localPath = (await _findLocalPath()) + '/Download';
+    await _checkPermission();
+    _localPath = (await _findLocalPath()) + '/KlasHelper';
     final savedDir = Directory(_localPath);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {

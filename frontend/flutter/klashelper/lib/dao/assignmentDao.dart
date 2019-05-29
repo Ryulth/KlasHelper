@@ -76,6 +76,7 @@ class AssignmentDao {
   }
   Future<List<Assignment>> getAllAssignment()async{
     final Database db = _database;
+    await _createTable(db,1);
     final List<Map<String,dynamic>> maps = await db.query(_tableName);
     print(maps.toString());
     return List.generate(maps.length, (index){
